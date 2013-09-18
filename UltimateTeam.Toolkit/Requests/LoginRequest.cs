@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Services;
+using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -25,6 +26,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public LoginRequest(LoginDetails loginDetails)
         {
+            loginDetails.ThrowIfNullArgument();
             _loginDetails = loginDetails;
         }
 
@@ -51,7 +53,7 @@ namespace UltimateTeam.Toolkit.Requests
                 }));
             validateResponseMessage.EnsureSuccessStatusCode();
             var validateResponse = JsonConvert.DeserializeObject<ValidateResponse>(await validateResponseMessage.Content.ReadAsStringAsync());
-            SearchRequest.PhishingToken = validateResponse.Token;
+            PhishingToken = validateResponse.Token;
 
             return validateResponse.Token;
         }
@@ -69,7 +71,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .Value
                 .Split(new[] { ':' })[1]
                 .Replace("\"", string.Empty);
-            SearchRequest.SessionId = sessionId;
+            SessionId = sessionId;
 
             return sessionId;
         }

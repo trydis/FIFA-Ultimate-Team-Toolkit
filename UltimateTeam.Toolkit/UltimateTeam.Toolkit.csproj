@@ -78,6 +78,7 @@
     <Compile Include="Requests\FutRequestBase.cs" />
     <Compile Include="Requests\IFutRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
+    <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />

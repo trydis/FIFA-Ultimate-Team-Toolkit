@@ -5,7 +5,6 @@ using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
-using UltimateTeam.Toolkit.Requests;
 
 namespace UltimateTeam.Toolkit
 {
@@ -48,6 +47,25 @@ namespace UltimateTeam.Toolkit
             catch (Exception e)
             {
                 throw new FutException("Search failed", e);
+            }
+        }
+
+        public async Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            if (bidAmount == 0)
+            {
+                bidAmount = auctionInfo.CalculateBid();
+            }
+
+            try
+            {
+                return await _requestFactories.PlaceBidRequestFactory(auctionInfo, bidAmount).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Placing bid failed", e);
             }
         }
     }

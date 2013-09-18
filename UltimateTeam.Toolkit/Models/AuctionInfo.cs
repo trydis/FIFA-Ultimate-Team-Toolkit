@@ -25,5 +25,25 @@
         public long TradeId { get; set; }
 
         public string TradeState { get; set; }
+
+        public uint CalculateBid()
+        {
+            if (CurrentPrice == 0)
+                return StartingBid;
+
+            if (CurrentPrice < 1000)
+                return CurrentPrice + 50;
+
+            if (CurrentPrice < 10000)
+                return CurrentPrice + 100;
+
+            if (CurrentPrice < 50000)
+                return CurrentPrice + 250;
+
+            if (CurrentPrice < 100000)
+                return CurrentPrice + 500;
+
+            return CurrentPrice + 1000;
+        }
     }
 }

@@ -9,6 +9,8 @@ namespace UltimateTeam.Toolkit.Factories
     {
         Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory { get; set; }   
     
-        Func<SearchParameters, IFutRequest<AuctionResponse>> SearchRequestFactory { get; set; }       
+        Func<SearchParameters, IFutRequest<AuctionResponse>> SearchRequestFactory { get; set; }
+
+        Func<AuctionInfo, uint, IFutRequest<AuctionResponse>> PlaceBidRequestFactory { get; set; }
     }
 }

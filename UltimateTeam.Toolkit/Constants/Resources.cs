@@ -17,5 +17,7 @@
         public const string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa14/";
 
         public const string TransferMarket = "transfermarket";
+
+        public static string Bid = "trade/{0}/bid";
     }
 }

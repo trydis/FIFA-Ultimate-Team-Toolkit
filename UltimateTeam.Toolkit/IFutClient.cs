@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
-using UltimateTeam.Toolkit.Requests;
 
 namespace UltimateTeam.Toolkit
 {
@@ -10,5 +9,7 @@ namespace UltimateTeam.Toolkit
         Task<LoginResponse> LoginAsync(LoginDetails loginDetails);
 
         Task<AuctionResponse> SearchAsync(SearchParameters searchParameters);
+
+        Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0);
     }
 }
