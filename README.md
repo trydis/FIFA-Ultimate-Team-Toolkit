@@ -10,7 +10,7 @@ FIFA Ultimate Team 2014 Toolkit
 ```csharp
 var client = new FutClient();
 var loginDetails = new LoginDetails("e-mail", "password", "secret answer");
-await client.LoginAsync(loginDetails);
+var loginResponse = await client.LoginAsync(loginDetails);
 ```
 
 ### NuGet packages
