@@ -27,7 +27,16 @@ namespace UltimateTeam.Toolkit.Requests
         public LoginRequest(LoginDetails loginDetails)
         {
             loginDetails.ThrowIfNullArgument();
+            SetFutHome(loginDetails);
             _loginDetails = loginDetails;
+        }
+
+        private static void SetFutHome(LoginDetails loginDetails)
+        {
+            if (loginDetails.Platform == Platform.Xbox360)
+            {
+                Resources.FutHome = Resources.FutHomeXbox360;
+            }
         }
 
         public async Task<LoginResponse> PerformRequestAsync()
@@ -36,8 +45,8 @@ namespace UltimateTeam.Toolkit.Requests
             await LoginAsync(_loginDetails, HttpClient, mainPageResponseMessage);
             var nucleusId = await GetNucleusIdAsync(HttpClient);
             var shards = await GetShardsAsync(HttpClient, nucleusId);
-            var userAccounts = await GetUserAccountsAsync(HttpClient);
-            var sessionId = await GetSessionIdAsync(HttpClient, nucleusId, userAccounts);
+            var userAccounts = await GetUserAccountsAsync(HttpClient, _loginDetails.Platform);
+            var sessionId = await GetSessionIdAsync(HttpClient, nucleusId, userAccounts, _loginDetails.Platform);
             var phishingToken = await ValidateAsync(_loginDetails, HttpClient, sessionId);
 
             return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
@@ -58,14 +67,14 @@ namespace UltimateTeam.Toolkit.Requests
             return validateResponse.Token;
         }
 
-        private static async Task<string> GetSessionIdAsync(HttpClient httpClient, string nucleusId, UserAccounts userAccounts)
+        private static async Task<string> GetSessionIdAsync(HttpClient httpClient, string nucleusId, UserAccounts userAccounts, Platform platform)
         {
             var persona = userAccounts.UserAccountInfo.Personas
                 .OrderByDescending(x => x.UserClubList.OrderByDescending(club => club.LastAccessDateTime))
                 .First();
             var authResponseMessage = await httpClient.PostAsync(Resources.Auth, new StringContent(
                 string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT14WEB"", ""clientVersion"": 1, ""nuc"": {0}, ""nucleusPersonaId"": {1}, ""nucleusPersonaDisplayName"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
-                    nucleusId, persona.PersonaId, persona.PersonaName, "ps3")));
+                    nucleusId, persona.PersonaId, persona.PersonaName, platform == Platform.Ps3 ? "ps3" : "360")));
             authResponseMessage.EnsureSuccessStatusCode();
             var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
                 .Value
@@ -76,10 +85,11 @@ namespace UltimateTeam.Toolkit.Requests
             return sessionId;
         }
 
-        private static async Task<UserAccounts> GetUserAccountsAsync(HttpClient httpClient)
+        private static async Task<UserAccounts> GetUserAccountsAsync(HttpClient httpClient, Platform platform)
         {
             httpClient.DefaultRequestHeaders.Remove(NonStandardHttpHeaders.Route);
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com:443");
+            var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Ps3 ? "s2." : string.Empty);
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await httpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
             accountInfoResponseMessage.EnsureSuccessStatusCode();
 

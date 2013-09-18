@@ -10,7 +10,9 @@ namespace UltimateTeam.Toolkit.Models
         
         public string SecretAnswer { get; private set; }
 
-        public LoginDetails(string username, string password, string secretAnswer)
+        public Platform Platform { get; set; }
+
+        public LoginDetails(string username, string password, string secretAnswer, Platform platform)
         {
             username.ThrowIfInvalidArgument();
             password.ThrowIfInvalidArgument();
@@ -18,6 +20,7 @@ namespace UltimateTeam.Toolkit.Models
             Username = username;
             Password = password;
             SecretAnswer = secretAnswer;
+            Platform = platform;
         }
     }
 }
