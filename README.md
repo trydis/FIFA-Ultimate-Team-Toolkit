@@ -1,9 +1,9 @@
-FIFA-Ultimate-Team-2014-Toolkit
+FIFA Ultimate Team 2014 Toolkit
 ===============================
 
 ## Sample usage
 
-[Login](https://github.com/trydis/Fifa-Ultimate-Team-2013-Toolkit#login)  
+[Login](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#login)  
 
 ### Login
 

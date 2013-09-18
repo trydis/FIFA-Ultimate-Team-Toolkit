@@ -38,11 +38,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\HttpHeaders.cs" />
+    <Compile Include="Constants\NonStandardHttpHeaders.cs" />
+    <Compile Include="Constants\Resources.cs" />
     <Compile Include="Exceptions\FutException.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Factories\FutRequestFactory.cs" />
-    <Compile Include="Factories\IFutRequestFactory.cs" />
+    <Compile Include="Factories\FutRequestFactories.cs" />
+    <Compile Include="Factories\IFutRequestFactories.cs" />
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Persona.cs" />
@@ -55,6 +58,8 @@
     <Compile Include="Models\UserAccounts.cs" />
     <Compile Include="Models\UserClub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\IFutRequest.cs" />
+    <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
   </ItemGroup>

@@ -9,16 +9,16 @@ namespace UltimateTeam.Toolkit
 {
     public class FutClient : IFutClient
     {
-        private readonly IFutRequestFactory _requestFactory;
+        private readonly IFutRequestFactories _requestFactories;
 
         public FutClient()
+            : this(new FutRequestFactories())
         {
-            _requestFactory = new FutRequestFactory();
         }
 
-        public FutClient(IFutRequestFactory requestFactory)
+        public FutClient(IFutRequestFactories requestFactories)
         {
-            _requestFactory = requestFactory;
+            _requestFactories = requestFactories;
         }
 
         public async Task LoginAsync(LoginDetails loginDetails)
@@ -27,7 +27,7 @@ namespace UltimateTeam.Toolkit
 
             try
             {
-                await _requestFactory.CreateLoginRequest(loginDetails);
+                await _requestFactories.LoginRequestFactory(loginDetails).PerformRequest();
             }
             catch (Exception e)
             {
