@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    public class LoginRequest : IFutRequest<LoginResponse>
+    internal class LoginRequest : FutRequestBase, IFutRequest<LoginResponse>
     {
         private readonly LoginDetails _loginDetails;
 
@@ -29,23 +28,20 @@ namespace UltimateTeam.Toolkit.Requests
             _loginDetails = loginDetails;
         }
 
-        public async Task<LoginResponse> PerformRequest()
+        public async Task<LoginResponse> PerformRequestAsync()
         {
-            var messageHandler = new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip };
-            var httpClient = new HttpClient(messageHandler);
-            httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            var mainPageResponseMessage = await GetMainPageAsync(httpClient);
-            await LoginAsync(_loginDetails, httpClient, mainPageResponseMessage);
-            var nucleusId = await GetNucleusIdAsync(httpClient);
-            var shards = await GetShardsAsync(httpClient, nucleusId);
-            var userAccounts = await GetUserAccountsAsync(httpClient);
-            var sessionId = await GetSessionIdAsync(httpClient, nucleusId, userAccounts);
-            await ValidateAsync(_loginDetails, httpClient, sessionId);
+            var mainPageResponseMessage = await GetMainPageAsync(HttpClient);
+            await LoginAsync(_loginDetails, HttpClient, mainPageResponseMessage);
+            var nucleusId = await GetNucleusIdAsync(HttpClient);
+            var shards = await GetShardsAsync(HttpClient, nucleusId);
+            var userAccounts = await GetUserAccountsAsync(HttpClient);
+            var sessionId = await GetSessionIdAsync(HttpClient, nucleusId, userAccounts);
+            var phishingToken = await ValidateAsync(_loginDetails, HttpClient, sessionId);
 
-            return new LoginResponse(nucleusId, shards, userAccounts, sessionId);
+            return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
         }
 
-        private async Task ValidateAsync(LoginDetails loginDetails, HttpClient httpClient, string sessionId)
+        private async Task<string> ValidateAsync(LoginDetails loginDetails, HttpClient httpClient, string sessionId)
         {
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, sessionId);
             var validateResponseMessage = await httpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(
@@ -54,6 +50,10 @@ namespace UltimateTeam.Toolkit.Requests
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
             validateResponseMessage.EnsureSuccessStatusCode();
+            var validateResponse = JsonConvert.DeserializeObject<ValidateResponse>(await validateResponseMessage.Content.ReadAsStringAsync());
+            SearchRequest.PhishingToken = validateResponse.Token;
+
+            return validateResponse.Token;
         }
 
         private static async Task<string> GetSessionIdAsync(HttpClient httpClient, string nucleusId, UserAccounts userAccounts)
@@ -69,6 +69,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .Value
                 .Split(new[] { ':' })[1]
                 .Replace("\"", string.Empty);
+            SearchRequest.SessionId = sessionId;
 
             return sessionId;
         }

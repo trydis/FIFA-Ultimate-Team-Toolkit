@@ -4,6 +4,6 @@ namespace UltimateTeam.Toolkit.Requests
 {
     public interface IFutRequest<TResponse>
     {
-        Task<TResponse> PerformRequest();
+        Task<TResponse> PerformRequestAsync();
     }
 }

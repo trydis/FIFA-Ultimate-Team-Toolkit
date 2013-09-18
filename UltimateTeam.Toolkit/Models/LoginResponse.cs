@@ -12,16 +12,20 @@ namespace UltimateTeam.Toolkit.Models
         
         public string SessionId { get; private set; }
 
-        public LoginResponse(string nucleusId, Shards shards, UserAccounts userAccounts, string sessionId)
+        public string PhishingToken { get; private set; }
+
+        public LoginResponse(string nucleusId, Shards shards, UserAccounts userAccounts, string sessionId, string phishingToken)
         {
             nucleusId.ThrowIfInvalidArgument();
             shards.ThrowIfNullArgument();
             userAccounts.ThrowIfNullArgument();
             sessionId.ThrowIfInvalidArgument();
+            phishingToken.ThrowIfInvalidArgument();
             NucleusId = nucleusId;
             Shards = shards;
             UserAccounts = userAccounts;
             SessionId = sessionId;
+            PhishingToken = phishingToken;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿namespace UltimateTeam.Toolkit.Constants
 {
-    public class HttpHeaders
+    internal class HttpHeaders
     {
+        public const string ContentType = "Content-Type";
+
         public const string AcceptEncoding = "Accept-Encoding";
 
         public const string Accept = "Accept";

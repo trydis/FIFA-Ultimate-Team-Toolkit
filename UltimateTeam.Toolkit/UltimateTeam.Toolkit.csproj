@@ -48,6 +48,12 @@
     <Compile Include="Factories\IFutRequestFactories.cs" />
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
+    <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\AuctionInfo.cs" />
+    <Compile Include="Models\AuctionResponse.cs" />
+    <Compile Include="Models\BidTokens.cs" />
+    <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\UserAccountInfo.cs" />
     <Compile Include="Models\LoginDetails.cs" />
@@ -57,9 +63,22 @@
     <Compile Include="Models\Shards.cs" />
     <Compile Include="Models\UserAccounts.cs" />
     <Compile Include="Models\UserClub.cs" />
+    <Compile Include="Models\ValidateResponse.cs" />
+    <Compile Include="Parameters\ChemistryStyle.cs" />
+    <Compile Include="Parameters\League.cs" />
+    <Compile Include="Parameters\Level.cs" />
+    <Compile Include="Parameters\Nation.cs" />
+    <Compile Include="Parameters\PlayerSearchParameters.cs" />
+    <Compile Include="Parameters\Position.cs" />
+    <Compile Include="Parameters\ResourceType.cs" />
+    <Compile Include="Parameters\SearchParameterBase.cs" />
+    <Compile Include="Parameters\SearchParameters.cs" />
+    <Compile Include="Parameters\Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\FutRequestBase.cs" />
     <Compile Include="Requests\IFutRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
+    <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
   </ItemGroup>

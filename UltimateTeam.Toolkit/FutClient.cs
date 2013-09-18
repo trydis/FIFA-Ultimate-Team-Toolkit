@@ -4,6 +4,8 @@ using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Parameters;
+using UltimateTeam.Toolkit.Requests;
 
 namespace UltimateTeam.Toolkit
 {
@@ -27,11 +29,25 @@ namespace UltimateTeam.Toolkit
 
             try
             {
-                return await _requestFactories.LoginRequestFactory(loginDetails).PerformRequest();
+                return await _requestFactories.LoginRequestFactory(loginDetails).PerformRequestAsync();
             }
             catch (Exception e)
             {
                 throw new FutException("Login failed", e);
+            }
+        }
+
+        public async Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
+        {
+            searchParameters.ThrowIfNullArgument();
+
+            try
+            {
+                return await _requestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Search failed", e);
             }
         }
     }

@@ -1,7 +1,11 @@
 ﻿namespace UltimateTeam.Toolkit.Constants
 {
-    public class NonStandardHttpHeaders
+    internal class NonStandardHttpHeaders
     {
+        public const string MethodOverride = "X-HTTP-Method-Override";
+
+        public const string PhishingToken = "X-UT-PHISHING-TOKEN";
+
         public const string RequestedWith = "X-Requested-With";
 
         public const string NucleusId = "Easw-Session-Data-Nucleus-Id";
@@ -11,6 +15,5 @@
         public const string Route = "X-UT-Route";
 
         public const string SessionId = "X-UT-SID";
-         
     }
 }
