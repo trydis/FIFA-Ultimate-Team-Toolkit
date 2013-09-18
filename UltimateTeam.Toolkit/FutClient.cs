@@ -21,13 +21,13 @@ namespace UltimateTeam.Toolkit
             _requestFactories = requestFactories;
         }
 
-        public async Task LoginAsync(LoginDetails loginDetails)
+        public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails)
         {
             loginDetails.ThrowIfNullArgument();
 
             try
             {
-                await _requestFactories.LoginRequestFactory(loginDetails).PerformRequest();
+                return await _requestFactories.LoginRequestFactory(loginDetails).PerformRequest();
             }
             catch (Exception e)
             {

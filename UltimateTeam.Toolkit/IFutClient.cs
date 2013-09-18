@@ -5,6 +5,6 @@ namespace UltimateTeam.Toolkit
 {
     public interface IFutClient
     {
-        Task LoginAsync(LoginDetails loginDetails);
+        Task<LoginResponse> LoginAsync(LoginDetails loginDetails);
     }
 }
