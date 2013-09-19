@@ -1,6 +1,12 @@
 FIFA Ultimate Team 2014 Toolkit
 ===============================
 
+## Supported platforms
+- .NET 4 and higher
+- Silverlight 4 and higher
+- Windows Phone 7.5 and higher
+- Windows Store Apps
+
 ## Sample usage
 
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#initialization)  
@@ -62,4 +68,5 @@ var auctionResponse = await client.PlaceBidAsync(auctionInfo);
 ### NuGet packages
 
 If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
-http://www.nuget.org/packages/Microsoft.Net.Http/
+[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)
+[Async targeting pack](http://www.nuget.org/packages/Microsoft.Bcl.Async/)
