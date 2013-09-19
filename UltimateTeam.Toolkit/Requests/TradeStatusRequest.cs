@@ -1,0 +1,34 @@
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Extensions;
+
+namespace UltimateTeam.Toolkit.Requests
+{
+    internal class TradeStatusRequest : FutRequestBase, IFutRequest<AuctionResponse>
+    {
+        private readonly IEnumerable<long> _tradeIds;
+
+        public TradeStatusRequest(IEnumerable<long> tradeIds)
+        {
+            tradeIds.ThrowIfNullArgument();
+            _tradeIds = tradeIds;
+        }
+
+        public async Task<AuctionResponse> PerformRequestAsync()
+        {
+            AddCommonHeaders();
+            AddMethodOverrideHeader("GET");
+            var tradeStatusResponseMessage = await HttpClient.PostAsync(
+                string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds)),
+                new StringContent(" ", Encoding.UTF8, "application/json"));
+            tradeStatusResponseMessage.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<AuctionResponse>(await tradeStatusResponseMessage.Content.ReadAsStringAsync());
+        }
+    }
+}

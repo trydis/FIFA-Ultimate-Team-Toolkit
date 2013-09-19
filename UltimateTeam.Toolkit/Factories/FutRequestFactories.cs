@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
@@ -16,6 +17,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<AuctionInfo, IFutRequest<Item>> _itemRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte[]>> _playerImageRequestFactory;
+
+        private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
 
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
@@ -45,6 +48,12 @@ namespace UltimateTeam.Toolkit.Factories
         {
             get { return _playerImageRequestFactory ?? (_playerImageRequestFactory = info => new PlayerImageRequest(info)); }
             set { _playerImageRequestFactory = value; }
+        }
+
+        public Func<IEnumerable<long>, IFutRequest<AuctionResponse>> TradeStatusRequestFactory
+        {
+            get { return _tradeStatusRequestFactory ?? (_tradeStatusRequestFactory = tradeIds => new TradeStatusRequest(tradeIds)); }
+            set { _tradeStatusRequestFactory = value; }
         }
     }
 }

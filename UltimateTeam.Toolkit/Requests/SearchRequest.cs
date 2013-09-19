@@ -24,7 +24,7 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = string.Format(Resources.FutHome + Resources.TransferMarket + "?start={0}&num={1}", (_searchParameters.Page - 1) * PageSize, PageSize + 1);
             _searchParameters.BuildUriString(ref uriString);
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, "GET");
+            AddMethodOverrideHeader("GET");
             AddCommonHeaders();
             var searchResponseMessage = await HttpClient.PostAsync(uriString, new StringContent(" "));
             searchResponseMessage.EnsureSuccessStatusCode();

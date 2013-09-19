@@ -83,6 +83,7 @@
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
+    <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
   </ItemGroup>

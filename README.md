@@ -13,6 +13,7 @@ FIFA Ultimate Team 2014 Toolkit
 [Login](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#login)  
 [Player search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-search)  
 [Place bid](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#place-bid)  
+[Trade status](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#trade-status)  
 [Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
 [Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
@@ -65,6 +66,22 @@ Place the next valid bid amount:
 
 ```csharp
 var auctionResponse = await client.PlaceBidAsync(auctionInfo);
+```
+
+### Trade status
+
+Retrieves the trade status of the auctions of interest.
+
+```csharp
+var auctionResponse = await client.GetTradeStatusAsync(
+    Auctions // Contains the auctions we're currently watching
+    .Where(x => x.AuctionInfo.Expires != -1) // Not expired
+    .Select(x => x.AuctionInfo.TradeId));
+
+foreach (var auctionInfo in auctionResponse.AuctionInfo)
+{
+	// Handle the updated auction data
+}
 ```
 
 ### Item data

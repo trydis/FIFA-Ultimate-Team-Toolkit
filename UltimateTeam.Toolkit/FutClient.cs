@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
@@ -85,6 +86,8 @@ namespace UltimateTeam.Toolkit
 
         public async Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
         {
+            auctionInfo.ThrowIfNullArgument();
+
             try
             {
                 return await _requestFactories.PlayerImageRequestFactory(auctionInfo).PerformRequestAsync();
@@ -92,6 +95,20 @@ namespace UltimateTeam.Toolkit
             catch (Exception e)
             {
                 throw new FutException("Get player image failed", e);
+            }
+        }
+
+        public async Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds)
+        {
+            tradeIds.ThrowIfNullArgument();
+
+            try
+            {
+                return await _requestFactories.TradeStatusRequestFactory(tradeIds).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get trade statuses failed", e);
             }
         }
     }

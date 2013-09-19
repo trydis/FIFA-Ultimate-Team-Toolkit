@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 
@@ -15,5 +16,7 @@ namespace UltimateTeam.Toolkit
         Task<Item> GetItemAsync(AuctionInfo auctionInfo);
 
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
+
+        Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds);
     }
 }

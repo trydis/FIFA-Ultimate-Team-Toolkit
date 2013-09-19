@@ -22,7 +22,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<AuctionResponse> PerformRequestAsync()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, "PUT");
+            AddMethodOverrideHeader("PUT");
             AddCommonHeaders();
             var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
             var bidResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content));

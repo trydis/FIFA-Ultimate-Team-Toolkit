@@ -26,6 +26,8 @@
 
         public const string TransferMarket = "transfermarket";
 
-        public static string Bid = "trade/{0}/bid";
+        public const string Bid = "trade/{0}/bid";
+
+        public const string TradeStatus = "trade?tradeIds={0}";
     }
 }
