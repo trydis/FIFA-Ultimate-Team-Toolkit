@@ -68,5 +68,5 @@ var auctionResponse = await client.PlaceBidAsync(auctionInfo);
 ### NuGet packages
 
 If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
-[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)
+[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)  
 [Async targeting pack](http://www.nuget.org/packages/Microsoft.Bcl.Async/)
