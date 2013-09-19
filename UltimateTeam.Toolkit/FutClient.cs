@@ -82,5 +82,17 @@ namespace UltimateTeam.Toolkit
                throw new FutException("Get item failed", e);
             }
         }
+
+        public async Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
+        {
+            try
+            {
+                return await _requestFactories.PlayerImageRequestFactory(auctionInfo).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get player image failed", e);
+            }
+        }
     }
 }

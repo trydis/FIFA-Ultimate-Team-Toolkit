@@ -14,6 +14,7 @@ FIFA Ultimate Team 2014 Toolkit
 [Player search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-search)  
 [Place bid](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#place-bid)  
 [Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
+[Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -72,6 +73,15 @@ Contains info such as name, ratings etc.
 
 ```csharp
 var item = await client.GetItemAsync(auctionInfo);
+```
+
+### Player image
+
+- Format: PNG
+- Dimensions: 100 x 100 pixels
+
+```csharp
+var imageBytes = await client.GetPlayerImageAsync(auctionInfo);
 ```
 
 ### NuGet packages
