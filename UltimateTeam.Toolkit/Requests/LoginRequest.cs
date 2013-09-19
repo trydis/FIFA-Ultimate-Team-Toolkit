@@ -41,21 +41,21 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<LoginResponse> PerformRequestAsync()
         {
-            var mainPageResponseMessage = await GetMainPageAsync(HttpClient);
-            await LoginAsync(_loginDetails, HttpClient, mainPageResponseMessage);
-            var nucleusId = await GetNucleusIdAsync(HttpClient);
-            var shards = await GetShardsAsync(HttpClient, nucleusId);
-            var userAccounts = await GetUserAccountsAsync(HttpClient, _loginDetails.Platform);
-            var sessionId = await GetSessionIdAsync(HttpClient, nucleusId, userAccounts, _loginDetails.Platform);
-            var phishingToken = await ValidateAsync(_loginDetails, HttpClient, sessionId);
+            var mainPageResponseMessage = await GetMainPageAsync();
+            await LoginAsync(_loginDetails, mainPageResponseMessage);
+            var nucleusId = await GetNucleusIdAsync();
+            var shards = await GetShardsAsync(nucleusId);
+            var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
+            var sessionId = await GetSessionIdAsync(nucleusId, userAccounts, _loginDetails.Platform);
+            var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
             return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
         }
 
-        private async Task<string> ValidateAsync(LoginDetails loginDetails, HttpClient httpClient, string sessionId)
+        private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
         {
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, sessionId);
-            var validateResponseMessage = await httpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, sessionId);
+            var validateResponseMessage = await HttpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(
                 new[]
                 {
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
@@ -67,12 +67,12 @@ namespace UltimateTeam.Toolkit.Requests
             return validateResponse.Token;
         }
 
-        private static async Task<string> GetSessionIdAsync(HttpClient httpClient, string nucleusId, UserAccounts userAccounts, Platform platform)
+        private async Task<string> GetSessionIdAsync(string nucleusId, UserAccounts userAccounts, Platform platform)
         {
             var persona = userAccounts.UserAccountInfo.Personas
                 .OrderByDescending(x => x.UserClubList.OrderByDescending(club => club.LastAccessDateTime))
                 .First();
-            var authResponseMessage = await httpClient.PostAsync(Resources.Auth, new StringContent(
+            var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
                 string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT14WEB"", ""clientVersion"": 1, ""nuc"": {0}, ""nucleusPersonaId"": {1}, ""nucleusPersonaDisplayName"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
                     nucleusId, persona.PersonaId, persona.PersonaName, platform == Platform.Ps3 ? "ps3" : "360")));
             authResponseMessage.EnsureSuccessStatusCode();
@@ -85,35 +85,35 @@ namespace UltimateTeam.Toolkit.Requests
             return sessionId;
         }
 
-        private static async Task<UserAccounts> GetUserAccountsAsync(HttpClient httpClient, Platform platform)
+        private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
-            httpClient.DefaultRequestHeaders.Remove(NonStandardHttpHeaders.Route);
+            HttpClient.DefaultRequestHeaders.Remove(NonStandardHttpHeaders.Route);
             var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Ps3 ? "s2." : string.Empty);
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
-            var accountInfoResponseMessage = await httpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
+            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
             accountInfoResponseMessage.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<UserAccounts>(await accountInfoResponseMessage.Content.ReadAsStringAsync());
         }
 
-        private static async Task<Shards> GetShardsAsync(HttpClient httpClient, string nucleusId)
+        private async Task<Shards> GetShardsAsync(string nucleusId)
         {
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.NucleusId, nucleusId);
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, "https://utas.fut.ea.com");
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.Accept, "application/json, text/javascript");
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
-            httpClient.DefaultRequestHeaders.Referrer = new Uri("http://www.easports.com/iframe/fut/?baseShowoffUrl=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Ffootball-club%2Fultimate-team%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Ffootball-club%2Fultimate-team&locale=en_GB");
-            var shardsResponseMessage = await httpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.NucleusId, nucleusId);
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, "https://utas.fut.ea.com");
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
+            AddAcceptHeader("application/json, text/javascript");
+            AddAcceptLanguageHeader();
+            AddReferrerHeader(Resources.BaseShowoff);
+            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
             shardsResponseMessage.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<Shards>(await shardsResponseMessage.Content.ReadAsStringAsync());
         }
 
-        private static async Task<string> GetNucleusIdAsync(HttpClient httpClient)
+        private async Task<string> GetNucleusIdAsync()
         {
-            var nucleusResponseMessage = await httpClient.GetAsync(Resources.NucleusId);
+            var nucleusResponseMessage = await HttpClient.GetAsync(Resources.NucleusId);
             nucleusResponseMessage.EnsureSuccessStatusCode();
             var nucleusId = Regex.Match(await nucleusResponseMessage.Content.ReadAsStringAsync(), "EASW_ID = '\\d+'")
                 .Value
@@ -123,9 +123,9 @@ namespace UltimateTeam.Toolkit.Requests
             return nucleusId;
         }
 
-        private static async Task LoginAsync(LoginDetails loginDetails, HttpClient httpClient, HttpResponseMessage mainPageResponseMessage)
+        private async Task LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
         {
-            var loginResponseMessage = await httpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
+            var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
                 new[]
                 {
                     new KeyValuePair<string, string>("email", loginDetails.Username),
@@ -138,11 +138,11 @@ namespace UltimateTeam.Toolkit.Requests
             loginResponseMessage.EnsureSuccessStatusCode();
         }
 
-        private static async Task<HttpResponseMessage> GetMainPageAsync(HttpClient httpClient)
+        private async Task<HttpResponseMessage> GetMainPageAsync()
         {
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");
-            var mainPageResponseMessage = await httpClient.GetAsync(Resources.Home);
+            AddUserAgent();
+            AddAcceptEncodingHeader();
+            var mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
             mainPageResponseMessage.EnsureSuccessStatusCode();
 
             return mainPageResponseMessage;

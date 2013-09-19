@@ -11,5 +11,7 @@ namespace UltimateTeam.Toolkit
         Task<AuctionResponse> SearchAsync(SearchParameters searchParameters);
 
         Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0);
+
+        Task<Item> GetItemAsync(AuctionInfo auctionInfo);
     }
 }

@@ -45,5 +45,30 @@
 
             return CurrentPrice + 1000;
         }
+
+        public long CalculateBaseId()
+        {
+            var baseId = ItemData.ResourceId;
+            var version = 0;
+
+            while (baseId > 16777216)
+            {
+                version++;
+                switch (version)
+                {
+                    case 1:
+                        baseId -= 1342177280;
+                        break;
+                    case 2:
+                        baseId -= 50331648;
+                        break;
+                    default:
+                        baseId -= 16777216;
+                        break;
+                }
+            }
+
+            return baseId;
+        }
     }
 }

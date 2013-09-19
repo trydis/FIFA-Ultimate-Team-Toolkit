@@ -12,7 +12,8 @@ FIFA Ultimate Team 2014 Toolkit
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#initialization)  
 [Login](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#login)  
 [Player search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-search)  
-[Place bid](https://github.com/trydis/Fifa-Ultimate-Team-2014-Toolkit#place-bid)  
+[Place bid](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#place-bid)  
+[Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -63,6 +64,14 @@ Place the next valid bid amount:
 
 ```csharp
 var auctionResponse = await client.PlaceBidAsync(auctionInfo);
+```
+
+### Item data
+
+Contains info such as name, ratings etc.
+
+```csharp
+var item = await client.GetItemAsync(auctionInfo);
 ```
 
 ### NuGet packages

@@ -13,6 +13,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionInfo, uint, IFutRequest<AuctionResponse>> _placeBidRequestFactory;
 
+        private Func<AuctionInfo, IFutRequest<Item>> _itemRequestFactory;
+
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get { return _loginRequestFactory ?? (_loginRequestFactory = details => new LoginRequest(details)); }
@@ -29,6 +31,12 @@ namespace UltimateTeam.Toolkit.Factories
         {
             get { return _placeBidRequestFactory ?? (_placeBidRequestFactory = (info, amount) => new PlaceBidRequest(info, amount)); }
             set { _placeBidRequestFactory = value; }
+        }
+
+        public Func<AuctionInfo, IFutRequest<Item>> ItemRequestFactory
+        {
+            get { return _itemRequestFactory ?? (_itemRequestFactory = info => new ItemRequest(info)); }
+            set { _itemRequestFactory = value; }
         }
     }
 }

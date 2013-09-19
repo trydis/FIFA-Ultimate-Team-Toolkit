@@ -31,12 +31,37 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.PhishingToken, PhishingToken);
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, SessionId);
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.Accept, "application/json");
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            AddAcceptHeader("application/json");
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.ContentType, "application/json");
-            HttpClient.DefaultRequestHeaders.Referrer = new Uri("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
+            AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
+            AddUserAgent();
+        }
+
+        protected void AddUserAgent()
+        {
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
+        }
+
+        protected void AddAcceptHeader(string value)
+        {
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.Accept, value);            
+        }
+
+        protected void AddReferrerHeader(string value)
+        {
+            HttpClient.DefaultRequestHeaders.Referrer = new Uri(value);
+        }
+
+        protected void AddAcceptEncodingHeader()
+        {
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");            
+        }
+
+        protected void AddAcceptLanguageHeader()
+        {
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");            
         }
     }
 }

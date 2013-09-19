@@ -12,5 +12,7 @@ namespace UltimateTeam.Toolkit.Factories
         Func<SearchParameters, IFutRequest<AuctionResponse>> SearchRequestFactory { get; set; }
 
         Func<AuctionInfo, uint, IFutRequest<AuctionResponse>> PlaceBidRequestFactory { get; set; }
+
+        Func<AuctionInfo, IFutRequest<Item>> ItemRequestFactory { get; set; }
     }
 }

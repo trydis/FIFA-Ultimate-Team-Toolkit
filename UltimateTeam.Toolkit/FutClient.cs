@@ -68,5 +68,19 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Placing bid failed", e);
             }
         }
+
+        public async Task<Item> GetItemAsync(AuctionInfo auctionInfo)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            try
+            {
+                return await _requestFactories.ItemRequestFactory(auctionInfo).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+               throw new FutException("Get item failed", e);
+            }
+        }
     }
 }
