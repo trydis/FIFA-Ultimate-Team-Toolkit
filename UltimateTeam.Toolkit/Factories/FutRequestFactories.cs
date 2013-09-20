@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
+using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Factories
 {
-    internal class FutRequestFactories : IFutRequestFactories
+    public class FutRequestFactories
     {
         private Func<LoginDetails, IFutRequest<LoginResponse>> _loginRequestFactory;
 
@@ -23,37 +24,61 @@ namespace UltimateTeam.Toolkit.Factories
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get { return _loginRequestFactory ?? (_loginRequestFactory = details => new LoginRequest(details)); }
-            set { _loginRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _loginRequestFactory = value;
+            }
         }
 
         public Func<SearchParameters, IFutRequest<AuctionResponse>> SearchRequestFactory
         {
             get { return _searchRequestFactory ?? (_searchRequestFactory = parameters => new SearchRequest(parameters)); }
-            set { _searchRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _searchRequestFactory = value;
+            }
         }
 
         public Func<AuctionInfo, uint, IFutRequest<AuctionResponse>> PlaceBidRequestFactory
         {
             get { return _placeBidRequestFactory ?? (_placeBidRequestFactory = (info, amount) => new PlaceBidRequest(info, amount)); }
-            set { _placeBidRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _placeBidRequestFactory = value;
+            }
         }
 
         public Func<AuctionInfo, IFutRequest<Item>> ItemRequestFactory
         {
             get { return _itemRequestFactory ?? (_itemRequestFactory = info => new ItemRequest(info)); }
-            set { _itemRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _itemRequestFactory = value;
+            }
         }
 
         public Func<AuctionInfo, IFutRequest<byte[]>> PlayerImageRequestFactory
         {
             get { return _playerImageRequestFactory ?? (_playerImageRequestFactory = info => new PlayerImageRequest(info)); }
-            set { _playerImageRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _playerImageRequestFactory = value;
+            }
         }
 
         public Func<IEnumerable<long>, IFutRequest<AuctionResponse>> TradeStatusRequestFactory
         {
             get { return _tradeStatusRequestFactory ?? (_tradeStatusRequestFactory = tradeIds => new TradeStatusRequest(tradeIds)); }
-            set { _tradeStatusRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _tradeStatusRequestFactory = value;
+            }
         }
     }
 }

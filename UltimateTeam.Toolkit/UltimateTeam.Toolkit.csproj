@@ -40,7 +40,6 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\FutRequestFactories.cs" />
-    <Compile Include="Factories\IFutRequestFactories.cs" />
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />

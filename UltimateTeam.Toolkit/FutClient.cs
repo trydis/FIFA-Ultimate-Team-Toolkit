@@ -11,15 +11,16 @@ namespace UltimateTeam.Toolkit
 {
     public class FutClient : IFutClient
     {
-        private readonly IFutRequestFactories _requestFactories;
+        private readonly FutRequestFactories _requestFactories;
 
         public FutClient()
             : this(new FutRequestFactories())
         {
         }
 
-        public FutClient(IFutRequestFactories requestFactories)
+        public FutClient(FutRequestFactories requestFactories)
         {
+            requestFactories.ThrowIfNullArgument();
             _requestFactories = requestFactories;
         }
 
@@ -80,7 +81,7 @@ namespace UltimateTeam.Toolkit
             }
             catch (Exception e)
             {
-               throw new FutException("Get item failed", e);
+                throw new FutException("Get item failed", e);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Moq;
 using NUnit.Framework;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Factories;
@@ -7,45 +6,58 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Tests
 {
-    //[TestFixture]
-    //public class FutClientTests
-    //{
-    //    private const string IgnoredParameter = "foo";
+    [TestFixture]
+    public class FutClientTests
+    {
+        private FutRequestFactories _requestFactories;
 
-    //    private Mock<IFutRequestFactory> _requestFactoryMock;
+        private IFutClient _futClient;
 
-    //    private IFutClient _futClient;
+        public void CreateClient(bool passNullInstance = false)
+        {
+            _requestFactories = new FutRequestFactories();
+            _futClient = new FutClient(passNullInstance ? null : _requestFactories);
+        }
 
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //        _requestFactoryMock = new Mock<IFutRequestFactory>();
-    //        _futClient = new FutClient(_requestFactoryMock.Object);
-    //    }
+        [Test,
+        ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_WhenPassedNull_ShouldThrowArgumentNullException()
+        {
+            CreateClient(true);
+        }
 
-    //    [Test,
-    //    ExpectedException(typeof(ArgumentException))]
-    //    public async void Foo()
-    //    {
-    //        await _futClient.LoginAsync(new LoginDetails(null, IgnoredParameter, IgnoredParameter));
-    //    }
+        [Test,
+        ExpectedException(typeof(ArgumentNullException))]
+        public async void LoginAsync_WhenPassedNull_ShouldThrowArgumentException()
+        {
+            CreateClient();
 
-    //    [Test,
-    //    ExpectedException(typeof(ArgumentException))]
-    //    public async void Foo2()
-    //    {
-    //        await _futClient.LoginAsync(new LoginDetails(IgnoredParameter, null, IgnoredParameter));
-    //    }
+            await _futClient.LoginAsync(null);
+        }
 
-    //    [Test,
-    //    ExpectedException(typeof(FutException))]
-    //    public async void Foo3()
-    //    {
-    //        _requestFactoryMock
-    //            .Setup(factory => factory.CreateLoginRequest(It.IsAny<LoginDetails>()))
-    //            .Throws<Exception>();
+        [Test]
+        public async void LoginAsync_WhenCalled_ShouldPerformRequest()
+        {
+            CreateClient();
+            var mockRequest = TestHelpers.CreateMockRequestReturningNull<LoginResponse>();
+            _requestFactories.LoginRequestFactory = details => mockRequest.Object;
 
-    //        await _futClient.LoginAsync(new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter));
-    //    }
-    //}
+            await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails());
+
+            mockRequest.VerifyAll();
+        }
+
+        [Test,
+        ExpectedException(typeof(FutException))]
+        public async void LoginAsync_WhenPerformRequestThrowsException_ShouldThrowFutException()
+        {
+            CreateClient();
+            var mockRequest = TestHelpers.CreateMockRequestThrowingException<LoginResponse>();
+            _requestFactories.LoginRequestFactory = details => mockRequest.Object;
+
+            await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails());
+
+            mockRequest.VerifyAll();
+        }
+    }
 }
