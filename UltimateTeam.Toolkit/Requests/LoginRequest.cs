@@ -74,7 +74,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .First();
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
                 string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT14WEB"", ""clientVersion"": 1, ""nuc"": {0}, ""nucleusPersonaId"": {1}, ""nucleusPersonaDisplayName"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
-                    nucleusId, persona.PersonaId, persona.PersonaName, platform == Platform.Ps3 ? "ps3" : "360")));
+                    nucleusId, persona.PersonaId, persona.PersonaName, GetNucleusPersonaPlatform(platform))));
             authResponseMessage.EnsureSuccessStatusCode();
             var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
                 .Value
@@ -85,10 +85,25 @@ namespace UltimateTeam.Toolkit.Requests
             return sessionId;
         }
 
+        private static string GetNucleusPersonaPlatform(Platform platform)
+        {
+            switch (platform)
+            {
+                case Platform.Ps3:
+                    return "ps3";
+                case Platform.Xbox360:
+                    return "360";
+                case Platform.Pc:
+                    return "pc";
+                default:
+                    throw new ArgumentOutOfRangeException("platform");
+            }
+        }
+
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
             HttpClient.DefaultRequestHeaders.Remove(NonStandardHttpHeaders.Route);
-            var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Ps3 ? "s2." : string.Empty);
+            var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Xbox360 ? string.Empty : "s2.");
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
             accountInfoResponseMessage.EnsureSuccessStatusCode();
