@@ -31,5 +31,7 @@
         public const string TradeStatus = "trade?tradeIds={0}";
 
         public const string Credits = "user/credits";
+
+        public const string Auctionhouse = "auctionhouse";
     }
 }

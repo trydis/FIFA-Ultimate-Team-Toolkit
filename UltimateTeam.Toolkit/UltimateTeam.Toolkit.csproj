@@ -43,6 +43,8 @@
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\AuctionDetails.cs" />
+    <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\BidTokens.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\ItemWrapper.cs" />
+    <Compile Include="Models\ListAuctionResponse.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\RareType.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Requests\FutRequestBase.cs" />
     <Compile Include="Requests\IFutRequest.cs" />
     <Compile Include="Requests\ItemRequest.cs" />
+    <Compile Include="Requests\ListAuctionRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />

@@ -20,5 +20,7 @@ namespace UltimateTeam.Toolkit
         Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds);
 
         Task<CreditsResponse> GetCreditsAsync();
+
+        Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails);
     }
 }

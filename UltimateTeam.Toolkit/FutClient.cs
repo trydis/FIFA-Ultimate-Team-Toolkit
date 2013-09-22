@@ -124,5 +124,19 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Get credits failed", e);
             }
         }
+
+        public async Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
+        {
+            auctionDetails.ThrowIfNullArgument();
+
+            try
+            {
+                return await _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("List auction failed", e);
+            }
+        }
     }
 }

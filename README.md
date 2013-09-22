@@ -17,6 +17,7 @@ FIFA Ultimate Team 2014 Toolkit
 [Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
 [Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
 [Credits](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#credits)  
+[List auction](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#list-auction)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -108,6 +109,22 @@ Amount of coins and unopened packs.
 
 ```csharp
 var creditsResponse = await client.GetCreditsAsync();
+```
+
+### List auction
+
+Lists an auction from a trade pile item.
+
+```csharp
+// Duration = one hour, starting bid = 150 and no buy now price
+var auctionDetails = new AuctionDetails(auctionInfo.ItemData.Id);
+```
+```csharp
+// Duration = three hours, starting bid = 200 and buy now price = 1000
+var auctionDetails = new AuctionDetails(auctionInfo.ItemData.Id, AuctionDuration.ThreeHours, 200, 1000);
+```
+```csharp
+var listAuctionResponse = await client.ListAuctionAsync(auctionDetails);
 ```
 
 ### NuGet packages
