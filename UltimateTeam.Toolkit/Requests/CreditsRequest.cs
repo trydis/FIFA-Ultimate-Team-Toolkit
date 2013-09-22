@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
@@ -9,7 +10,7 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<CreditsResponse> PerformRequestAsync()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, "GET");
+            AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
             var creditsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.Credits));
             creditsResponseMessage.EnsureSuccessStatusCode();

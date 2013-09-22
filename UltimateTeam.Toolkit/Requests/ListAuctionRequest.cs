@@ -19,7 +19,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<ListAuctionResponse> PerformRequestAsync()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, "POST");
+            AddMethodOverrideHeader(HttpMethod.Post);
             AddCommonHeaders();
             var content = string.Format("{{\"buyNowPrice\":{0},\"startingBid\":{1},\"duration\":{2},\"itemData\":{{\"id\":{3}}}}}",
                 _auctionDetails.BuyNowPrice, _auctionDetails.StartingBid, (uint)_auctionDetails.AuctionDuration, _auctionDetails.ItemDataId);

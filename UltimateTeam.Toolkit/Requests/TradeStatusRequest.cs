@@ -22,7 +22,7 @@ namespace UltimateTeam.Toolkit.Requests
         public async Task<AuctionResponse> PerformRequestAsync()
         {
             AddCommonHeaders();
-            AddMethodOverrideHeader("GET");
+            AddMethodOverrideHeader(HttpMethod.Get);
             var tradeStatusResponseMessage = await HttpClient.PostAsync(
                 string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds)),
                 new StringContent(" ", Encoding.UTF8, "application/json"));

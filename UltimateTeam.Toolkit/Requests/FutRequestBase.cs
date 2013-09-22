@@ -64,9 +64,9 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");            
         }
 
-        protected void AddMethodOverrideHeader(string value)
+        protected void AddMethodOverrideHeader(HttpMethod httpMethod)
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, value);                        
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);                        
         }
     }
 }
