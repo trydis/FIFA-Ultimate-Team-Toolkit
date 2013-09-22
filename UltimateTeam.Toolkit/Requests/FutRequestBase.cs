@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -67,6 +69,11 @@ namespace UltimateTeam.Toolkit.Requests
         protected void AddMethodOverrideHeader(HttpMethod httpMethod)
         {
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);                        
+        }
+
+        protected static async Task<T> Deserialize<T>(HttpResponseMessage message)
+        {
+            return JsonConvert.DeserializeObject<T>(await message.Content.ReadAsStringAsync());
         }
     }
 }

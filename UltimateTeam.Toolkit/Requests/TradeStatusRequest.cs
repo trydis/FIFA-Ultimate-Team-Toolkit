@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
@@ -28,7 +27,7 @@ namespace UltimateTeam.Toolkit.Requests
                 new StringContent(" ", Encoding.UTF8, "application/json"));
             tradeStatusResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<AuctionResponse>(await tradeStatusResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Services;
@@ -61,7 +60,7 @@ namespace UltimateTeam.Toolkit.Requests
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
             validateResponseMessage.EnsureSuccessStatusCode();
-            var validateResponse = JsonConvert.DeserializeObject<ValidateResponse>(await validateResponseMessage.Content.ReadAsStringAsync());
+            var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
             PhishingToken = validateResponse.Token;
 
             return validateResponse.Token;
@@ -108,7 +107,7 @@ namespace UltimateTeam.Toolkit.Requests
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
             accountInfoResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<UserAccounts>(await accountInfoResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<UserAccounts>(accountInfoResponseMessage);
         }
 
         private async Task<Shards> GetShardsAsync(string nucleusId)
@@ -123,7 +122,7 @@ namespace UltimateTeam.Toolkit.Requests
             var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
             shardsResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<Shards>(await shardsResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<Shards>(shardsResponseMessage);
         }
 
         private async Task<string> GetNucleusIdAsync()

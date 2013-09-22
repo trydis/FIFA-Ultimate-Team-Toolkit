@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
@@ -26,7 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
             var tradepileResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.Auctionhouse), new StringContent(content));
             tradepileResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<ListAuctionResponse>(await tradepileResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<ListAuctionResponse>(tradepileResponseMessage);
         }
     }
 }

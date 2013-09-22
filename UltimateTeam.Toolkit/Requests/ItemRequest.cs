@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
@@ -25,7 +24,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
             var itemResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Item, _auctionInfo.CalculateBaseId()));
             itemResponseMessage.EnsureSuccessStatusCode();
-            var itemWrapper = JsonConvert.DeserializeObject<ItemWrapper>(await itemResponseMessage.Content.ReadAsStringAsync());
+            var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
 
             return itemWrapper.Item;
         }

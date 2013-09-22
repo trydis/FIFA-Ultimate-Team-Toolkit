@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
@@ -29,7 +28,7 @@ namespace UltimateTeam.Toolkit.Requests
             var searchResponseMessage = await HttpClient.PostAsync(uriString, new StringContent(" "));
             searchResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<AuctionResponse>(await searchResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<AuctionResponse>(searchResponseMessage);
         }
     }
 }

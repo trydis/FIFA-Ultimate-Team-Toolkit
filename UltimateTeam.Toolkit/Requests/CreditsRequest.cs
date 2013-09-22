@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 
@@ -15,7 +14,7 @@ namespace UltimateTeam.Toolkit.Requests
             var creditsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.Credits));
             creditsResponseMessage.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<CreditsResponse>(await creditsResponseMessage.Content.ReadAsStringAsync());
+            return await Deserialize<CreditsResponse>(creditsResponseMessage);
         }
     }
 }

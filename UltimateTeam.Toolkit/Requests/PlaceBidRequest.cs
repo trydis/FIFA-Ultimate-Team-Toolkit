@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
@@ -27,7 +26,7 @@ namespace UltimateTeam.Toolkit.Requests
             var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
             var bidResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content));
             bidResponseMessage.EnsureSuccessStatusCode();
-            var auctionResponse = JsonConvert.DeserializeObject<AuctionResponse>(await bidResponseMessage.Content.ReadAsStringAsync());
+            var auctionResponse = await Deserialize<AuctionResponse>(bidResponseMessage);
 
             return auctionResponse;
         }
