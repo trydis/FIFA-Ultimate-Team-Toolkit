@@ -18,5 +18,7 @@ namespace UltimateTeam.Toolkit
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
 
         Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds);
+
+        Task<CreditsResponse> GetCreditsAsync();
     }
 }

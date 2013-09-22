@@ -112,5 +112,17 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Get trade statuses failed", e);
             }
         }
+
+        public async Task<CreditsResponse> GetCreditsAsync()
+        {
+            try
+            {
+                return await _requestFactories.CreditsRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get credits failed", e);
+            }
+        }
     }
 }
