@@ -6,7 +6,7 @@
 
         public uint BuyNowPrice { get; set; }
 
-        public uint CurrentPrice { get; set; }
+        public uint CurrentBid { get; set; }
 
         public int Expires { get; set; }
 
@@ -28,22 +28,22 @@
 
         public uint CalculateBid()
         {
-            if (CurrentPrice == 0)
+            if (CurrentBid == 0)
                 return StartingBid;
 
-            if (CurrentPrice < 1000)
-                return CurrentPrice + 50;
+            if (CurrentBid < 1000)
+                return CurrentBid + 50;
 
-            if (CurrentPrice < 10000)
-                return CurrentPrice + 100;
+            if (CurrentBid < 10000)
+                return CurrentBid + 100;
 
-            if (CurrentPrice < 50000)
-                return CurrentPrice + 250;
+            if (CurrentBid < 50000)
+                return CurrentBid + 250;
 
-            if (CurrentPrice < 100000)
-                return CurrentPrice + 500;
+            if (CurrentBid < 100000)
+                return CurrentBid + 500;
 
-            return CurrentPrice + 1000;
+            return CurrentBid + 1000;
         }
 
         public long CalculateBaseId()
