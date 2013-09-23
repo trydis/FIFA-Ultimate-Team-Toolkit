@@ -33,5 +33,11 @@
         public const string Credits = "user/credits";
 
         public const string Auctionhouse = "auctionhouse";
+
+        public const string TradePile = "tradepile";
+
+        public const string Watchlist = "watchlist";
+
+        public const string PurchasedItems = "purchased/items";
     }
 }

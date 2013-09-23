@@ -22,6 +22,12 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
 
         private Func<IFutRequest<CreditsResponse>> _creditsRequestFactory;
+        
+        private Func<IFutRequest<TradePileResponse>> _tradePileRequestFactory;
+
+        private Func<IFutRequest<WatchlistResponse>> _watchlistRequestFactory;
+
+        private Func<IFutRequest<PurchasedItemsResponse>> _purchaseditemsRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
@@ -92,6 +98,36 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _creditsRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<TradePileResponse>> TradePileRequestFactory
+        {
+            get { return _tradePileRequestFactory ?? (_tradePileRequestFactory = () => new TradePileRequest()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _tradePileRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<WatchlistResponse>> WatchlistRequestFactory
+        {
+            get { return _watchlistRequestFactory ?? (_watchlistRequestFactory = () => new WatchlistRequest()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _watchlistRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<PurchasedItemsResponse>> PurchasedItemsRequestFactory
+        {
+            get { return _purchaseditemsRequestFactory ?? (_purchaseditemsRequestFactory = () => new PurchasedItemsRequest()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _purchaseditemsRequestFactory = value;
             }
         }
 

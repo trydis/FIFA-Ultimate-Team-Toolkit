@@ -125,6 +125,42 @@ namespace UltimateTeam.Toolkit
             }
         }
 
+        public async Task<TradePileResponse> GetTradePileAsync()
+        {
+            try
+            {
+                return await _requestFactories.TradePileRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get TradePile failed", e);
+            }
+        }
+
+        public async Task<WatchlistResponse> GetWatchlistAsync()
+        {
+            try
+            {
+                return await _requestFactories.WatchlistRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get Watchlist failed", e);
+            }
+        }
+
+        public async Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
+        {
+            try
+            {
+                return await _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get Purchased Items failed", e);
+            }
+        }
+
         public async Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
         {
             auctionDetails.ThrowIfNullArgument();
