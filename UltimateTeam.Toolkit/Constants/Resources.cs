@@ -35,5 +35,7 @@
         public const string Auctionhouse = "auctionhouse";
 
         public const string TradePile = "tradepile";
+
+        public const string Watchlist = "watchlist";
     }
 }

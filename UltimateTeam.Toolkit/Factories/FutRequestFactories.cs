@@ -25,6 +25,8 @@ namespace UltimateTeam.Toolkit.Factories
         
         private Func<IFutRequest<TradePileResponse>> _tradePileRequestFactory;
 
+        private Func<IFutRequest<WatchlistResponse>> _watchlistRequestFactory;
+
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
@@ -104,6 +106,16 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _tradePileRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<WatchlistResponse>> WatchlistRequestFactory
+        {
+            get { return _watchlistRequestFactory ?? (_watchlistRequestFactory = () => new WatchlistRequest()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _watchlistRequestFactory = value;
             }
         }
 

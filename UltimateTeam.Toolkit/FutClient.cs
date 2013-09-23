@@ -137,6 +137,18 @@ namespace UltimateTeam.Toolkit
             }
         }
 
+        public async Task<WatchlistResponse> GetWatchlistAsync()
+        {
+            try
+            {
+                return await _requestFactories.WatchlistRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get Watchlist failed", e);
+            }
+        }
+
         public async Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
         {
             auctionDetails.ThrowIfNullArgument();

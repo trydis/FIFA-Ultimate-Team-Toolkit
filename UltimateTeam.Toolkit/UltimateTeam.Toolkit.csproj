@@ -70,6 +70,7 @@
     <Compile Include="Models\UserAccounts.cs" />
     <Compile Include="Models\UserClub.cs" />
     <Compile Include="Models\ValidateResponse.cs" />
+    <Compile Include="Models\WatchlistResponse.cs" />
     <Compile Include="Parameters\ChemistryStyle.cs" />
     <Compile Include="Parameters\League.cs" />
     <Compile Include="Parameters\Level.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
+    <Compile Include="Requests\WatchlistRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
   </ItemGroup>
