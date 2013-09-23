@@ -18,6 +18,9 @@ FIFA Ultimate Team 2014 Toolkit
 [Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
 [Credits](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#credits)  
 [List auction](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#list-auction)  
+[Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-trade-pile)  
+[Watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#watch-list)  
+[Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#purchased-items)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -125,6 +128,30 @@ var auctionDetails = new AuctionDetails(auctionInfo.ItemData.Id, AuctionDuration
 ```
 ```csharp
 var listAuctionResponse = await client.ListAuctionAsync(auctionDetails);
+```
+
+### Get trade pile
+
+Gets the items in the trade pile.
+
+```csharp
+var tradePileResponse = await client.GetTradePileAsync();
+```
+
+### Watch list
+
+Retrieves the the watch list.
+
+```csharp
+var watchlistResponse = await client.GetWatchlistAsync();
+```
+
+### Purchased items
+
+Items that have been bought or received in gift packs.
+
+```csharp
+var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
 ```
 
 ### NuGet packages

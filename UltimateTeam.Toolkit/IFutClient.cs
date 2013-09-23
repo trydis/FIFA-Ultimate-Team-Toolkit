@@ -21,6 +21,12 @@ namespace UltimateTeam.Toolkit
 
         Task<CreditsResponse> GetCreditsAsync();
 
+        Task<TradePileResponse> GetTradePileAsync();
+
+        Task<WatchlistResponse> GetWatchlistAsync();
+
+        Task<PurchasedItemsResponse> GetPurchasedItemsAsync();
+
         Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails);
     }
 }
