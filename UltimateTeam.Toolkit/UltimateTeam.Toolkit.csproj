@@ -59,6 +59,7 @@
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\RareType.cs" />
+    <Compile Include="Models\TradePileResponse.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
     <Compile Include="Models\UserAccountInfo.cs" />
     <Compile Include="Models\LoginDetails.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
+    <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />

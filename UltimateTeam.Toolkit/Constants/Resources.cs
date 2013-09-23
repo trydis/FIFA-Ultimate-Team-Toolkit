@@ -33,5 +33,7 @@
         public const string Credits = "user/credits";
 
         public const string Auctionhouse = "auctionhouse";
+
+        public const string TradePile = "tradepile";
     }
 }

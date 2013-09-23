@@ -125,6 +125,18 @@ namespace UltimateTeam.Toolkit
             }
         }
 
+        public async Task<TradePileResponse> GetTradePileAsync()
+        {
+            try
+            {
+                return await _requestFactories.TradePileRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get TradePile failed", e);
+            }
+        }
+
         public async Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
         {
             auctionDetails.ThrowIfNullArgument();

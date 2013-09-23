@@ -22,6 +22,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
 
         private Func<IFutRequest<CreditsResponse>> _creditsRequestFactory;
+        
+        private Func<IFutRequest<TradePileResponse>> _tradePileRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
@@ -92,6 +94,16 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _creditsRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<TradePileResponse>> TradePileRequestFactory
+        {
+            get { return _tradePileRequestFactory ?? (_tradePileRequestFactory = () => new TradePileRequest()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _tradePileRequestFactory = value;
             }
         }
 
