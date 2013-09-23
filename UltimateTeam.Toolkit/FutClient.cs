@@ -149,6 +149,18 @@ namespace UltimateTeam.Toolkit
             }
         }
 
+        public async Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
+        {
+            try
+            {
+                return await _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Get Purchased Items failed", e);
+            }
+        }
+
         public async Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
         {
             auctionDetails.ThrowIfNullArgument();

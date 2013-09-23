@@ -37,5 +37,7 @@
         public const string TradePile = "tradepile";
 
         public const string Watchlist = "watchlist";
+
+        public const string PurchasedItems = "purchased/items";
     }
 }
