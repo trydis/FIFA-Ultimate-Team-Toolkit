@@ -52,6 +52,7 @@
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
+    <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\ItemWrapper.cs" />
