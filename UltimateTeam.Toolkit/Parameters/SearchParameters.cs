@@ -26,6 +26,8 @@
 
         public Level Level { get; set; }
 
+        public string DevelopmentType { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();
