@@ -30,6 +30,8 @@
 
         public string TrainingType { get; set; }
 
+        public string ClubInfoType { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();
