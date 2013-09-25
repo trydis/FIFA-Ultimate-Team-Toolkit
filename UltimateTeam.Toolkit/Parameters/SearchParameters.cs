@@ -32,6 +32,8 @@
 
         public string ClubInfoType { get; set; }
 
+        public string StaffType { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();
