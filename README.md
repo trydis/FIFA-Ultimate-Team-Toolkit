@@ -21,6 +21,8 @@ FIFA Ultimate Team 2014 Toolkit
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-trade-pile)  
 [Watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#watch-list)  
 [Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#purchased-items)  
+[Development search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#development-search)  
+[Training search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#training-search)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -152,6 +154,44 @@ Items that have been bought or received in gift packs.
 
 ```csharp
 var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
+```
+
+## Development search
+
+All the search parameters are optional. If none are specified, you will get the 1st page of results with no filters applied.
+
+```csharp
+var searchParameters = new DevelopmentSearchParameters
+{
+    Page = 1,
+    Level = Level.Gold,
+    DevelopmentType = DevelopmentType.Healing,
+};
+
+var searchResponse = await client.SearchAsync(searchParameters);
+foreach (var auctionInfo in searchResponse.AuctionInfo)
+{
+    // Handle auction data
+}
+```
+
+## Training search
+
+All the search parameters are optional. If none are specified, you will get the 1st page of results with no filters applied.
+
+```csharp
+ var searchParameters = new TrainingSearchParameters
+{
+    Page = 1,
+    Level = Level.Gold,
+    TrainingType = TrainingType.ChemistryStyles,
+};
+
+var searchResponse = await client.SearchAsync(searchParameters);
+foreach (var auctionInfo in searchResponse.AuctionInfo)
+{
+    // Handle auction data
+}
 ```
 
 ### NuGet packages
