@@ -156,7 +156,7 @@ Items that have been bought or received in gift packs.
 var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
 ```
 
-## Development search
+### Development search
 
 All the search parameters are optional. If none are specified, you will get the 1st page of results with no filters applied.
 
@@ -175,7 +175,7 @@ foreach (var auctionInfo in searchResponse.AuctionInfo)
 }
 ```
 
-## Training search
+### Training search
 
 All the search parameters are optional. If none are specified, you will get the 1st page of results with no filters applied.
 
