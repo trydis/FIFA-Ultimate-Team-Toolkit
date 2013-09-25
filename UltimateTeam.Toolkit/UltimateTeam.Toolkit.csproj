@@ -75,6 +75,7 @@
     <Compile Include="Parameters\ChemistryStyle.cs" />
     <Compile Include="Parameters\ClubInfoSearchParameters.cs" />
     <Compile Include="Parameters\ClubInfoType.cs" />
+    <Compile Include="Parameters\BallSearchParameters.cs" />
     <Compile Include="Parameters\DevelopmentSearchParameters.cs" />
     <Compile Include="Parameters\DevelopmentType.cs" />
     <Compile Include="Parameters\League.cs" />
