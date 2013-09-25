@@ -39,5 +39,7 @@
         public const string Watchlist = "watchlist";
 
         public const string PurchasedItems = "purchased/items";
+
+        public const string ListItem = "item";
     }
 }

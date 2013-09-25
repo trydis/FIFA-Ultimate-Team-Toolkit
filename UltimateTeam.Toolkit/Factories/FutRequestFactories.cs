@@ -30,8 +30,10 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IFutRequest<PurchasedItemsResponse>> _purchaseditemsRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
-
+        
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
+        
+        private Func<ItemData, IFutRequest<TradePileResponse>> _sendItemToTradePileRequestFactory;
 
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
@@ -151,6 +153,12 @@ namespace UltimateTeam.Toolkit.Factories
                 value.ThrowIfNullArgument();
                 _removeFromWatchlistRequestFactory = value;
             }
+        }
+
+        public Func<ItemData, IFutRequest<TradePileResponse>> SendItemToTradePileRequestFactory
+        {
+            get { return _sendItemToTradePileRequestFactory ?? (_sendItemToTradePileRequestFactory = itemData => new SendItemToTradePileRequest(itemData)); }
+            set { _sendItemToTradePileRequestFactory = value; }
         }
     }
 }

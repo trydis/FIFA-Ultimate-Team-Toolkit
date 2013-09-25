@@ -103,6 +103,7 @@
     <Compile Include="Requests\PlayerImageRequest.cs" />
     <Compile Include="Requests\PurchasedItemsRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
+    <Compile Include="Requests\SendItemToTradePileRequest.cs" />
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Requests\RemoveFromWatchlistRequest.cs" />

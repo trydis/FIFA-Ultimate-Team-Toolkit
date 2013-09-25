@@ -23,6 +23,7 @@ FIFA Ultimate Team 2014 Toolkit
 [Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#training-search)  
+[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#send-to-trade-pile)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -192,6 +193,14 @@ foreach (var auctionInfo in searchResponse.AuctionInfo)
 {
     // Handle auction data
 }
+```
+
+### Send to trade pile
+
+Sends an item to the trade pile (transfer market) 
+
+```csharp
+var sendToTradePileResponse = await client.SendItemToTradePileAsync(itemData);
 ```
 
 ### NuGet packages

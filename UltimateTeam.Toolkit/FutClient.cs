@@ -188,5 +188,19 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Remove from watch list failed", e);
             }
         }
+        
+        public async Task<TradePileResponse> SendItemToTradePileAsync(ItemData itemData)
+        {
+            itemData.ThrowIfNullArgument();
+
+            try
+            {
+                return await _requestFactories.SendItemToTradePileRequestFactory(itemData).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Send to transfer market failed", e);
+            }
+        }
     }
 }
