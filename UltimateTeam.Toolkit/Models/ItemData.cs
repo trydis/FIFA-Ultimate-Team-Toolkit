@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UltimateTeam.Toolkit.Parameters;
 
 namespace UltimateTeam.Toolkit.Models
 {
@@ -14,7 +15,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint Fitness { get; set; }
 
-        public string Formation { get; set; }
+        public ChemistryStyle PlayStyle { get; set; }
 
         public long Id { get; set; }
 
