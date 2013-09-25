@@ -31,6 +31,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
+        private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
+
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get { return _loginRequestFactory ?? (_loginRequestFactory = details => new LoginRequest(details)); }
@@ -138,6 +140,16 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _listAuctionRequestFactory = value;
+            }
+        }
+
+        public Func<AuctionInfo, IFutRequest<byte>> RemoveFromWatchlistRequestFactory
+        {
+            get { return _removeFromWatchlistRequestFactory ?? (_removeFromWatchlistRequestFactory = info => new RemoveFromWatchlistRequest(info)); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _removeFromWatchlistRequestFactory = value;
             }
         }
     }

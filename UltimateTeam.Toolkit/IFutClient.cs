@@ -28,5 +28,7 @@ namespace UltimateTeam.Toolkit
         Task<PurchasedItemsResponse> GetPurchasedItemsAsync();
 
         Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails);
+
+        Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo);
     }
 }

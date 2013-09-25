@@ -105,6 +105,7 @@
     <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
+    <Compile Include="Requests\RemoveFromWatchlistRequest.cs" />
     <Compile Include="Requests\WatchlistRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />

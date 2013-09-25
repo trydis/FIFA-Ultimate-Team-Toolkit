@@ -174,5 +174,19 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("List auction failed", e);
             }
         }
+
+        public async Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            try
+            {
+                await _requestFactories.RemoveFromWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Remove from watch list failed", e);
+            }
+        }
     }
 }
