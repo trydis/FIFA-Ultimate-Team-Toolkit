@@ -85,6 +85,7 @@
     <Compile Include="Parameters\ResourceType.cs" />
     <Compile Include="Parameters\SearchParameterBase.cs" />
     <Compile Include="Parameters\SearchParameters.cs" />
+    <Compile Include="Parameters\StadiumSearchParameters.cs" />
     <Compile Include="Parameters\Team.cs" />
     <Compile Include="Parameters\TrainingSearchParameters.cs" />
     <Compile Include="Parameters\TrainingType.cs" />
