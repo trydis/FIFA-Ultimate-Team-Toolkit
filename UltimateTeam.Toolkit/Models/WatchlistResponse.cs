@@ -4,7 +4,7 @@ namespace UltimateTeam.Toolkit.Models
 {
     public class WatchlistResponse
     {
-        public List<AuctionInfo> Auctioninfo { get; set; }
+        public List<AuctionInfo> AuctionInfo { get; set; }
 
         public uint Credits { get; set; }
 
