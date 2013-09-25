@@ -28,6 +28,8 @@
 
         public string DevelopmentType { get; set; }
 
+        public string TrainingType { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();

@@ -84,6 +84,8 @@
     <Compile Include="Parameters\SearchParameterBase.cs" />
     <Compile Include="Parameters\SearchParameters.cs" />
     <Compile Include="Parameters\Team.cs" />
+    <Compile Include="Parameters\TrainingSearchParameters.cs" />
+    <Compile Include="Parameters\TrainingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreditsRequest.cs" />
     <Compile Include="Requests\FutRequestBase.cs" />
