@@ -202,5 +202,19 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Send to transfer market failed", e);
             }
         }
+
+        public async Task<QuickSellResponse> QuickSellItemAsync(long itemId)
+        {
+            if (itemId < 1) throw new ArgumentException("Definitely not valid", "itemId");
+
+            try
+            {
+                return await _requestFactories.QuickSellRequestFactory(itemId).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Quick sell item failed", e);
+            }
+        }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
+    <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
     <Compile Include="Models\TradePileResponse.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />
     <Compile Include="Requests\PurchasedItemsRequest.cs" />
+    <Compile Include="Requests\QuickSellRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Requests\SendItemToTradePileRequest.cs" />
     <Compile Include="Requests\TradePileRequest.cs" />

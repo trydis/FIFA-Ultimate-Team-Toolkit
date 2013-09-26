@@ -35,6 +35,8 @@ namespace UltimateTeam.Toolkit.Factories
         
         private Func<ItemData, IFutRequest<TradePileResponse>> _sendItemToTradePileRequestFactory;
 
+        private Func<long, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
+
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get { return _loginRequestFactory ?? (_loginRequestFactory = details => new LoginRequest(details)); }
@@ -158,7 +160,21 @@ namespace UltimateTeam.Toolkit.Factories
         public Func<ItemData, IFutRequest<TradePileResponse>> SendItemToTradePileRequestFactory
         {
             get { return _sendItemToTradePileRequestFactory ?? (_sendItemToTradePileRequestFactory = itemData => new SendItemToTradePileRequest(itemData)); }
-            set { _sendItemToTradePileRequestFactory = value; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _sendItemToTradePileRequestFactory = value;
+            }
+        }
+
+        public Func<long, IFutRequest<QuickSellResponse>> QuickSellRequestFactory
+        {
+            get { return _quickSellRequestFactory ?? (_quickSellRequestFactory = itemId => new QuickSellRequest(itemId)); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _quickSellRequestFactory = value;
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ FIFA Ultimate Team 2014 Toolkit
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#training-search)  
 [Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#send-to-trade-pile)  
+[Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#quick-sell)  
 [NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
 
 ### Initialization
@@ -201,6 +202,14 @@ Sends an item to the trade pile (transfer market)
 
 ```csharp
 var sendToTradePileResponse = await client.SendItemToTradePileAsync(itemData);
+```
+
+### Quick sell
+
+Quick sell an item at discard value.
+
+```csharp
+var quickSellResponse = await client.QuickSellItemAsync(ItemData.Id);
 ```
 
 ### NuGet packages

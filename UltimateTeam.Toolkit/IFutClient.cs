@@ -32,5 +32,7 @@ namespace UltimateTeam.Toolkit
         Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo);
         
         Task<TradePileResponse> SendItemToTradePileAsync(ItemData itemData);
+
+        Task<QuickSellResponse> QuickSellItemAsync(long itemId);
     }
 }
