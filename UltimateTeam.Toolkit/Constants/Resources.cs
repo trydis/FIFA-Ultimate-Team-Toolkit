@@ -40,6 +40,8 @@
 
         public const string PurchasedItems = "purchased/items";
 
-        public const string ListItem = "item/{0}";
+        public const string ListItem = "item";
+
+        public const string QuickSell = "item/{0}";
     }
 }
