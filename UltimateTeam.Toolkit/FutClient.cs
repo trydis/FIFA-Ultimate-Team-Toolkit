@@ -188,6 +188,20 @@ namespace UltimateTeam.Toolkit
                 throw new FutException("Remove from watch list failed", e);
             }
         }
+
+        public async Task RemoveFromTradePileAsync(AuctionInfo auctionInfo)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            try
+            {
+                await _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync();
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Remove from trade pile failed", e);
+            }
+        }
         
         public async Task<TradePileResponse> SendItemToTradePileAsync(ItemData itemData)
         {

@@ -43,5 +43,7 @@
         public const string ListItem = "item";
 
         public const string QuickSell = "item/{0}";
+        
+        public const string RemoveFromTradePile = "trade/{0}";
     }
 }

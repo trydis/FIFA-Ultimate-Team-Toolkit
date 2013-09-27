@@ -32,6 +32,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
         
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
+
+        private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
         
         private Func<ItemData, IFutRequest<TradePileResponse>> _sendItemToTradePileRequestFactory;
 
@@ -156,6 +158,17 @@ namespace UltimateTeam.Toolkit.Factories
                 _removeFromWatchlistRequestFactory = value;
             }
         }
+
+        public Func<AuctionInfo, IFutRequest<byte>> RemoveFromTradePileRequestFactory
+        {
+            get { return _removeFromTradePileRequestFactory ?? (_removeFromTradePileRequestFactory = info => new RemoveFromTradePileRequest(info)); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _removeFromTradePileRequestFactory = value;
+            }
+        }
+
 
         public Func<ItemData, IFutRequest<TradePileResponse>> SendItemToTradePileRequestFactory
         {
