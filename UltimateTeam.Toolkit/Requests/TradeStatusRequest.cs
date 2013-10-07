@@ -25,7 +25,6 @@ namespace UltimateTeam.Toolkit.Requests
             var tradeStatusResponseMessage = await HttpClient.PostAsync(
                 string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds)),
                 new StringContent(" ", Encoding.UTF8, "application/json"));
-            tradeStatusResponseMessage.EnsureSuccessStatusCode();
 
             return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
         }

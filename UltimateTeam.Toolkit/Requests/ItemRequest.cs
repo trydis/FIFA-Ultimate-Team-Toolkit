@@ -23,7 +23,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             var itemResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Item, _auctionInfo.CalculateBaseId()));
-            itemResponseMessage.EnsureSuccessStatusCode();
             var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
 
             return itemWrapper.Item;

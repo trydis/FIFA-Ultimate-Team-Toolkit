@@ -12,7 +12,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
             var purchasedItemsMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.PurchasedItems));
-            purchasedItemsMessage.EnsureSuccessStatusCode();
 
             return await Deserialize<PurchasedItemsResponse>(purchasedItemsMessage);
         }

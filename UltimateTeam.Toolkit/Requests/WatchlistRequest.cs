@@ -12,7 +12,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
             var watchlistResponseMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.Watchlist));
-            watchlistResponseMessage.EnsureSuccessStatusCode();
 
             return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
         }

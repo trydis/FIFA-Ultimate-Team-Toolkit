@@ -74,6 +74,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected static async Task<T> Deserialize<T>(HttpResponseMessage message)
         {
+            message.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await message.Content.ReadAsStringAsync());
         }
     }

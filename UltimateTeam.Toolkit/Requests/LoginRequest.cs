@@ -59,7 +59,6 @@ namespace UltimateTeam.Toolkit.Requests
                 {
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
-            validateResponseMessage.EnsureSuccessStatusCode();
             var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
             PhishingToken = validateResponse.Token;
 
@@ -105,7 +104,6 @@ namespace UltimateTeam.Toolkit.Requests
             var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Xbox360 ? string.Empty : "s2.");
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
-            accountInfoResponseMessage.EnsureSuccessStatusCode();
 
             return await Deserialize<UserAccounts>(accountInfoResponseMessage);
         }
@@ -120,7 +118,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
             AddReferrerHeader(Resources.BaseShowoff);
             var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
-            shardsResponseMessage.EnsureSuccessStatusCode();
 
             return await Deserialize<Shards>(shardsResponseMessage);
         }

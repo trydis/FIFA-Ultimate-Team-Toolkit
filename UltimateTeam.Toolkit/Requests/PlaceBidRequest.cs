@@ -25,10 +25,8 @@ namespace UltimateTeam.Toolkit.Requests
             AddCommonHeaders();
             var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
             var bidResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content));
-            bidResponseMessage.EnsureSuccessStatusCode();
-            var auctionResponse = await Deserialize<AuctionResponse>(bidResponseMessage);
 
-            return auctionResponse;
+            return await Deserialize<AuctionResponse>(bidResponseMessage);
         }
     }
 }

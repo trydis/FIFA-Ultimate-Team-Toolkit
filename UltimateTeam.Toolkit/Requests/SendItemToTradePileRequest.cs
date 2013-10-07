@@ -22,7 +22,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddCommonHeaders();
             var content = string.Format("{{\"itemData\":[{{\"id\":\"{0}\",\"pile\":\"trade\"}}]}}", _itemData.Id);
             var tradepileResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.ListItem), new StringContent(content));
-            tradepileResponseMessage.EnsureSuccessStatusCode();
          
             return await Deserialize<TradePileResponse>(tradepileResponseMessage);
         }
