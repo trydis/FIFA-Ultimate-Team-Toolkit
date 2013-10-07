@@ -39,6 +39,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.ContentType, "application/json");
             AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
             AddUserAgent();
+            HttpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
         }
 
         protected void AddUserAgent()
