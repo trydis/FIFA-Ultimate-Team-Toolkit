@@ -2,6 +2,6 @@
 {
     public class ListAuctionResponse
     {
-        public long TradeId { get; set; }
+        public long Id { get; set; }
     }
 }
