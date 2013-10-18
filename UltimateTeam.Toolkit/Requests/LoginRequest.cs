@@ -60,7 +60,6 @@ namespace UltimateTeam.Toolkit.Requests
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
             var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
-            PhishingToken = validateResponse.Token;
 
             return validateResponse.Token;
         }
@@ -78,7 +77,6 @@ namespace UltimateTeam.Toolkit.Requests
                 .Value
                 .Split(new[] { ':' })[1]
                 .Replace("\"", string.Empty);
-            SessionId = sessionId;
 
             return sessionId;
         }

@@ -11,18 +11,9 @@ namespace UltimateTeam.Toolkit
 {
     public class FutClient : IFutClient
     {
-        private readonly FutRequestFactories _requestFactories;
+        private readonly FutRequestFactories _requestFactories = new FutRequestFactories();
 
-        public FutClient()
-            : this(new FutRequestFactories())
-        {
-        }
-
-        public FutClient(FutRequestFactories requestFactories)
-        {
-            requestFactories.ThrowIfNullArgument();
-            _requestFactories = requestFactories;
-        }
+        public FutRequestFactories RequestFactories { get { return _requestFactories; } }
 
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails)
         {
@@ -30,7 +21,12 @@ namespace UltimateTeam.Toolkit
 
             try
             {
-                return await _requestFactories.LoginRequestFactory(loginDetails).PerformRequestAsync();
+                var loginRequest = _requestFactories.LoginRequestFactory(loginDetails);
+                var loginResponse = await loginRequest.PerformRequestAsync();
+                RequestFactories.PhishingToken = loginResponse.PhishingToken;
+                RequestFactories.SessionId = loginResponse.SessionId;
+
+                return loginResponse;
             }
             catch (Exception e)
             {

@@ -4,35 +4,58 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     public abstract class FutRequestBase
     {
-        private static readonly CookieContainer CookieContainer = new CookieContainer();
+        private string _phishingToken;
+
+        private string _sessionId;
+
+        private readonly HttpClientHandler _messageHandler;
+
+        public string PhishingToken
+        {
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _phishingToken = value;
+            }
+        }
+
+        public string SessionId
+        {
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _sessionId = value;
+            }
+        }
+
+        public HttpClientHandler MessageHandler
+        {
+            get { return _messageHandler; }
+        }
 
         protected readonly HttpClient HttpClient;
 
-        protected static string PhishingToken { get; set; }
-
-        protected static string SessionId { get; set; }
-
         protected FutRequestBase()
         {
-            var messageHandler = new HttpClientHandler
+            _messageHandler = new HttpClientHandler
             {
-                CookieContainer = CookieContainer,
                 AutomaticDecompression = DecompressionMethods.GZip
             };
-            HttpClient = new HttpClient(messageHandler);
+            HttpClient = new HttpClient(MessageHandler);
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
         }
 
         protected void AddCommonHeaders()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.PhishingToken, PhishingToken);
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.PhishingToken, _phishingToken);
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, SessionId);
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, _sessionId);
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             AddAcceptHeader("application/json");

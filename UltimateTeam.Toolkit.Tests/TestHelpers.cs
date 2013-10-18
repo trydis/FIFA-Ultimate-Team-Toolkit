@@ -15,6 +15,15 @@ namespace UltimateTeam.Toolkit.Tests
             return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps3);
         }
 
+        public static Mock<IFutRequest<T>> CreateMockRequestReturning<T>(T result) where T : class
+        {
+            var mock = new Mock<IFutRequest<T>>();
+            mock.Setup(request => request.PerformRequestAsync())
+                .Returns(() => TaskEx.FromResult(result));
+
+            return mock;
+        }
+
         public static Mock<IFutRequest<T>> CreateMockRequestReturningNull<T>() where T : class
         {
             var mock = new Mock<IFutRequest<T>>();

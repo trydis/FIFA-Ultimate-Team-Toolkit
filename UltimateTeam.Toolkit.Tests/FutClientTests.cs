@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using UltimateTeam.Toolkit.Exceptions;
-using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Tests
@@ -9,38 +8,28 @@ namespace UltimateTeam.Toolkit.Tests
     [TestFixture]
     public class FutClientTests
     {
-        private FutRequestFactories _requestFactories;
-
         private IFutClient _futClient;
 
-        public void CreateClient(bool passNullInstance = false)
+        [SetUp]
+        public void Setup()
         {
-            _requestFactories = new FutRequestFactories();
-            _futClient = new FutClient(passNullInstance ? null : _requestFactories);
-        }
-
-        [Test,
-        ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_WhenPassedNull_ShouldThrowArgumentNullException()
-        {
-            CreateClient(true);
+            _futClient = new FutClient();
         }
 
         [Test,
         ExpectedException(typeof(ArgumentNullException))]
         public async void LoginAsync_WhenPassedNull_ShouldThrowArgumentException()
         {
-            CreateClient();
-
             await _futClient.LoginAsync(null);
         }
 
         [Test]
         public async void LoginAsync_WhenCalled_ShouldPerformRequest()
         {
-            CreateClient();
-            var mockRequest = TestHelpers.CreateMockRequestReturningNull<LoginResponse>();
-            _requestFactories.LoginRequestFactory = details => mockRequest.Object;
+            const string guid = "8194C855-BCCB-426F-A6F9-130383E9FB5A";
+            var loginResponse = new LoginResponse(guid, new Shards(), new UserAccounts(), guid, guid);
+            var mockRequest = TestHelpers.CreateMockRequestReturning(loginResponse);
+            _futClient.RequestFactories.LoginRequestFactory = details => mockRequest.Object;
 
             await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails());
 
@@ -51,9 +40,8 @@ namespace UltimateTeam.Toolkit.Tests
         ExpectedException(typeof(FutException))]
         public async void LoginAsync_WhenPerformRequestThrowsException_ShouldThrowFutException()
         {
-            CreateClient();
             var mockRequest = TestHelpers.CreateMockRequestThrowingException<LoginResponse>();
-            _requestFactories.LoginRequestFactory = details => mockRequest.Object;
+            _futClient.RequestFactories.LoginRequestFactory = details => mockRequest.Object;
 
             await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails());
 
