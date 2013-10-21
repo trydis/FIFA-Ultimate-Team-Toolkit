@@ -22,7 +22,9 @@ namespace UltimateTeam.Toolkit.Requests
             
             AddMethodOverrideHeader(HttpMethod.Delete);
             AddCommonHeaders();
-            var removeFromTradePileMessage = await HttpClient.PostAsync(uriString, new StringContent(" "));
+            var removeFromTradePileMessage = await HttpClient
+                .PostAsync(uriString, new StringContent(" "))
+                .ConfigureAwait(false);
             removeFromTradePileMessage.EnsureSuccessStatusCode();
 
             return 0;

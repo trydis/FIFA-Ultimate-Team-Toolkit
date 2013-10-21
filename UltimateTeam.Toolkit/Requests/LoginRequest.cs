@@ -40,7 +40,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<LoginResponse> PerformRequestAsync()
         {
-            var mainPageResponseMessage = await GetMainPageAsync();
+            var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
             await LoginAsync(_loginDetails, mainPageResponseMessage);
             var nucleusId = await GetNucleusIdAsync();
             var shards = await GetShardsAsync(nucleusId);

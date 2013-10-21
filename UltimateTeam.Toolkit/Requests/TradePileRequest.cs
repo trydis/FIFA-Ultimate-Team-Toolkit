@@ -11,7 +11,9 @@ namespace UltimateTeam.Toolkit.Requests
         {
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
-            var tradePileResponseMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.TradePile));
+            var tradePileResponseMessage = await HttpClient
+                .GetAsync(string.Format(Resources.FutHome + Resources.TradePile))
+                .ConfigureAwait(false);
 
             return await Deserialize<TradePileResponse>(tradePileResponseMessage);
         }

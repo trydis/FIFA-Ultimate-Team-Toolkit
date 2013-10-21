@@ -21,7 +21,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", _auctioninfo.TradeId);
             AddMethodOverrideHeader(HttpMethod.Delete);
             AddCommonHeaders();
-            var removeFromWatchlistResponseMessage = await HttpClient.PostAsync(uriString, new StringContent(" "));
+            var removeFromWatchlistResponseMessage = await HttpClient
+                .PostAsync(uriString, new StringContent(" "))
+                .ConfigureAwait(false);
             removeFromWatchlistResponseMessage.EnsureSuccessStatusCode();
 
             return 0;

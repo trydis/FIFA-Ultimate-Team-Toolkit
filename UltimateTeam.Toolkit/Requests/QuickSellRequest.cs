@@ -20,7 +20,9 @@ namespace UltimateTeam.Toolkit.Requests
         {
             AddMethodOverrideHeader(HttpMethod.Delete);
             AddCommonHeaders();
-            var quickSellResponse = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.QuickSell, _itemId), new StringContent(" "));
+            var quickSellResponse = await HttpClient
+                .PostAsync(string.Format(Resources.FutHome + Resources.QuickSell, _itemId), new StringContent(" "))
+                .ConfigureAwait(false);
 
             return await Deserialize<QuickSellResponse>(quickSellResponse);
         }

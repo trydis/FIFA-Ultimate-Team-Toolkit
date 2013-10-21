@@ -11,7 +11,9 @@ namespace UltimateTeam.Toolkit.Requests
         {
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
-            var creditsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.FutHome + Resources.Credits));
+            var creditsResponseMessage = await HttpClient
+                .GetAsync(string.Format(Resources.FutHome + Resources.Credits))
+                .ConfigureAwait(false);
 
             return await Deserialize<CreditsResponse>(creditsResponseMessage);
         }

@@ -24,7 +24,9 @@ namespace UltimateTeam.Toolkit.Requests
             AddMethodOverrideHeader(HttpMethod.Put);
             AddCommonHeaders();
             var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
-            var bidResponseMessage = await HttpClient.PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content));
+            var bidResponseMessage = await HttpClient
+                .PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content))
+                .ConfigureAwait(false);
 
             return await Deserialize<AuctionResponse>(bidResponseMessage);
         }

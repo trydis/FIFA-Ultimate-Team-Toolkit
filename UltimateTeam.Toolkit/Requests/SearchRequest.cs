@@ -25,7 +25,9 @@ namespace UltimateTeam.Toolkit.Requests
             _searchParameters.BuildUriString(ref uriString);
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
-            var searchResponseMessage = await HttpClient.PostAsync(uriString, new StringContent(" "));
+            var searchResponseMessage = await HttpClient
+                .PostAsync(uriString, new StringContent(" "))
+                .ConfigureAwait(false);
 
             return await Deserialize<AuctionResponse>(searchResponseMessage);
         }

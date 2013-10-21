@@ -22,7 +22,9 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader(Resources.BaseShowoff);
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
-            var itemResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Item, _auctionInfo.CalculateBaseId()));
+            var itemResponseMessage = await HttpClient
+                .GetAsync(string.Format(Resources.Item, _auctionInfo.CalculateBaseId()))
+                .ConfigureAwait(false);
             var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
 
             return itemWrapper.Item;

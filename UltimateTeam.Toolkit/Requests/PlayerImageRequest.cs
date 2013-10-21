@@ -22,8 +22,10 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader(Resources.BaseShowoff);
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
-            
-            return await HttpClient.GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()));
+
+            return await HttpClient
+                .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
+                .ConfigureAwait(false);
         }
     }
 }
