@@ -49,8 +49,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
 
         private Func<IFutRequest<CreditsResponse>> _creditsRequestFactory;
-        
-        private Func<IFutRequest<TradePileResponse>> _tradePileRequestFactory;
+
+        private Func<IFutRequest<AuctionResponse>> _tradePileRequestFactory;
 
         private Func<IFutRequest<WatchlistResponse>> _watchlistRequestFactory;
 
@@ -61,8 +61,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
-        
-        private Func<ItemData, IFutRequest<TradePileResponse>> _sendItemToTradePileRequestFactory;
+
+        private Func<ItemData, IFutRequest<SendItemToTradePileResponse>> _sendItemToTradePileRequestFactory;
 
         private Func<long, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
@@ -73,7 +73,7 @@ namespace UltimateTeam.Toolkit.Factories
                 return _loginRequestFactory ?? (_loginRequestFactory = details =>
                     {
                         var loginRequest = new LoginRequest(details);
-                        loginRequest.MessageHandler.CookieContainer = _cookieContainer;
+                        loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     });
             }
@@ -186,7 +186,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<IFutRequest<TradePileResponse>> TradePileRequestFactory
+        public Func<IFutRequest<AuctionResponse>> TradePileRequestFactory
         {
             get
             {
@@ -289,7 +289,7 @@ namespace UltimateTeam.Toolkit.Factories
         }
 
 
-        public Func<ItemData, IFutRequest<TradePileResponse>> SendItemToTradePileRequestFactory
+        public Func<ItemData, IFutRequest<SendItemToTradePileResponse>> SendItemToTradePileRequestFactory
         {
             get
             {

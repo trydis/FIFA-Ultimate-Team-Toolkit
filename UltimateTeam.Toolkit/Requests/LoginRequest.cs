@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace UltimateTeam.Toolkit.Requests
             _loginDetails = loginDetails;
         }
 
+        public void SetCookieContainer(CookieContainer cookieContainer)
+        {
+            HttpClient.MessageHandler.CookieContainer = cookieContainer;
+        }
+
         private static void SetFutHome(LoginDetails loginDetails)
         {
             if (loginDetails.Platform == Platform.Xbox360)
@@ -54,7 +60,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, sessionId);
             var validateResponseMessage = await HttpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(
                 new[]
                 {
@@ -104,9 +110,9 @@ namespace UltimateTeam.Toolkit.Requests
 
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
-            HttpClient.DefaultRequestHeaders.Remove(NonStandardHttpHeaders.Route);
+            HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
             var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Xbox360 ? string.Empty : "s2.");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, route);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
 
             return await Deserialize<UserAccounts>(accountInfoResponseMessage);
@@ -114,10 +120,10 @@ namespace UltimateTeam.Toolkit.Requests
 
         private async Task<Shards> GetShardsAsync(string nucleusId)
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.NucleusId, nucleusId);
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.Route, "https://utas.fut.ea.com");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.fut.ea.com");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
             AddAcceptHeader("application/json, text/javascript");
             AddAcceptLanguageHeader();
             AddReferrerHeader(Resources.BaseShowoff);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Models
@@ -47,6 +48,6 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint BadgeId { get; set; }
 
-        // TODO: SkuAccessList
+        public Dictionary<string, long> SkuAccessList { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters 
 {
     public class BallSearchParameters : SearchParameters
     {

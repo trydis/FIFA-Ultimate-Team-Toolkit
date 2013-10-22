@@ -2,9 +2,8 @@
 {
     public class DuplicateItem
     {
-        public long DuplicateItemItd { get; set; }
+        public long DuplicateItemId { get; set; }
 
         public long ItemId { get; set; }
-
     }
 }

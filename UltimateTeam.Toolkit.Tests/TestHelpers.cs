@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Linq.Expressions;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
 using UltimateTeam.Toolkit.Models;
@@ -15,7 +17,7 @@ namespace UltimateTeam.Toolkit.Tests
             return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps3);
         }
 
-        public static Mock<IFutRequest<T>> CreateMockRequestReturning<T>(T result) where T : class
+        public static Mock<IFutRequest<T>> CreateMockFutRequestReturning<T>(T result) where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
             mock.Setup(request => request.PerformRequestAsync())
@@ -24,7 +26,7 @@ namespace UltimateTeam.Toolkit.Tests
             return mock;
         }
 
-        public static Mock<IFutRequest<T>> CreateMockRequestReturningNull<T>() where T : class
+        public static Mock<IFutRequest<T>> CreateMockFutRequestReturningNull<T>() where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
             mock.Setup(request => request.PerformRequestAsync())
@@ -33,11 +35,22 @@ namespace UltimateTeam.Toolkit.Tests
             return mock;
         }
 
-        public static Mock<IFutRequest<T>> CreateMockRequestThrowingException<T>()
+        public static Mock<IFutRequest<T>> CreateMockFutRequestThrowingException<T>()
         {
             var mock = new Mock<IFutRequest<T>>();
             mock.Setup(request => request.PerformRequestAsync())
-                .Throws(new HttpRequestException());
+                .Throws(new HttpRequestException("Things went south..."));
+
+            return mock;
+        }
+        
+        public static Mock<IHttpClient> CreateMockHttpClientReturningJson(HttpMethod method, string json)
+        {
+            var mock = new Mock<IHttpClient>();
+            Expression<Func<IHttpClient, Task<HttpResponseMessage>>> getExpression = client => client.GetAsync(It.IsAny<string>());
+            Expression<Func<IHttpClient, Task<HttpResponseMessage>>> postExpression = client => client.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>());
+            mock.Setup(method == HttpMethod.Get ? getExpression : postExpression)
+                .Returns(() => TaskEx.FromResult(new HttpResponseMessage { Content = new StringContent(json) }));
 
             return mock;
         }

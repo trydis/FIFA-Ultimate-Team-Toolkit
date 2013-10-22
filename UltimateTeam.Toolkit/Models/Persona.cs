@@ -9,5 +9,7 @@ namespace UltimateTeam.Toolkit.Models
         public string PersonaName { get; set; }
 
         public IEnumerable<UserClub> UserClubList { get; set; }
+
+        public bool ReturningUser { get; set; }
     }
 }

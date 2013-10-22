@@ -24,7 +24,7 @@ namespace UltimateTeam.Toolkit
 
         Task<CreditsResponse> GetCreditsAsync();
 
-        Task<TradePileResponse> GetTradePileAsync();
+        Task<AuctionResponse> GetTradePileAsync();
 
         Task<WatchlistResponse> GetWatchlistAsync();
 
@@ -35,8 +35,8 @@ namespace UltimateTeam.Toolkit
         Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo);
 
         Task RemoveFromTradePileAsync(AuctionInfo auctionInfo);
-        
-        Task<TradePileResponse> SendItemToTradePileAsync(ItemData itemData);
+
+        Task<SendItemToTradePileResponse> SendItemToTradePileAsync(ItemData itemData);
 
         Task<QuickSellResponse> QuickSellItemAsync(long itemId);
     }

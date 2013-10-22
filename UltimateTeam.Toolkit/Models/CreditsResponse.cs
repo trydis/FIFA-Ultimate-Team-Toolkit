@@ -9,5 +9,7 @@ namespace UltimateTeam.Toolkit.Models
         public List<Currency> Currencies { get; set; }
 
         public UnopenedPacks UnopenedPacks { get; set; }
+
+        public double FutCashBalance { get; set; }
     }
 }

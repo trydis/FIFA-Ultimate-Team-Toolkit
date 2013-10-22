@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -14,7 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         private string _sessionId;
 
-        private readonly HttpClientHandler _messageHandler;
+        private IHttpClient _httpClient;
 
         public string PhishingToken
         {
@@ -34,71 +35,113 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        public HttpClientHandler MessageHandler
+        internal IHttpClient HttpClient
         {
-            get { return _messageHandler; }
+            get { return _httpClient ?? (_httpClient = new HttpClientWrapper()); }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _httpClient = value;
+            }
         }
-
-        protected readonly HttpClient HttpClient;
 
         protected FutRequestBase()
         {
-            _messageHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip
-            };
-            HttpClient = new HttpClient(MessageHandler);
-            HttpClient.DefaultRequestHeaders.ExpectContinue = false;
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
+            HttpClient.SetExpectContinueHeaderToFalse();
         }
 
         protected void AddCommonHeaders()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.PhishingToken, _phishingToken);
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             AddAcceptHeader("application/json");
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.ContentType, "application/json");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
             AddUserAgent();
-            HttpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
+            HttpClient.AddConnectionKeepAliveHeader();
         }
 
         protected void AddUserAgent()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
+            HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
         }
 
         protected void AddAcceptHeader(string value)
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.Accept, value);            
+            HttpClient.AddRequestHeader(HttpHeaders.Accept, value);
         }
 
         protected void AddReferrerHeader(string value)
         {
-            HttpClient.DefaultRequestHeaders.Referrer = new Uri(value);
+            HttpClient.SetReferrerUri(value);
         }
 
         protected void AddAcceptEncodingHeader()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");            
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");
         }
 
         protected void AddAcceptLanguageHeader()
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");            
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");
         }
 
         protected void AddMethodOverrideHeader(HttpMethod httpMethod)
         {
-            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);                        
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);
         }
 
-        protected static async Task<T> Deserialize<T>(HttpResponseMessage message)
+        protected static async Task<T> Deserialize<T>(HttpResponseMessage message) where T : class
         {
             message.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<T>(await message.Content.ReadAsStringAsync());
+            var messageContent = await message.Content.ReadAsStringAsync();
+            T deserializedObject = null;
+
+            try
+            {
+                deserializedObject = JsonConvert.DeserializeObject<T>(messageContent);
+            }
+            catch (JsonSerializationException serializationException)
+            {
+                try
+                {
+                    var futErrorWithDebugString = JsonConvert.DeserializeObject<FutErrorWithDebugString>(messageContent);
+                    MapAndThrowException(serializationException, futErrorWithDebugString);
+                }
+                catch (JsonSerializationException)
+                {
+                    try
+                    {
+                        var futErrorWithMessage = JsonConvert.DeserializeObject<FutErrorWithMessage>(messageContent);
+                        MapAndThrowException(serializationException, futErrorWithMessage);
+                    }
+                    catch (JsonSerializationException)
+                    {
+                        throw serializationException;
+                    }
+                }
+            }
+
+            return deserializedObject;
+        }
+
+        private static void MapAndThrowException(Exception exception, FutErrorBase futError)
+        {
+            switch (futError.Code)
+            {
+                case FutErrorCode.PermissionDenied:
+                    throw new PermissionDeniedException((FutErrorWithDebugString)futError, exception);
+                case FutErrorCode.ExpiredSession:
+                    throw new ExpiredSessionException((FutErrorWithMessage)futError, exception);
+                case FutErrorCode.InternalServerError:
+                    throw new InternalServerException((FutErrorWithDebugString)futError, exception);
+                default:
+                    throw new FutException("Serialization exception, check inner exception for details", exception);
+            }
         }
     }
 }

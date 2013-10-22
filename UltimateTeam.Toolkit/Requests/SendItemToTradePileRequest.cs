@@ -6,7 +6,7 @@ using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    internal class SendItemToTradePileRequest : FutRequestBase, IFutRequest<TradePileResponse>
+    internal class SendItemToTradePileRequest : FutRequestBase, IFutRequest<SendItemToTradePileResponse>
     {
         private readonly ItemData _itemData;
 
@@ -16,7 +16,7 @@ namespace UltimateTeam.Toolkit.Requests
             _itemData = itemData;
         }
 
-        public async Task<TradePileResponse> PerformRequestAsync()
+        public async Task<SendItemToTradePileResponse> PerformRequestAsync()
         {
             AddMethodOverrideHeader(HttpMethod.Put);
             AddCommonHeaders();
@@ -24,8 +24,8 @@ namespace UltimateTeam.Toolkit.Requests
             var tradepileResponseMessage = await HttpClient
                 .PostAsync(string.Format(Resources.FutHome + Resources.ListItem), new StringContent(content))
                 .ConfigureAwait(false);
-         
-            return await Deserialize<TradePileResponse>(tradepileResponseMessage);
+
+            return await Deserialize<SendItemToTradePileResponse>(tradepileResponseMessage);
         }
     }
 }

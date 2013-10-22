@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -12,7 +11,6 @@ namespace UltimateTeam.Toolkit.Requests
 
         public QuickSellRequest(long itemId)
         {
-            itemId.ThrowIfNullArgument();
             _itemId = itemId;
         }
 

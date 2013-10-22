@@ -10,5 +10,6 @@ namespace UltimateTeam.Toolkit.Models
 
         public List<DuplicateItem> DuplicateItemIdList { get; set; }
 
+        public ushort Total { get; set; }
     }
 }

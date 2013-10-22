@@ -5,9 +5,9 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    internal class TradePileRequest : FutRequestBase, IFutRequest<TradePileResponse>
+    internal class TradePileRequest : FutRequestBase, IFutRequest<AuctionResponse>
     {
-        public async Task<TradePileResponse> PerformRequestAsync()
+        public async Task<AuctionResponse> PerformRequestAsync()
         {
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
@@ -15,7 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .GetAsync(string.Format(Resources.FutHome + Resources.TradePile))
                 .ConfigureAwait(false);
 
-            return await Deserialize<TradePileResponse>(tradePileResponseMessage);
+            return await Deserialize<AuctionResponse>(tradePileResponseMessage);
         }
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>AssertEx</id>
+    <version>1.0.0</version>
+    <title>AssertEx</title>
+    <authors>Peter Provost,  Brendan Forster</authors>
+    <owners>Peter Provost,  Brendan Forster</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://github.com/pprovost/AssertEx/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A set of simple assert extensions to give you more choices and easier to read tests</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>unit-testing testing assert</tags>
+  </metadata>
+</package>

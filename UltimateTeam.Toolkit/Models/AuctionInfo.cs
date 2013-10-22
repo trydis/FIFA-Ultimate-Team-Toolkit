@@ -26,6 +26,8 @@
 
         public string TradeState { get; set; }
 
+        public bool? Watched { get; set; }
+
         public uint CalculateBid()
         {
             if (CurrentBid == 0)
