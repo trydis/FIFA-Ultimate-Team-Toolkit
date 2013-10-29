@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Services;
 using UltimateTeam.Toolkit.Extensions;
@@ -66,9 +67,14 @@ namespace UltimateTeam.Toolkit.Requests
 
         private async Task<string> GetSessionIdAsync(string nucleusId, UserAccounts userAccounts, Platform platform)
         {
-            var persona = userAccounts.UserAccountInfo.Personas
-                .OrderByDescending(x => x.UserClubList.OrderByDescending(club => club.LastAccessDateTime))
-                .First();
+            var persona = userAccounts
+                .UserAccountInfo
+                .Personas
+                .FirstOrDefault(p => p.UserClubList.Any(club => club.Platform == GetNucleusPersonaPlatform(platform)));
+            if (persona == null)
+            {
+                throw new FutException("Couldn't find a persona matching the selected platform");
+            }
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
                 string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT14WEB"", ""clientVersion"": 1, ""nuc"": {0}, ""nucleusPersonaId"": {1}, ""nucleusPersonaDisplayName"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
                     nucleusId, persona.PersonaId, persona.PersonaName, GetNucleusPersonaPlatform(platform))));
