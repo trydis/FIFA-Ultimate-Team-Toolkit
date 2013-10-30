@@ -7,6 +7,12 @@ FIFA Ultimate Team 2014 Toolkit
 - Windows Phone 7.5 and higher
 - Windows Store Apps
 
+## NuGet packages
+
+If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:  
+[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)  
+[Async targeting pack](http://www.nuget.org/packages/Microsoft.Bcl.Async/)  
+
 ## Sample usage
 
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#initialization)  
@@ -25,7 +31,8 @@ FIFA Ultimate Team 2014 Toolkit
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#training-search)  
 [Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#send-to-trade-pile)  
 [Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#quick-sell)  
-[NuGet packages](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nuget-packages)  
+[Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-watch-list)  
+[Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-trade-pile)  
 
 ### Initialization
 
@@ -212,8 +219,18 @@ Quick sell an item at discard value.
 var quickSellResponse = await client.QuickSellItemAsync(ItemData.Id);
 ```
 
-### NuGet packages
+### Remove from watch list
 
-If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:  
-[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)  
-[Async targeting pack](http://www.nuget.org/packages/Microsoft.Bcl.Async/)
+Removes an auction from the watch list.
+
+```csharp
+await client.RemoveFromWatchlistAsync(auctionInfo);
+```
+
+### Remove from trade pile
+
+Removes an auction from the trade pile.
+
+```csharp
+await client.RemoveFromTradePileAsync(auctionInfo);
+```
