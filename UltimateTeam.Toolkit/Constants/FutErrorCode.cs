@@ -4,6 +4,7 @@
     {
         ExpiredSession = 401,
         PermissionDenied = 461,
-        InternalServerError = 500
+        InternalServerError = 500,
+        ServiceUnavailable = 503
     }
 }

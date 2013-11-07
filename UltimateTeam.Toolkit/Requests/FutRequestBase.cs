@@ -139,6 +139,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new ExpiredSessionException((FutErrorWithMessage)futError, exception);
                 case FutErrorCode.InternalServerError:
                     throw new InternalServerException((FutErrorWithDebugString)futError, exception);
+                case FutErrorCode.ServiceUnavailable:
+                    throw new ServiceUnavailableException((FutErrorWithDebugString)futError, exception);
                 default:
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - Code: {0}, Reason: {1}", futError.Code, futError.Reason), exception);
             }

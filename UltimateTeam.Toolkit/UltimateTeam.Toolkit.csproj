@@ -41,6 +41,7 @@
     <Compile Include="Exceptions\FutException.cs" />
     <Compile Include="Exceptions\InternalServerException.cs" />
     <Compile Include="Exceptions\PermissionDeniedException.cs" />
+    <Compile Include="Exceptions\ServiceUnavailableException.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\FutRequestFactories.cs" />
