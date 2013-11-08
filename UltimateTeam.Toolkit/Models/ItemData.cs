@@ -11,7 +11,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public List<Attribute> AttributeList { get; set; }
 
-        public byte CardSubTypeId { get; set; }
+        public ushort CardSubTypeId { get; set; }
 
         public byte Contract { get; set; }
 
