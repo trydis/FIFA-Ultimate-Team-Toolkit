@@ -37,6 +37,7 @@
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
     <Compile Include="Constants\Resources.cs" />
+    <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ExpiredSessionException.cs" />
     <Compile Include="Exceptions\FutException.cs" />
     <Compile Include="Exceptions\InternalServerException.cs" />

@@ -129,18 +129,29 @@ namespace UltimateTeam.Toolkit.Requests
             return deserializedObject;
         }
 
-        private static void MapAndThrowException(Exception exception, FutErrorBase futError)
+        private static void MapAndThrowException(Exception exception, FutErrorWithDebugString futError)
         {
             switch (futError.Code)
             {
+                case FutErrorCode.BadRequest:
+                    throw new BadRequestException(futError, exception);
                 case FutErrorCode.PermissionDenied:
-                    throw new PermissionDeniedException((FutErrorWithDebugString)futError, exception);
-                case FutErrorCode.ExpiredSession:
-                    throw new ExpiredSessionException((FutErrorWithMessage)futError, exception);
+                    throw new PermissionDeniedException(futError, exception);
                 case FutErrorCode.InternalServerError:
-                    throw new InternalServerException((FutErrorWithDebugString)futError, exception);
+                    throw new InternalServerException(futError, exception);
                 case FutErrorCode.ServiceUnavailable:
-                    throw new ServiceUnavailableException((FutErrorWithDebugString)futError, exception);
+                    throw new ServiceUnavailableException(futError, exception);
+                default:
+                    throw new FutException(string.Format("Unknown EA error, please report on GitHub - Code: {0}, String: {1}", futError.Code, futError.String), exception);
+            }
+        }
+
+        private static void MapAndThrowException(Exception exception, FutErrorWithMessage futError)
+        {
+            switch (futError.Code)
+            {
+                case FutErrorCode.ExpiredSession:
+                    throw new ExpiredSessionException(futError, exception);
                 default:
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - Code: {0}, Reason: {1}", futError.Code, futError.Reason), exception);
             }
