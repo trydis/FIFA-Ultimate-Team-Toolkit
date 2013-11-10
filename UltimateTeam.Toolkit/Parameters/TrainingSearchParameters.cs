@@ -30,6 +30,9 @@ namespace UltimateTeam.Toolkit.Parameters
             if (MaxBid > 0)
                 uriString += "&macr=" + MaxBid;
 
+            if (ChemistryStyle > 0)
+                uriString += "&playStyle=" + (ushort)ChemistryStyle;
+
 
             return uriString;
         }
