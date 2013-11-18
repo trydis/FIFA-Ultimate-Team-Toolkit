@@ -8,11 +8,11 @@ namespace UltimateTeam.Toolkit.Requests
     {       
         HttpClientHandler MessageHandler { get; set; }
 
+        void ClearRequestHeaders();
+
         void AddRequestHeader(string name, string value);
 
         void RemoveRequestHeader(string name);
-
-        void SetExpectContinueHeaderToFalse();
 
         void AddConnectionKeepAliveHeader();
 

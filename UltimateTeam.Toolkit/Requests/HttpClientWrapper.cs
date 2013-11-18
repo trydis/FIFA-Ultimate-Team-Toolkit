@@ -15,6 +15,17 @@ namespace UltimateTeam.Toolkit.Requests
         {
             MessageHandler = new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip };
             _httpClient = new HttpClient(MessageHandler);
+            SetExpectContinueHeaderToFalse();
+        }
+
+        private void SetExpectContinueHeaderToFalse()
+        {
+            _httpClient.DefaultRequestHeaders.ExpectContinue = false;
+        }
+
+        public void ClearRequestHeaders()
+        {
+            _httpClient.DefaultRequestHeaders.Clear();
         }
 
         public void AddRequestHeader(string name, string value)
@@ -25,11 +36,6 @@ namespace UltimateTeam.Toolkit.Requests
         public void RemoveRequestHeader(string name)
         {
             _httpClient.DefaultRequestHeaders.Remove(name);
-        }
-
-        public void SetExpectContinueHeaderToFalse()
-        {
-            _httpClient.DefaultRequestHeaders.ExpectContinue = false;
         }
 
         public void AddConnectionKeepAliveHeader()

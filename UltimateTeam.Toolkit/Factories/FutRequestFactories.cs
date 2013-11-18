@@ -16,25 +16,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private string _sessionId;
 
-        public string PhishingToken
-        {
-            get { return _phishingToken; }
-            set
-            {
-                value.ThrowIfInvalidArgument();
-                _phishingToken = value;
-            }
-        }
-
-        public string SessionId
-        {
-            get { return _sessionId; }
-            set
-            {
-                value.ThrowIfInvalidArgument();
-                _sessionId = value;
-            }
-        }
+        private IHttpClient _httpClient;
 
         private Func<LoginDetails, IFutRequest<LoginResponse>> _loginRequestFactory;
 
@@ -57,7 +39,7 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IFutRequest<PurchasedItemsResponse>> _purchaseditemsRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
-        
+
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
@@ -66,13 +48,48 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<long, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
+        public string PhishingToken
+        {
+            get { return _phishingToken; }
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _phishingToken = value;
+            }
+        }
+
+        public string SessionId
+        {
+            get { return _sessionId; }
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _sessionId = value;
+            }
+        }
+
+        internal IHttpClient HttpClient
+        {
+            get
+            {
+                var httpClient = _httpClient ?? (_httpClient = new HttpClientWrapper());
+                httpClient.ClearRequestHeaders();
+                return httpClient;
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _httpClient = value;
+            }
+        }
+
         public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = details =>
                     {
-                        var loginRequest = new LoginRequest(details);
+                        var loginRequest = new LoginRequest(details) { HttpClient = HttpClient };
                         loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     });
@@ -91,7 +108,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _searchRequestFactory ?? (_searchRequestFactory = parameters => new SearchRequest(parameters)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -108,7 +126,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _placeBidRequestFactory ?? (_placeBidRequestFactory = (info, amount) => new PlaceBidRequest(info, amount)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -125,7 +144,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _itemRequestFactory ?? (_itemRequestFactory = info => new ItemRequest(info)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -142,7 +162,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _playerImageRequestFactory ?? (_playerImageRequestFactory = info => new PlayerImageRequest(info)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -159,7 +180,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _tradeStatusRequestFactory ?? (_tradeStatusRequestFactory = tradeIds => new TradeStatusRequest(tradeIds)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -176,7 +198,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _creditsRequestFactory ?? (_creditsRequestFactory = () => new CreditsRequest
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -193,7 +216,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _tradePileRequestFactory ?? (_tradePileRequestFactory = () => new TradePileRequest
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -210,7 +234,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _watchlistRequestFactory ?? (_watchlistRequestFactory = () => new WatchlistRequest
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -227,7 +252,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _purchaseditemsRequestFactory ?? (_purchaseditemsRequestFactory = () => new PurchasedItemsRequest
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -244,7 +270,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _listAuctionRequestFactory ?? (_listAuctionRequestFactory = details => new ListAuctionRequest(details)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -261,7 +288,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _removeFromWatchlistRequestFactory ?? (_removeFromWatchlistRequestFactory = info => new RemoveFromWatchlistRequest(info)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -278,7 +306,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _removeFromTradePileRequestFactory ?? (_removeFromTradePileRequestFactory = info => new RemoveFromTradePileRequest(info)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -296,7 +325,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _sendItemToTradePileRequestFactory ?? (_sendItemToTradePileRequestFactory = itemData => new SendItemToTradePileRequest(itemData)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set
@@ -313,7 +343,8 @@ namespace UltimateTeam.Toolkit.Factories
                 return _quickSellRequestFactory ?? (_quickSellRequestFactory = itemId => new QuickSellRequest(itemId)
                 {
                     PhishingToken = PhishingToken,
-                    SessionId = SessionId
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
                 });
             }
             set

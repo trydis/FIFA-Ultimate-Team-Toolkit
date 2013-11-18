@@ -39,17 +39,12 @@ namespace UltimateTeam.Toolkit.Requests
 
         internal IHttpClient HttpClient
         {
-            get { return _httpClient ?? (_httpClient = new HttpClientWrapper()); }
+            get { return _httpClient; }
             set
             {
                 value.ThrowIfNullArgument();
                 _httpClient = value;
             }
-        }
-
-        protected FutRequestBase()
-        {
-            HttpClient.SetExpectContinueHeaderToFalse();
         }
 
         protected void AddCommonHeaders()
