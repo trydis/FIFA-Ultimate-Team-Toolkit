@@ -4,6 +4,8 @@ namespace UltimateTeam.Toolkit.Models
 {
     public class AuctionInfo
     {
+        public const uint MIN_BID = 150;
+
         public string BidState { get; set; }
 
         public uint BuyNowPrice { get; set; }
@@ -34,20 +36,28 @@ namespace UltimateTeam.Toolkit.Models
         {
             if (CurrentBid == 0)
                 return StartingBid;
+            else
+                return CalculateNextBid(CurrentBid);
+        }
 
-            if (CurrentBid < 1000)
-                return CurrentBid + 50;
+        public static uint CalculateNextBid(uint currentBid)
+        {
+            if (currentBid == 0)
+                return MIN_BID;
 
-            if (CurrentBid < 10000)
-                return CurrentBid + 100;
+            if (currentBid < 1000)
+                return currentBid + 50;
 
-            if (CurrentBid < 50000)
-                return CurrentBid + 250;
+            if (currentBid < 10000)
+                return currentBid + 100;
 
-            if (CurrentBid < 100000)
-                return CurrentBid + 500;
+            if (currentBid < 50000)
+                return currentBid + 250;
 
-            return CurrentBid + 1000;
+            if (currentBid < 100000)
+                return currentBid + 500;
+
+            return currentBid + 1000;
         }
 
         public long CalculateBaseId()
