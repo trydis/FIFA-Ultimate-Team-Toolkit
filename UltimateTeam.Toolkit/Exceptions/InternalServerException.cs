@@ -4,15 +4,11 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {
-    public class InternalServerException : FutException
+    public class InternalServerException : FutErrorException
     {
-        public FutErrorWithDebugString FutError { get; private set; }
-
-        public InternalServerException(FutErrorWithDebugString futError, Exception exception)
-            : base(futError.Reason, exception)
+        public InternalServerException(FutError futError, Exception exception)
+            : base(futError, exception)
         {
-            futError.ThrowIfNullArgument();
-            FutError = futError;
         }
     }
 }

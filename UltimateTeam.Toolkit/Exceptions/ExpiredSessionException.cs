@@ -4,15 +4,11 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {
-    public class ExpiredSessionException : FutException
+    public class ExpiredSessionException : FutErrorException
     {
-        public FutErrorWithMessage FutError { get; private set; }
-
-        public ExpiredSessionException(FutErrorWithMessage futError, Exception exception)
-            : base(futError.Message, exception)
+        public ExpiredSessionException(FutError futError, Exception exception)
+            : base(futError, exception)
         {
-            futError.ThrowIfNullArgument();
-            FutError = futError;
         }
     }
 }

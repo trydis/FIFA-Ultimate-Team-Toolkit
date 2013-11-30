@@ -3,9 +3,9 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {
-    public class BadRequestException : PermissionDeniedException
+    public class BadRequestException : FutErrorException
     {
-        public BadRequestException(FutErrorWithDebugString futError, Exception exception)
+        public BadRequestException(FutError futError, Exception exception)
             : base(futError, exception)
         {
         }

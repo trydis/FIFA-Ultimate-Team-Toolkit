@@ -4,15 +4,11 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {
-    public class PermissionDeniedException : FutException
+    public class PermissionDeniedException : FutErrorException
     {
-        public FutErrorWithDebugString FutError { get; private set; }
-
-        public PermissionDeniedException(FutErrorWithDebugString futError, Exception exception)
-            : base(futError.Reason, exception)
+        public PermissionDeniedException(FutError futError, Exception exception)
+            : base(futError, exception)
         {
-            futError.ThrowIfNullArgument();
-            FutError = futError;
         }
     }
 }

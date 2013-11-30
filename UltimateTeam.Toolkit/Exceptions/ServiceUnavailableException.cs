@@ -3,9 +3,9 @@ using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {
-    public class ServiceUnavailableException : PermissionDeniedException
+    public class ServiceUnavailableException : FutErrorException
     {
-        public ServiceUnavailableException(FutErrorWithDebugString futError, Exception exception)
+        public ServiceUnavailableException(FutError futError, Exception exception)
             : base(futError, exception)
         {
         }

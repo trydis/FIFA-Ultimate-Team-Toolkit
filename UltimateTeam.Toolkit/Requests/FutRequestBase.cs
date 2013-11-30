@@ -109,30 +109,24 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 try
                 {
-                    var futErrorWithDebugString = JsonConvert.DeserializeObject<FutErrorWithDebugString>(messageContent);
-                    MapAndThrowException(serializationException, futErrorWithDebugString);
+                    var futError = JsonConvert.DeserializeObject<FutError>(messageContent);
+                    MapAndThrowException(serializationException, futError);
                 }
                 catch (JsonSerializationException)
                 {
-                    try
-                    {
-                        var futErrorWithMessage = JsonConvert.DeserializeObject<FutErrorWithMessage>(messageContent);
-                        MapAndThrowException(serializationException, futErrorWithMessage);
-                    }
-                    catch (JsonSerializationException)
-                    {
-                        throw serializationException;
-                    }
+                    throw serializationException;
                 }
             }
 
             return deserializedObject;
         }
 
-        private static void MapAndThrowException(Exception exception, FutErrorWithDebugString futError)
+        private static void MapAndThrowException(Exception exception, FutError futError)
         {
             switch (futError.Code)
             {
+                case FutErrorCode.ExpiredSession:
+                    throw new ExpiredSessionException(futError, exception);
                 case FutErrorCode.BadRequest:
                     throw new BadRequestException(futError, exception);
                 case FutErrorCode.PermissionDenied:
@@ -142,19 +136,10 @@ namespace UltimateTeam.Toolkit.Requests
                 case FutErrorCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(futError, exception);
                 default:
-                    throw new FutException(string.Format("Unknown EA error, please report on GitHub - Code: {0}, String: {1}", futError.Code, futError.String), exception);
+                    FutErrorException newException = new FutErrorException(futError, exception);
+                    throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
             }
         }
 
-        private static void MapAndThrowException(Exception exception, FutErrorWithMessage futError)
-        {
-            switch (futError.Code)
-            {
-                case FutErrorCode.ExpiredSession:
-                    throw new ExpiredSessionException(futError, exception);
-                default:
-                    throw new FutException(string.Format("Unknown EA error, please report on GitHub - Code: {0}, Reason: {1}", futError.Code, futError.Reason), exception);
-            }
-        }
     }
 }
