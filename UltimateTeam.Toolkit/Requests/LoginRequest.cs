@@ -47,15 +47,22 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<LoginResponse> PerformRequestAsync()
         {
-            var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
-            await LoginAsync(_loginDetails, mainPageResponseMessage);
-            var nucleusId = await GetNucleusIdAsync();
-            var shards = await GetShardsAsync(nucleusId);
-            var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
-            var sessionId = await GetSessionIdAsync(nucleusId, userAccounts, _loginDetails.Platform);
-            var phishingToken = await ValidateAsync(_loginDetails, sessionId);
+            try
+            {
+                var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
+                await LoginAsync(_loginDetails, mainPageResponseMessage);
+                var nucleusId = await GetNucleusIdAsync();
+                var shards = await GetShardsAsync(nucleusId);
+                var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
+                var sessionId = await GetSessionIdAsync(nucleusId, userAccounts, _loginDetails.Platform);
+                var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
-            return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
+                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
+            }
+            catch (Exception e)
+            {
+                throw new FutException("Unable to login", e);
+            }
         }
 
         private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
