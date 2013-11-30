@@ -34,6 +34,8 @@
 
         public string StaffType { get; set; }
 
+        public long ResourceId { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();
