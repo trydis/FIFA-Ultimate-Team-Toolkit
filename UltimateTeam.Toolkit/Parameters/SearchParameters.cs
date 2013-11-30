@@ -2,6 +2,8 @@
 {
     public abstract class SearchParameters
     {
+        private const byte DefaultPageSize = 12;
+
         public string Type { get; set; }
         
         public uint Page { get; set; }
@@ -36,10 +38,13 @@
 
         public long ResourceId { get; set; }
 
+        public byte PageSize { get; set; }
+
         protected SearchParameters(ResourceType resourceType)
         {
             Type = resourceType.ToString().ToLower();
             Page = 1;
+            PageSize = DefaultPageSize;
         }
 
         internal abstract string BuildUriString(ref string uriString);
