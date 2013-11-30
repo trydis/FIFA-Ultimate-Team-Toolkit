@@ -11,6 +11,9 @@ namespace UltimateTeam.Toolkit.Requests
 {
     public abstract class FutRequestBase
     {
+        private static JsonSerializerSettings _jsonSerializerSettings =
+            new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
+
         private string _phishingToken;
 
         private string _sessionId;
@@ -47,7 +50,6 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected FutRequestBase()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
             HttpClient.SetExpectContinueHeaderToFalse();
         }
 
@@ -103,13 +105,13 @@ namespace UltimateTeam.Toolkit.Requests
 
             try
             {
-                deserializedObject = JsonConvert.DeserializeObject<T>(messageContent);
+                deserializedObject = JsonConvert.DeserializeObject<T>(messageContent, _jsonSerializerSettings);
             }
             catch (JsonSerializationException serializationException)
             {
                 try
                 {
-                    var futError = JsonConvert.DeserializeObject<FutError>(messageContent);
+                    var futError = JsonConvert.DeserializeObject<FutError>(messageContent, _jsonSerializerSettings);
                     MapAndThrowException(serializationException, futError);
                 }
                 catch (JsonSerializationException)
