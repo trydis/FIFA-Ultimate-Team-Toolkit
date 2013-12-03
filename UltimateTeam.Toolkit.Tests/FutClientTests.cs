@@ -211,6 +211,16 @@ namespace UltimateTeam.Toolkit.Tests
         }
 
         [Test]
+        public void ListAuctionAsync_WhenResponseContainsConflictServerError_ShouldThrowConflictException()
+        {
+            const string jsonError = "{\"debug\":\"\",\"string\":\"Conflict\",\"reason\":\"\",\"code\":\"409\"}";
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError);
+            _futClient.RequestFactories.ListAuctionFactory = auctionDetails => new ListAuctionRequest(auctionDetails) { HttpClient = mock.Object };
+
+            AssertEx.TaskThrows<ConflictException>(async () => await _futClient.ListAuctionAsync(new AuctionDetails(1)));
+        }
+
+        [Test]
         public void QuickSellItemAsync_WhenResponseContainsValidData_ShouldNotThrow()
         {
             #region JSON
