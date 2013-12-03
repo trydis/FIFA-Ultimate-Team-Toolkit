@@ -12,11 +12,13 @@ namespace UltimateTeam.Toolkit.Exceptions
         public FutErrorException(FutError futError)
             : base(ExtractMessage(futError))
         {
+            FutError = futError;
         }
 
         public FutErrorException(FutError futError, Exception innerException)
             : base(ExtractMessage(futError), innerException)
         {
+            FutError = futError;
         }
 
         private static string ExtractMessage(FutError futError)

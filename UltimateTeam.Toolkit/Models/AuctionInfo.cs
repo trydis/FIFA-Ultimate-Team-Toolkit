@@ -4,7 +4,7 @@ namespace UltimateTeam.Toolkit.Models
 {
     public class AuctionInfo
     {
-        public const uint MIN_BID = 150;
+        public const uint MinBid = 150;
 
         public string BidState { get; set; }
 
@@ -34,16 +34,13 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint CalculateBid()
         {
-            if (CurrentBid == 0)
-                return StartingBid;
-            else
-                return CalculateNextBid(CurrentBid);
+            return CurrentBid == 0 ? StartingBid : CalculateNextBid(CurrentBid);
         }
 
         public static uint CalculateNextBid(uint currentBid)
         {
             if (currentBid == 0)
-                return MIN_BID;
+                return MinBid;
 
             if (currentBid < 1000)
                 return currentBid + 50;

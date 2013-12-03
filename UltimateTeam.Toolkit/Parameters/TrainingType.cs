@@ -6,7 +6,7 @@ namespace UltimateTeam.Toolkit.Parameters
     {
         public const string PlayerTraining = "playerTraining";
 
-        public const string GKTraining = "GKTraining";
+        public const string GkTraining = "GKTraining";
 
         public const string Position = "position";
 
@@ -24,7 +24,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public static IEnumerable<TrainingType> GetAll()
         {
             yield return new TrainingType("playerTraining", PlayerTraining);
-            yield return new TrainingType("GKTraining", GKTraining);
+            yield return new TrainingType("GKTraining", GkTraining);
             yield return new TrainingType("position", Position);
             yield return new TrainingType("playStyle", ChemistryStyles);
             yield return new TrainingType("managerLeagueModifier", ManagerLeagues);

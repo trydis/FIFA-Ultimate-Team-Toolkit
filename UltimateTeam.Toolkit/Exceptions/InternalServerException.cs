@@ -1,5 +1,4 @@
 ﻿using System;
-using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Exceptions

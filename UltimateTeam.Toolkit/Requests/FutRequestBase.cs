@@ -11,8 +11,7 @@ namespace UltimateTeam.Toolkit.Requests
 {
     public abstract class FutRequestBase
     {
-        private static JsonSerializerSettings _jsonSerializerSettings =
-            new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
 
         private string _phishingToken;
 
@@ -105,13 +104,13 @@ namespace UltimateTeam.Toolkit.Requests
 
             try
             {
-                deserializedObject = JsonConvert.DeserializeObject<T>(messageContent, _jsonSerializerSettings);
+                deserializedObject = JsonConvert.DeserializeObject<T>(messageContent, JsonSerializerSettings);
             }
             catch (JsonSerializationException serializationException)
             {
                 try
                 {
-                    var futError = JsonConvert.DeserializeObject<FutError>(messageContent, _jsonSerializerSettings);
+                    var futError = JsonConvert.DeserializeObject<FutError>(messageContent, JsonSerializerSettings);
                     MapAndThrowException(serializationException, futError);
                 }
                 catch (JsonSerializationException)
@@ -138,7 +137,7 @@ namespace UltimateTeam.Toolkit.Requests
                 case FutErrorCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(futError, exception);
                 default:
-                    FutErrorException newException = new FutErrorException(futError, exception);
+                    var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
             }
         }
