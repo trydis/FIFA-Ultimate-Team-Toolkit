@@ -3,6 +3,7 @@
     public enum FutErrorCode : ushort
     {
         ExpiredSession = 401,
+        NotFound = 404,
         Conflict = 409,
         BadRequest = 460,
         PermissionDenied = 461,

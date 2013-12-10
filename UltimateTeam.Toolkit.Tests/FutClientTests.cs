@@ -232,6 +232,17 @@ namespace UltimateTeam.Toolkit.Tests
         }
 
         [Test]
+        public void ListAuctionAsync_WhenResponseContainsNotFoundServerError_ShouldThrowNotFoundException()
+        {
+            // The spelling error is intentional, although it doesn't matter for this test
+            const string jsonError = "{\"debug\":\"\",\"string\":\"Not Fund\",\"reason\":\"\",\"code\":\"404\"}";
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError);
+            _futClient.RequestFactories.ListAuctionFactory = auctionDetails => new ListAuctionRequest(auctionDetails) { HttpClient = mock.Object };
+
+            AssertEx.TaskThrows<NotFoundException>(async () => await _futClient.ListAuctionAsync(new AuctionDetails(1)));
+        }
+
+        [Test]
         public void QuickSellItemAsync_WhenResponseContainsValidData_ShouldNotThrow()
         {
             #region JSON

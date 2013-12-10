@@ -128,6 +128,8 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 case FutErrorCode.ExpiredSession:
                     throw new ExpiredSessionException(futError, exception);
+                case FutErrorCode.NotFound:
+                    throw new NotFoundException(futError, exception);
                 case FutErrorCode.Conflict:
                     throw new ConflictException(futError, exception);
                 case FutErrorCode.BadRequest:
