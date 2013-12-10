@@ -187,6 +187,17 @@ namespace UltimateTeam.Toolkit.Tests
         }
 
         [Test]
+        public void PlaceBidAsync_WhenResponseContainsNotEnoughCreditError_ShouldThrowNotEnoughCreditException()
+        {
+            const string jsonError = "{\"debug\":\"\",\"string\":\"Not enough credit\",\"reason\":\"\",\"code\":\"470\"}";
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError); 
+            _futClient.RequestFactories.PlaceBidRequestFactory = (auctionInfo, bidAmount) =>
+                new PlaceBidRequest(auctionInfo, bidAmount) { HttpClient = mock.Object };
+
+            AssertEx.TaskThrows<NotEnoughCreditException>(async () => await _futClient.PlaceBidAsync(new AuctionInfo()));
+        }
+
+        [Test]
         public void GetPurchasedItemsAsync_WhenResponseContainsValidData_ShouldNotThrow()
         {
             #region JSON

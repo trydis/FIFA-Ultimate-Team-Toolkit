@@ -134,6 +134,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new BadRequestException(futError, exception);
                 case FutErrorCode.PermissionDenied:
                     throw new PermissionDeniedException(futError, exception);
+                case FutErrorCode.NotEnoughCredit:
+                    throw new NotEnoughCreditException(futError, exception);
                 case FutErrorCode.InternalServerError:
                     throw new InternalServerException(futError, exception);
                 case FutErrorCode.ServiceUnavailable:

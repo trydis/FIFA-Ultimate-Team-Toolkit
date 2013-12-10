@@ -6,6 +6,7 @@
         Conflict = 409,
         BadRequest = 460,
         PermissionDenied = 461,
+        NotEnoughCredit = 470,
         InternalServerError = 500,
         ServiceUnavailable = 503
     }
