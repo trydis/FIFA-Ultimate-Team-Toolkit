@@ -57,6 +57,26 @@ namespace UltimateTeam.Toolkit.Models
             return currentBid + 1000;
         }
 
+        public static uint CalculatePreviousBid(uint currentBid)
+        {
+            if (currentBid <= MinBid)
+                return 0;
+
+            if (currentBid <= 1000)
+                return currentBid - 50;
+
+            if (currentBid <= 10000)
+                return currentBid - 100;
+
+            if (currentBid <= 50000)
+                return currentBid - 250;
+
+            if (currentBid <= 100000)
+                return currentBid - 500;
+
+            return currentBid - 1000;
+        }
+
         public long CalculateBaseId()
         {
             return ItemData.ResourceId.CalculateBaseId();
