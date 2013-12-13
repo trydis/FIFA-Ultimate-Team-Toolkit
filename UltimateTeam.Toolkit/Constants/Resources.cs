@@ -45,5 +45,7 @@
         public const string QuickSell = "item/{0}";
         
         public const string RemoveFromTradePile = "trade/{0}";
+
+        public const string PileSize = "clientdata/pileSize";
     }
 }

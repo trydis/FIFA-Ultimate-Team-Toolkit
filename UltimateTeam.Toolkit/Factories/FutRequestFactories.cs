@@ -48,6 +48,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<long, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
+        private Func<IFutRequest<PileSizeResponse>> _pileSizeRequestFactory;
+
         public string PhishingToken
         {
             get { return _phishingToken; }
@@ -353,5 +355,24 @@ namespace UltimateTeam.Toolkit.Factories
                 _quickSellRequestFactory = value;
             }
         }
+
+        public Func<IFutRequest<PileSizeResponse>> PileSizeRequestFactory
+        {
+            get
+            {
+                return _pileSizeRequestFactory ?? (_pileSizeRequestFactory = () => new PileSizeRequest
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _pileSizeRequestFactory = value;
+            }
+        }
+
     }
 }

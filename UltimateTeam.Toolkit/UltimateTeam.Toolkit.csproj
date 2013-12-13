@@ -36,6 +36,7 @@
     <Compile Include="Constants\FutErrorCode.cs" />
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
+    <Compile Include="Constants\Pile.cs" />
     <Compile Include="Constants\Resources.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ConflictException.cs" />
@@ -60,16 +61,18 @@
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\BidTokens.cs" />
     <Compile Include="Models\CardType.cs" />
-    <Compile Include="Models\FutError.cs" />
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
+    <Compile Include="Models\FutError.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\ItemWrapper.cs" />
     <Compile Include="Models\ListAuctionResponse.cs" />
     <Compile Include="Models\Persona.cs" />
+    <Compile Include="Models\PileSize.cs" />
+    <Compile Include="Models\PileSizeResponse.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Requests\ItemRequest.cs" />
     <Compile Include="Requests\ListAuctionRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
+    <Compile Include="Requests\PileSizeRequest.cs" />
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />
     <Compile Include="Requests\PurchasedItemsRequest.cs" />

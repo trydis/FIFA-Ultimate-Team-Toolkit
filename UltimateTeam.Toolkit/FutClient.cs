@@ -71,6 +71,11 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.CreditsRequestFactory().PerformRequestAsync();
         }
 
+        public Task<PileSizeResponse> GetPileSizeAsync()
+        {
+            return _requestFactories.PileSizeRequestFactory().PerformRequestAsync();
+        }
+
         public Task<AuctionResponse> GetTradePileAsync()
         {
             return _requestFactories.TradePileRequestFactory().PerformRequestAsync();
