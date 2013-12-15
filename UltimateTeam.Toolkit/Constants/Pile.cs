@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace UltimateTeam.Toolkit.Constants
+﻿namespace UltimateTeam.Toolkit.Constants
 {
-    public enum Pile: int
+    public enum Pile : ushort
     {
         TradePile = 2,
         UnknownPile3 = 3, // Size of this pile seems to be always -1
