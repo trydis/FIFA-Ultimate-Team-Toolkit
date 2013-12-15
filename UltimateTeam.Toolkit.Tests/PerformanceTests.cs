@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using NUnit.Framework;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
 
@@ -11,6 +12,7 @@ namespace UltimateTeam.Toolkit.Tests
     public class PerformanceTests
     {
         private IFutClient _futClient;
+        private readonly Resources _resources = new Resources();
 
         [SetUp]
         public void Setup()
@@ -40,7 +42,7 @@ namespace UltimateTeam.Toolkit.Tests
             #endregion
 
             var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, string.Format(json, string.Join(",", auctions)));
-            _futClient.RequestFactories.SearchRequestFactory = parameters => new SearchRequest(parameters) { HttpClient = mock.Object };
+            _futClient.RequestFactories.SearchRequestFactory = parameters => new SearchRequest(parameters) { HttpClient = mock.Object, Resources = _resources };
 
             await _futClient.SearchAsync(new PlayerSearchParameters());
             var stopwatch = Stopwatch.StartNew();

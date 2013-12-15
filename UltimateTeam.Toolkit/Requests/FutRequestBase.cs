@@ -37,6 +37,8 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
+        internal Resources Resources { get; set; }
+
         internal IHttpClient HttpClient
         {
             get { return _httpClient; }

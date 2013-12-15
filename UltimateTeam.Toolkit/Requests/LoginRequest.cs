@@ -28,21 +28,12 @@ namespace UltimateTeam.Toolkit.Requests
         public LoginRequest(LoginDetails loginDetails)
         {
             loginDetails.ThrowIfNullArgument();
-            SetFutHome(loginDetails);
             _loginDetails = loginDetails;
         }
 
         public void SetCookieContainer(CookieContainer cookieContainer)
         {
             HttpClient.MessageHandler.CookieContainer = cookieContainer;
-        }
-
-        private static void SetFutHome(LoginDetails loginDetails)
-        {
-            if (loginDetails.Platform == Platform.Xbox360)
-            {
-                Resources.FutHome = Resources.FutHomeXbox360;
-            }
         }
 
         public async Task<LoginResponse> PerformRequestAsync()

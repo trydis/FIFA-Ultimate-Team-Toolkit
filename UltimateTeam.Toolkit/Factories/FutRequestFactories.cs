@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
@@ -11,6 +12,8 @@ namespace UltimateTeam.Toolkit.Factories
     public class FutRequestFactories
     {
         private readonly CookieContainer _cookieContainer = new CookieContainer();
+
+        private readonly Resources _resources = new Resources();
 
         private string _phishingToken;
 
@@ -91,7 +94,11 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = details =>
                     {
-                        var loginRequest = new LoginRequest(details) { HttpClient = HttpClient };
+                        if (details.Platform == Platform.Xbox360)
+                        {
+                            _resources.FutHome = Resources.FutHomeXbox360;
+                        }
+                        var loginRequest = new LoginRequest(details) { HttpClient = HttpClient, Resources = _resources };
                         loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     });
@@ -111,7 +118,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -129,7 +137,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -147,7 +156,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -165,7 +175,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -183,7 +194,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -201,7 +213,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -219,7 +232,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -237,7 +251,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -255,7 +270,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -273,7 +289,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -291,7 +308,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -309,7 +327,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -328,7 +347,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -346,7 +366,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -364,7 +385,8 @@ namespace UltimateTeam.Toolkit.Factories
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
-                    HttpClient = HttpClient
+                    HttpClient = HttpClient,
+                    Resources = _resources
                 });
             }
             set
@@ -373,6 +395,5 @@ namespace UltimateTeam.Toolkit.Factories
                 _pileSizeRequestFactory = value;
             }
         }
-
     }
 }

@@ -20,7 +20,7 @@
 
         public const string PlayerImage = "http://cdn.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014/fut/items/images/players/web/{0}.png";
 
-        public static string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa14/";
+        public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa14/";
         
         public const string FutHomeXbox360 = "https://utas.fut.ea.com/ut/game/fifa14/";
 
