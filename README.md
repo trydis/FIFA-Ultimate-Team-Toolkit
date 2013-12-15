@@ -33,6 +33,7 @@ If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
 [Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#quick-sell)  
 [Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-watch-list)  
 [Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-trade-pile)  
+[Get pile sizes](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-pile-sizes)  
 
 ### Initialization
 
@@ -233,4 +234,12 @@ Removes an auction from the trade pile.
 
 ```csharp
 await client.RemoveFromTradePileAsync(auctionInfo);
+```
+
+### Get pile sizes
+
+Gets the trade pile and watch list sizes.
+
+```csharp
+var pileSizeResponse = await client.GetPileSizeAsync();
 ```
