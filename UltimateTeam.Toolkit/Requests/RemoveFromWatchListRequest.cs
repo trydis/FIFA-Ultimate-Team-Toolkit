@@ -3,14 +3,16 @@ using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class RemoveFromWatchlistRequest : FutRequestBase, IFutRequest<byte>
     {
-        private readonly AuctionInfo _auctioninfo;
+        private readonly IEnumerable<AuctionInfo> _auctioninfo;
 
-        public RemoveFromWatchlistRequest(AuctionInfo auctioninfo)
+        public RemoveFromWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
         {
             auctioninfo.ThrowIfNullArgument();
             _auctioninfo = auctioninfo;
@@ -18,7 +20,8 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", _auctioninfo.TradeId);
+            var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
+            var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", tradeIds);
             AddMethodOverrideHeader(HttpMethod.Delete);
             AddCommonHeaders();
             var removeFromWatchlistResponseMessage = await HttpClient

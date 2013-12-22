@@ -43,7 +43,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
-        private Func<AuctionInfo, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
+        private Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
 
@@ -300,7 +300,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<AuctionInfo, IFutRequest<byte>> RemoveFromWatchlistRequestFactory
+        public Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> RemoveFromWatchlistRequestFactory
         {
             get
             {

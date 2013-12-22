@@ -36,6 +36,8 @@ namespace UltimateTeam.Toolkit
 
         Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo);
 
+        Task RemoveFromWatchlistAsync(IEnumerable<AuctionInfo> auctionInfo);
+
         Task RemoveFromTradePileAsync(AuctionInfo auctionInfo);
 
         Task<SendItemToTradePileResponse> SendItemToTradePileAsync(ItemData itemData);

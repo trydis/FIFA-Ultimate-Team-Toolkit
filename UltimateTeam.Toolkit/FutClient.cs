@@ -98,11 +98,16 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync();
         }
 
-        public Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo)
+        public Task RemoveFromWatchlistAsync(IEnumerable<AuctionInfo> auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
             return _requestFactories.RemoveFromWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
+        }
+
+        public Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo)
+        {
+            return RemoveFromWatchlistAsync(new[] { auctionInfo });
         }
 
         public Task RemoveFromTradePileAsync(AuctionInfo auctionInfo)
