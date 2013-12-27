@@ -135,6 +135,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new PermissionDeniedException(futError, exception);
                 case FutErrorCode.NotEnoughCredit:
                     throw new NotEnoughCreditException(futError, exception);
+                case FutErrorCode.NoSuchTradeExists:
+                    throw new NoSuchTradeExistsException(futError, exception);
                 case FutErrorCode.InternalServerError:
                     throw new InternalServerException(futError, exception);
                 case FutErrorCode.ServiceUnavailable:

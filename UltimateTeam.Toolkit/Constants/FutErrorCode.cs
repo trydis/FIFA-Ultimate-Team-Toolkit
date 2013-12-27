@@ -8,6 +8,7 @@
         BadRequest = 460,
         PermissionDenied = 461,
         NotEnoughCredit = 470,
+        NoSuchTradeExists = 478,
         InternalServerError = 500,
         ServiceUnavailable = 503
     }

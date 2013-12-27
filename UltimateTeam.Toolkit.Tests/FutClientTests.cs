@@ -200,6 +200,17 @@ namespace UltimateTeam.Toolkit.Tests
         }
 
         [Test]
+        public void PlaceBidAsync_WhenResponseContainsNoSuchTradeExistsError_ShouldThrowNoSuchTradeExistsException()
+        {
+            const string jsonError = "{\"debug\":\"\",\"string\":\"No such trade exists\",\"reason\":\"\",\"code\":\"478\"}";
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError);
+            _futClient.RequestFactories.PlaceBidRequestFactory = (auctionInfo, bidAmount) =>
+                new PlaceBidRequest(auctionInfo, bidAmount) { HttpClient = mock.Object, Resources = _resources };
+
+            AssertEx.TaskThrows<NoSuchTradeExistsException>(async () => await _futClient.PlaceBidAsync(new AuctionInfo()));
+        }
+
+        [Test]
         public void GetPurchasedItemsAsync_WhenResponseContainsValidData_ShouldNotThrow()
         {
             #region JSON
