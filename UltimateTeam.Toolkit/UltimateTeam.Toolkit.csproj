@@ -37,6 +37,7 @@
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
     <Compile Include="Constants\Pile.cs" />
+    <Compile Include="Constants\PosChangeEnum.cs" />
     <Compile Include="Constants\Resources.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ConflictException.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Parameters\Nation.cs" />
     <Compile Include="Parameters\PlayerSearchParameters.cs" />
     <Compile Include="Parameters\Position.cs" />
+    <Compile Include="Parameters\PositionChangeSearchParameters.cs" />
     <Compile Include="Parameters\ResourceType.cs" />
     <Compile Include="Parameters\SearchParameterBase.cs" />
     <Compile Include="Parameters\SearchParameters.cs" />
