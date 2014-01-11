@@ -43,5 +43,7 @@ namespace UltimateTeam.Toolkit
         Task<SendItemToTradePileResponse> SendItemToTradePileAsync(ItemData itemData);
 
         Task<QuickSellResponse> QuickSellItemAsync(long itemId);
+
+        Task<QuickSellResponse> QuickSellItemAsync(IEnumerable<long> itemId);
     }
 }

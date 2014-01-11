@@ -262,7 +262,7 @@ namespace UltimateTeam.Toolkit.Tests
             const string json = "{\"items\":[{\"id\":104902666784}],\"totalCredits\":12345}";
             #endregion
             var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, json);
-            _futClient.RequestFactories.QuickSellRequestFactory = auctionDetails => new QuickSellRequest(0) { HttpClient = mock.Object, Resources = _resources };
+            _futClient.RequestFactories.QuickSellRequestFactory = auctionDetails => new QuickSellRequest(new long[] { 0 }) { HttpClient = mock.Object, Resources = _resources };
 
             AssertEx.TaskDoesNotThrow(async () => await _futClient.QuickSellItemAsync(1));
         }

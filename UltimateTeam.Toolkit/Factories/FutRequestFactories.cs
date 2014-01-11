@@ -49,7 +49,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<ItemData, IFutRequest<SendItemToTradePileResponse>> _sendItemToTradePileRequestFactory;
 
-        private Func<long, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
+        private Func<IEnumerable<long>, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
         private Func<IFutRequest<PileSizeResponse>> _pileSizeRequestFactory;
 
@@ -358,7 +358,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<long, IFutRequest<QuickSellResponse>> QuickSellRequestFactory
+        public Func<IEnumerable<long>, IFutRequest<QuickSellResponse>> QuickSellRequestFactory
         {
             get
             {

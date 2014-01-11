@@ -128,7 +128,17 @@ namespace UltimateTeam.Toolkit
         {
             if (itemId < 1) throw new ArgumentException("Definitely not valid", "itemId");
 
-            return _requestFactories.QuickSellRequestFactory(itemId).PerformRequestAsync();
+            return QuickSellItemAsync(new[] { itemId });
+        }
+        public Task<QuickSellResponse> QuickSellItemAsync(IEnumerable<long> itemIds)
+        {
+            if (itemIds == null) throw new ArgumentNullException("itemIds");
+
+            foreach (var itemId in itemIds)
+                if (itemId < 1) 
+                    throw new ArgumentException(string.Format("ItemId {0} is definitely not valid", itemId), "itemId");
+            
+            return _requestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync();
         }
     }
 }
