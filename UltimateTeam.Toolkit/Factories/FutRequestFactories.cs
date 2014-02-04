@@ -30,6 +30,10 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<AuctionInfo, IFutRequest<Item>> _itemRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte[]>> _playerImageRequestFactory;
+        
+        private Func<AuctionInfo, IFutRequest<byte[]>> _clubImageRequestFactory;
+        
+        private Func<Item, IFutRequest<byte[]>> _nationImageRequestFactory;
 
         private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
 
@@ -183,6 +187,42 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _playerImageRequestFactory = value;
+            }
+        }
+            public Func<AuctionInfo, IFutRequest<byte[]>> ClubImageRequestFactory
+        {
+            get
+            {
+                return _clubImageRequestFactory ?? (_clubImageRequestFactory = info => new ClubImageRequest(info)
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _clubImageRequestFactory = value;
+            }
+        }
+        public Func<Item, IFutRequest<byte[]>> NationImageRequestFactory
+        {
+            get
+            {
+                return _nationImageRequestFactory ?? (_nationImageRequestFactory = info => new NationImageRequest(info)
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _nationImageRequestFactory = value;
             }
         }
 
