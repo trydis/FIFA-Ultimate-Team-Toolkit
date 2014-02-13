@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using UltimateTeam.Toolkit.Constants;
@@ -47,11 +47,15 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
 
+        private Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> _addToWatchlistRequestFactory;
+
         private Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
 
         private Func<ItemData, IFutRequest<SendItemToTradePileResponse>> _sendItemToTradePileRequestFactory;
+
+        private Func<ItemData, IFutRequest<SendItemToClubResponse>> _sendItemToClubRequestFactory;
 
         private Func<IEnumerable<long>, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
@@ -344,6 +348,26 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
+        public Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> AddToWatchlistRequestFactory
+        {
+            get
+            {
+                return _addToWatchlistRequestFactory ?? (_addToWatchlistRequestFactory = info => new AddToWatchlistRequest(info)
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _addToWatchlistRequestFactory = value;
+            }
+        }
+
+
         public Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> RemoveFromWatchlistRequestFactory
         {
             get
@@ -379,6 +403,25 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _removeFromTradePileRequestFactory = value;
+            }
+        }
+
+        public Func<ItemData, IFutRequest<SendItemToClubResponse>> SendItemToClubRequestFactory
+        {
+            get
+            {
+                return _sendItemToClubRequestFactory ?? (_sendItemToClubRequestFactory = itemData => new SendItemToClubRequest(itemData)
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _sendItemToClubRequestFactory = value;
             }
         }
 

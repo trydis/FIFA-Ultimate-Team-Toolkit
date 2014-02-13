@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Extensions;
@@ -103,6 +103,18 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync();
         }
 
+        public Task AddToWatchlistRequest(IEnumerable<AuctionInfo> auctionInfo)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            return _requestFactories.AddToWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
+        }
+
+        public Task AddToWatchlistRequest(AuctionInfo auctionInfo)
+        {
+            return AddToWatchlistRequest(new [] { auctionInfo });
+        }
+
         public Task RemoveFromWatchlistAsync(IEnumerable<AuctionInfo> auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
@@ -120,6 +132,13 @@ namespace UltimateTeam.Toolkit
             auctionInfo.ThrowIfNullArgument();
 
             return _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync();
+        }
+
+        public Task<SendItemToClubResponse> SendItemToClubAsync(ItemData itemData)
+        {
+            itemData.ThrowIfNullArgument();
+
+            return _requestFactories.SendItemToClubRequestFactory(itemData).PerformRequestAsync();
         }
 
         public Task<SendItemToTradePileResponse> SendItemToTradePileAsync(ItemData itemData)
