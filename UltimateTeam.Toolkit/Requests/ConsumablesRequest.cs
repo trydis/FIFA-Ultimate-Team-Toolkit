@@ -9,7 +9,6 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<ConsumablesResponse> PerformRequestAsync()
         {
-
             AddCommonHeaders();
             AddMethodOverrideHeader(HttpMethod.Get);
             var consumablesResponseMessage = await HttpClient

@@ -78,7 +78,7 @@ namespace UltimateTeam.Toolkit
 
         public Task<ConsumablesResponse> GetConsumablesAsync()
         {
-            return _requestFactories.ConsumableRequestFactory().PerformRequestAsync();
+            return _requestFactories.ConsumablesRequestFactory().PerformRequestAsync();
         }
         
         public Task<AuctionResponse> GetTradePileAsync()
@@ -135,6 +135,7 @@ namespace UltimateTeam.Toolkit
 
             return QuickSellItemAsync(new[] { itemId });
         }
+
         public Task<QuickSellResponse> QuickSellItemAsync(IEnumerable<long> itemIds)
         {
             if (itemIds == null) throw new ArgumentNullException("itemIds");
@@ -144,6 +145,20 @@ namespace UltimateTeam.Toolkit
                     throw new ArgumentException(string.Format("ItemId {0} is definitely not valid", itemId), "itemId");
             
             return _requestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync();
+        }
+
+        public Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo)
+        {
+            auctionInfo.ThrowIfNullArgument();
+
+            return _requestFactories.ClubImageRequestFactory(auctionInfo).PerformRequestAsync();
+        }
+
+        public Task<byte[]> GetNationImageAsync(Item item)
+        {
+            item.ThrowIfNullArgument();
+
+            return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
     }
 }

@@ -45,5 +45,11 @@ namespace UltimateTeam.Toolkit
         Task<QuickSellResponse> QuickSellItemAsync(long itemId);
 
         Task<QuickSellResponse> QuickSellItemAsync(IEnumerable<long> itemId);
+
+        Task<ConsumablesResponse> GetConsumablesAsync();
+
+        Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo);
+        
+        Task<byte[]> GetNationImageAsync(Item item);
     }
 }

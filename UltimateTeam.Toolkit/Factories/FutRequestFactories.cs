@@ -30,9 +30,9 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<AuctionInfo, IFutRequest<Item>> _itemRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte[]>> _playerImageRequestFactory;
-        
+
         private Func<AuctionInfo, IFutRequest<byte[]>> _clubImageRequestFactory;
-        
+
         private Func<Item, IFutRequest<byte[]>> _nationImageRequestFactory;
 
         private Func<IEnumerable<long>, IFutRequest<AuctionResponse>> _tradeStatusRequestFactory;
@@ -56,6 +56,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IEnumerable<long>, IFutRequest<QuickSellResponse>> _quickSellRequestFactory;
 
         private Func<IFutRequest<PileSizeResponse>> _pileSizeRequestFactory;
+
+        private Func<IFutRequest<ConsumablesResponse>> _consumablesRequestFactory;
 
         public string PhishingToken
         {
@@ -189,7 +191,8 @@ namespace UltimateTeam.Toolkit.Factories
                 _playerImageRequestFactory = value;
             }
         }
-            public Func<AuctionInfo, IFutRequest<byte[]>> ClubImageRequestFactory
+
+        public Func<AuctionInfo, IFutRequest<byte[]>> ClubImageRequestFactory
         {
             get
             {
@@ -207,6 +210,7 @@ namespace UltimateTeam.Toolkit.Factories
                 _clubImageRequestFactory = value;
             }
         }
+
         public Func<Item, IFutRequest<byte[]>> NationImageRequestFactory
         {
             get
@@ -433,6 +437,25 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _pileSizeRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<ConsumablesResponse>> ConsumablesRequestFactory
+        {
+            get
+            {
+                return _consumablesRequestFactory ?? (_consumablesRequestFactory = () => new ConsumablesRequest
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _consumablesRequestFactory = value;
             }
         }
     }
