@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Extensions;
@@ -103,16 +103,16 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync();
         }
 
-        public Task AddToWatchlistRequest(IEnumerable<AuctionInfo> auctionInfo)
+        public Task AddToWatchlistRequestAsync(IEnumerable<AuctionInfo> auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
             return _requestFactories.AddToWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
         }
 
-        public Task AddToWatchlistRequest(AuctionInfo auctionInfo)
+        public Task AddToWatchlistRequestAsync(AuctionInfo auctionInfo)
         {
-            return AddToWatchlistRequest(new [] { auctionInfo });
+            return AddToWatchlistRequestAsync(new [] { auctionInfo });
         }
 
         public Task RemoveFromWatchlistAsync(IEnumerable<AuctionInfo> auctionInfo)

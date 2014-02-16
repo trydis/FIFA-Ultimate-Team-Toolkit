@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
@@ -34,9 +34,9 @@ namespace UltimateTeam.Toolkit
 
         Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails);
 
-        Task AddToWatchlistRequest(AuctionInfo auctionInfo);
+        Task AddToWatchlistRequestAsync(AuctionInfo auctionInfo);
 
-        Task AddToWatchlistRequest(IEnumerable<AuctionInfo> auctionInfo);
+        Task AddToWatchlistRequestAsync(IEnumerable<AuctionInfo> auctionInfo);
 
         Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo);
 

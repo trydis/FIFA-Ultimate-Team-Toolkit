@@ -82,6 +82,7 @@
     <Compile Include="Models\PurchasedItemsResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
+    <Compile Include="Models\SendItemToClubResponse.cs" />
     <Compile Include="Models\SendItemToTradePileResponse.cs" />
     <Compile Include="Models\TradePileItem.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Parameters\TrainingSearchParameters.cs" />
     <Compile Include="Parameters\TrainingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\AddToWatchlistRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Requests\PurchasedItemsRequest.cs" />
     <Compile Include="Requests\QuickSellRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
+    <Compile Include="Requests\SendItemToClubRequest.cs" />
     <Compile Include="Requests\SendItemToTradePileRequest.cs" />
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
