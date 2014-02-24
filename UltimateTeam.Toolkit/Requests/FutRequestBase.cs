@@ -141,6 +141,10 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new InternalServerException(futError, exception);
                 case FutErrorCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(futError, exception);
+                case FutErrorCode.InvalidDeck:
+                    throw new InvalidDeckException(futError, exception);
+                case FutErrorCode.DestinationFull:
+                    throw new DestinationFullException(futError, exception);                    
                 default:
                     var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);

@@ -53,5 +53,7 @@
         public const string PileSize = "clientdata/pileSize";
         
         public const string Consumables = "club/stats/consumables";
+        
+        public const string ReList = "relist";
     }
 }

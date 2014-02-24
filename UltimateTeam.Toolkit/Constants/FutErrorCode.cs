@@ -10,6 +10,8 @@
         NotEnoughCredit = 470,
         NoSuchTradeExists = 478,
         InternalServerError = 500,
-        ServiceUnavailable = 503
+        ServiceUnavailable = 503,
+        InvalidDeck = 477,
+        DestinationFull = 473
     }
 }

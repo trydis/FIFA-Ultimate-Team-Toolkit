@@ -22,6 +22,8 @@ If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
 [Trade status](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#trade-status)  
 [Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
 [Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
+[Club image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#club-image)  
+[Nation image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nation-image)  
 [Credits](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#credits)  
 [List auction](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#list-auction)  
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-trade-pile)  
@@ -34,6 +36,7 @@ If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
 [Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-watch-list)  
 [Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-trade-pile)  
 [Get pile sizes](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-pile-sizes)  
+[ReList Tradepile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#relist-tradepile)  
 
 ### Initialization
 
@@ -117,6 +120,24 @@ var item = await client.GetItemAsync(auctionInfo);
 ```csharp
 var imageBytes = await client.GetPlayerImageAsync(auctionInfo);
 ```
+### Club image
+
+- Format: PNG
+- Dimensions: 256 x 256 pixels
+
+```csharp
+var imageBytes = await client.GetClubImageAsync(auctionInfo);
+```
+
+### Nation image
+
+- Format: PNG
+- Dimensions: 71 x 45 pixels
+
+```csharp
+var imageBytes = await client.GetNationImageAsync(auctionInfo);
+```
+
 
 ### Credits
 
@@ -242,4 +263,12 @@ Gets the trade pile and watch list sizes.
 
 ```csharp
 var pileSizeResponse = await client.GetPileSizeAsync();
+```
+
+### Relist Tradepile
+
+Re-listing all tradepile items listed before.
+
+```csharp
+await client.ReListAsync();
 ```

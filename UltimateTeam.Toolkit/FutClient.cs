@@ -179,5 +179,10 @@ namespace UltimateTeam.Toolkit
 
             return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
+        
+         public Task<byte> ReListAsync()
+        {
+            return _requestFactories.ReListRequestFactory().PerformRequestAsync();
+        }
     }
 }

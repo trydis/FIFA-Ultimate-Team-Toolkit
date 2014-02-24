@@ -145,6 +145,7 @@
     <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Requests\RemoveFromWatchlistRequest.cs" />
     <Compile Include="Requests\WatchlistRequest.cs" />
+    <Compile Include="Requests\ReListRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
   </ItemGroup>
