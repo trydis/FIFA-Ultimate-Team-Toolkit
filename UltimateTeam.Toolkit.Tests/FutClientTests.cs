@@ -127,7 +127,7 @@ namespace UltimateTeam.Toolkit.Tests
             // TODO: Create one test without futCashBalance and one with it
             #region JSON
 
-            const string json = "{\"currencies\":[{\"name\":\"COINS\",\"finalFunds\":12345,\"funds\":12345},{\"name\":\"TOKEN\",\"finalFunds\":0,\"funds\":0},{\"name\":\"POINTS\",\"finalFunds\":0,\"funds\":0}],\"credits\":12345,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0},\"futCashBalance\":0.0}";
+            const string json = "{\"currencies\":[{\"name\":\"COINS\",\"finalFunds\":12345,\"funds\":12345},{\"name\":\"TOKEN\",\"finalFunds\":0,\"funds\":0},{\"name\":\"POINTS\",\"finalFunds\":0,\"funds\":0}],\"credits\":12345,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0},\"bidTokens\":{}}";
 
             #endregion
             var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Get, json);
