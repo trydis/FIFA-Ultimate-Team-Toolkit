@@ -150,6 +150,5 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
             }
         }
-
     }
 }

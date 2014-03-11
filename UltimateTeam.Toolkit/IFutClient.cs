@@ -57,5 +57,7 @@ namespace UltimateTeam.Toolkit
         Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo);
         
         Task<byte[]> GetNationImageAsync(Item item);
+
+        Task<byte> ReListAsync();
     }
 }
