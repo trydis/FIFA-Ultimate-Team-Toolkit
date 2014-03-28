@@ -37,6 +37,8 @@ If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:
 [Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-trade-pile)  
 [Get pile sizes](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-pile-sizes)  
 [ReList Tradepile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#relist-tradepile)  
+[Read Players from own club] (https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#read-players-from-own-club)
+[Read Squads from own club] (https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#read-squads-from-own-club)   
 
 ### Initialization
 
@@ -271,4 +273,47 @@ Re-listing all tradepile items listed before.
 
 ```csharp
 await client.ReListAsync();
+```
+
+### Read Players from own club
+
+Read players from your 'My Club' section.  Note, this will be expanded to include Staff and Club Items.
+
+```csharp
+var clubItems = await client.GetClubItemsAsync();
+foreach (ItemData itemData in clubItems.ItemData)
+  {
+    //deal with players
+  }
+```  
+
+### Read Squads from own club
+
+Read the list of squads from your club.  Note - many of the fields, such as Players etc are not populated here, and are in the Squad Details below.
+
+```csharp
+SquadListResponse squadListResponse = await Variables.Client.GetSquadListAsync();
+foreach (SquadDetailResponse sdr in squadListResponse.squad)
+{
+	string name = sdr.squadName;
+	// etc
+}
+```
+
+### Read Details of squads from our own club.
+
+```csharp
+SquadListResponse squadListResponse = await Variables.Client.GetSquadListAsync();
+foreach (SquadDetailResponse sdr in squadListResponse.squad)
+{
+	string name = sdr.squadName;
+	SquadDetailsResponse squadDetailsResponse = await client.GetSquadDetailAsync(sdr.id);
+	foreach (SquadPlayer squadPlayer in squadDetailsResponse.players)
+	{
+		ItemData itemData = squadPlayer.itemData;
+		//read properties of players etc.  
+		//Positions seem to be set by index number and depend on formation, that's possible for someone else! :)
+	}
+	
+}
 ```
