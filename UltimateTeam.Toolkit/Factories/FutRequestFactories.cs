@@ -43,6 +43,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<WatchlistResponse>> _watchlistRequestFactory;
 
+        private Func<IFutRequest<ClubItemResponse>> _clubItemRequestFactory;
+
         private Func<IFutRequest<PurchasedItemsResponse>> _purchaseditemsRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
@@ -309,6 +311,25 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _watchlistRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<ClubItemResponse>> ClubItemRequestFactory
+        {
+            get
+            {
+                return _clubItemRequestFactory ?? (_clubItemRequestFactory = () => new ClubItemRequest()
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _clubItemRequestFactory = value;
             }
         }
 

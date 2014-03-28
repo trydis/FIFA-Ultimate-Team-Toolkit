@@ -91,6 +91,11 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.WatchlistRequestFactory().PerformRequestAsync();
         }
 
+        public Task<ClubItemResponse> GetClubItemsAsync()
+        {
+            return _requestFactories.ClubItemRequestFactory().PerformRequestAsync();
+        }
+
         public Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
         {
             return _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();

@@ -68,6 +68,7 @@
     <Compile Include="Models\Consumables.cs" />
     <Compile Include="Models\ConsumablesCategory.cs" />
     <Compile Include="Models\ConsumablesResponse.cs" />
+    <Compile Include="Models\ClubItemResponse.cs" />
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
+    <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
     <Compile Include="Requests\IHttpClient.cs" />
     <Compile Include="Requests\NationImageRequest.cs" />
