@@ -3,9 +3,11 @@ FIFA Ultimate Team 2014 Toolkit
 
 ## Supported platforms
 - .NET 4 and higher
-- Silverlight 4 and higher
-- Windows Phone 7.5 and higher
+- Silverlight 5
+- Windows Phone 8
 - Windows Store Apps
+- Xamarin.Android
+- Xamarin.iOS
 
 ## NuGet packages
 
