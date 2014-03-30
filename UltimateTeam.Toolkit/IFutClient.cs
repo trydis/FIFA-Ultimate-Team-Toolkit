@@ -34,7 +34,7 @@ namespace UltimateTeam.Toolkit
 
         Task<SquadListResponse> GetSquadListAsync();
 
-        Task<SquadDetailResponse> GetSquadDetailAsync(ushort squadId);
+        Task<SquadDetailsResponse> GetSquadDetailsAsync(ushort squadId);
 
         Task<PurchasedItemsResponse> GetPurchasedItemsAsync();
 

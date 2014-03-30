@@ -7,7 +7,6 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class SquadListRequest : FutRequestBase, IFutRequest<SquadListResponse>
     {
-
         public async Task<SquadListResponse> PerformRequestAsync()
         {
             AddMethodOverrideHeader(HttpMethod.Get);
@@ -19,5 +18,4 @@ namespace UltimateTeam.Toolkit.Requests
             return await Deserialize<SquadListResponse>(squadListResponseMessage);
         }
     }
-
 }

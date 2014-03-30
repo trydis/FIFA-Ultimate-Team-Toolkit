@@ -57,7 +57,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
 
-        private Func<ushort, IFutRequest<SquadDetailResponse>> _squadDetailRequestFactory;
+        private Func<ushort, IFutRequest<SquadDetailsResponse>> _squadDetailsRequestFactory;
 
         private Func<ItemData, IFutRequest<SendItemToTradePileResponse>> _sendItemToTradePileRequestFactory;
 
@@ -322,7 +322,7 @@ namespace UltimateTeam.Toolkit.Factories
         {
             get
             {
-                return _clubItemRequestFactory ?? (_clubItemRequestFactory = () => new ClubItemRequest()
+                return _clubItemRequestFactory ?? (_clubItemRequestFactory = () => new ClubItemRequest
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
@@ -341,7 +341,7 @@ namespace UltimateTeam.Toolkit.Factories
         {
             get
             {
-                return _squadListRequestFactory ?? (_squadListRequestFactory = () => new SquadListRequest()
+                return _squadListRequestFactory ?? (_squadListRequestFactory = () => new SquadListRequest
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
@@ -452,11 +452,11 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<ushort, IFutRequest<SquadDetailResponse>> SquadDetailRequestFactory
+        public Func<ushort, IFutRequest<SquadDetailsResponse>> SquadDetailsRequestFactory
         {
             get
             {
-                return _squadDetailRequestFactory ?? (_squadDetailRequestFactory = squadId => new SquadDetailRequest(squadId)
+                return _squadDetailsRequestFactory ?? (_squadDetailsRequestFactory = squadId => new SquadDetailsRequest(squadId)
                 {
                     PhishingToken = PhishingToken,
                     SessionId = SessionId,
@@ -467,9 +467,8 @@ namespace UltimateTeam.Toolkit.Factories
             set
             {
                 value.ThrowIfNullArgument();
-                _squadDetailRequestFactory = value;
+                _squadDetailsRequestFactory = value;
             }
-
         }
 
         public Func<ItemData, IFutRequest<SendItemToClubResponse>> SendItemToClubRequestFactory

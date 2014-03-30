@@ -17,7 +17,6 @@ namespace UltimateTeam.Toolkit.Requests
         {
             _listType = 1;
         }
-                
 
         public async Task<ClubItemResponse> PerformRequestAsync()
         {

@@ -6,25 +6,25 @@ using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    internal class SquadDetailRequest : FutRequestBase, IFutRequest<SquadDetailResponse>
+    internal class SquadDetailsRequest : FutRequestBase, IFutRequest<SquadDetailsResponse>
     {
         private readonly ushort _squadId;
 
-        public SquadDetailRequest(ushort SquadId)
+        public SquadDetailsRequest(ushort squadId)
         {
-            SquadId.ThrowIfNullArgument();
-            _squadId = SquadId;
+            squadId.ThrowIfNullArgument();
+            _squadId = squadId;
         }
 
-        public async Task<SquadDetailResponse> PerformRequestAsync()
+        public async Task<SquadDetailsResponse> PerformRequestAsync()
         {
             AddMethodOverrideHeader(HttpMethod.Get);
             AddCommonHeaders();
             var squadResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.SquadDetail, _squadId))
+                .GetAsync(string.Format(Resources.FutHome + Resources.SquadDetails, _squadId))
                 .ConfigureAwait(false);
 
-            return await Deserialize<SquadDetailResponse>(squadResponseMessage);
+            return await Deserialize<SquadDetailsResponse>(squadResponseMessage);
         }
     }
 }

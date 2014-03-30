@@ -144,11 +144,9 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync();
         }
 
-        public Task<SquadDetailResponse> GetSquadDetailAsync(ushort squadId)
+        public Task<SquadDetailsResponse> GetSquadDetailsAsync(ushort squadId)
         {
-            squadId.ThrowIfNullArgument();
-
-            return _requestFactories.SquadDetailRequestFactory(squadId).PerformRequestAsync();
+            return _requestFactories.SquadDetailsRequestFactory(squadId).PerformRequestAsync();
         }
 
         public Task<SendItemToClubResponse> SendItemToClubAsync(ItemData itemData)

@@ -58,7 +58,7 @@
 
         public const string SquadList = "squad/list";
 
-        public const string SquadDetail = "squad/{0}";
+        public const string SquadDetails = "squad/{0}";
 
         public const string ReList = "relist";
     }
