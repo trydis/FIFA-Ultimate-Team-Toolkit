@@ -43,6 +43,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<WatchlistResponse>> _watchlistRequestFactory;
 
+        private Func<IFutRequest<ClubItemResponse>> _clubItemRequestFactory;
+
+        private Func<IFutRequest<SquadListResponse>> _squadListRequestFactory;
+
         private Func<IFutRequest<PurchasedItemsResponse>> _purchaseditemsRequestFactory;
 
         private Func<AuctionDetails, IFutRequest<ListAuctionResponse>> _listAuctionRequestFactory;
@@ -52,6 +56,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IEnumerable<AuctionInfo>, IFutRequest<byte>> _removeFromWatchlistRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte>> _removeFromTradePileRequestFactory;
+
+        private Func<ushort, IFutRequest<SquadDetailResponse>> _squadDetailRequestFactory;
 
         private Func<ItemData, IFutRequest<SendItemToTradePileResponse>> _sendItemToTradePileRequestFactory;
 
@@ -312,6 +318,44 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
+        public Func<IFutRequest<ClubItemResponse>> ClubItemRequestFactory
+        {
+            get
+            {
+                return _clubItemRequestFactory ?? (_clubItemRequestFactory = () => new ClubItemRequest()
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _clubItemRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<SquadListResponse>> SquadListRequestFactory
+        {
+            get
+            {
+                return _squadListRequestFactory ?? (_squadListRequestFactory = () => new SquadListRequest()
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _squadListRequestFactory = value;
+            }
+        }
+
         public Func<IFutRequest<PurchasedItemsResponse>> PurchasedItemsRequestFactory
         {
             get
@@ -408,6 +452,26 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
+        public Func<ushort, IFutRequest<SquadDetailResponse>> SquadDetailRequestFactory
+        {
+            get
+            {
+                return _squadDetailRequestFactory ?? (_squadDetailRequestFactory = squadId => new SquadDetailRequest(squadId)
+                {
+                    PhishingToken = PhishingToken,
+                    SessionId = SessionId,
+                    HttpClient = HttpClient,
+                    Resources = _resources
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _squadDetailRequestFactory = value;
+            }
+
+        }
+
         public Func<ItemData, IFutRequest<SendItemToClubResponse>> SendItemToClubRequestFactory
         {
             get
@@ -426,6 +490,8 @@ namespace UltimateTeam.Toolkit.Factories
                 _sendItemToClubRequestFactory = value;
             }
         }
+
+
 
 
         public Func<ItemData, IFutRequest<SendItemToTradePileResponse>> SendItemToTradePileRequestFactory

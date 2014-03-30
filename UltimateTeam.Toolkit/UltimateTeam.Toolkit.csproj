@@ -88,6 +88,7 @@
     <Compile Include="Models\Consumables.cs" />
     <Compile Include="Models\ConsumablesCategory.cs" />
     <Compile Include="Models\ConsumablesResponse.cs" />
+    <Compile Include="Models\ClubItemResponse.cs" />
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Models\RareType.cs" />
     <Compile Include="Models\SendItemToClubResponse.cs" />
     <Compile Include="Models\SendItemToTradePileResponse.cs" />
+    <Compile Include="Models\SquadResponse.cs" />
     <Compile Include="Models\TradePileItem.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
     <Compile Include="Models\UserAccountInfo.cs" />
@@ -145,6 +147,9 @@
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
+    <Compile Include="Requests\ClubItemRequest.cs" />
+    <Compile Include="Requests\SquadDetailRequest.cs" />
+    <Compile Include="Requests\SquadListRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
     <Compile Include="Requests\IHttpClient.cs" />
     <Compile Include="Requests\NationImageRequest.cs" />

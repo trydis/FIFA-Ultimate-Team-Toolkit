@@ -91,6 +91,16 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.WatchlistRequestFactory().PerformRequestAsync();
         }
 
+        public Task<ClubItemResponse> GetClubItemsAsync()
+        {
+            return _requestFactories.ClubItemRequestFactory().PerformRequestAsync();
+        }
+
+        public Task<SquadListResponse> GetSquadListAsync()
+        {
+            return _requestFactories.SquadListRequestFactory().PerformRequestAsync();
+        }
+        
         public Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
         {
             return _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();
@@ -132,6 +142,13 @@ namespace UltimateTeam.Toolkit
             auctionInfo.ThrowIfNullArgument();
 
             return _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync();
+        }
+
+        public Task<SquadDetailResponse> GetSquadDetailAsync(ushort squadId)
+        {
+            squadId.ThrowIfNullArgument();
+
+            return _requestFactories.SquadDetailRequestFactory(squadId).PerformRequestAsync();
         }
 
         public Task<SendItemToClubResponse> SendItemToClubAsync(ItemData itemData)
