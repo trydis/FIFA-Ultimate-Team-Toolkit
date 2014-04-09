@@ -49,6 +49,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint Greece = 22;
         public const uint Grenada = 77;
         public const uint Guinea = 118;
+        public const uint GuineaBissau = 119;
         public const uint Haiti = 80;
         public const uint Honduras = 81;
         public const uint Hungary = 23;
@@ -158,6 +159,7 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Greece", Greece);
             yield return new Nation("Grenada", Grenada);
             yield return new Nation("Guinea", Guinea);
+            yield return new Nation("Guinea Bissau", GuineaBissau);
             yield return new Nation("Haiti", Haiti);
             yield return new Nation("Honduras", Honduras);
             yield return new Nation("Hungary", Hungary);
@@ -214,5 +216,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Zambia", Zambia);
             yield return new Nation("Zimbabwe", Zimbabwe);
         }
+
     }
 }
