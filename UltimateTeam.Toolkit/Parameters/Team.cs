@@ -108,6 +108,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint CDNacional = 1891;
         public const uint CDNacionaldeMadeira = 1891;
         public const uint CDNumancia = 477;
+        public const uint CDTenerife = 260;
         public const uint Ceara = 111059;
         public const uint Celtic = 78;
         public const uint CentralCoastMariners = 111396;
@@ -687,6 +688,7 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Team("CD Mirandes", CDMirandes, League.LigaAdelante);
             yield return new Team("CD Nacional", CDNacional, League.LigaPortuguesa);
             yield return new Team("CD Numancia", CDNumancia, League.LigaAdelante);
+            yield return new Team("CD Tenerife", CDTenerife, League.LigaAdelante);
             yield return new Team("CE Sabadell", CESabadell, League.LigaAdelante);
             yield return new Team("Ceara", Ceara, League.LigadoBrasil);
             yield return new Team("Celtic", Celtic, League.Spl);

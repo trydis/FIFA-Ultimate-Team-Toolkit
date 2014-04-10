@@ -18,6 +18,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint LigaAdelante = 54;
         public const uint LigaBbva = 53;
         public const uint LigadoBrasil = 7;
+        public const uint LigadoBrasilB = 2025;
         public const uint LigaMx = 341;
         public const uint LigaPortuguesa = 308;
         public const uint Ligue1 = 16;
@@ -62,8 +63,10 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new League("Liga Adelante", LigaAdelante);
             yield return new League("Liga BBVA", LigaBbva);
             yield return new League("Liga do Brasil", LigadoBrasil);
+            yield return new League("Liga do Brasil B", LigadoBrasilB);
             yield return new League("Liga Portuguesa", LigaPortuguesa);
             yield return new League("Ligue 1", Ligue1);
+            yield return new League("Ligue 2", Ligue2);
             yield return new League("MLS", Mls);
             yield return new League("Npower Championship", NpowerChampionship);
             yield return new League("Npower League 1", NpowerLeague1);
