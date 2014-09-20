@@ -7,6 +7,7 @@
         InForm = 3,
         TeamOfTheYear = 5,
         TeamOfTheYear2 = 6,
-        ManOfTheMatch = 8
+        ManOfTheMatch = 8,
+        TeamOfTheSeason = 11
     }
 }
