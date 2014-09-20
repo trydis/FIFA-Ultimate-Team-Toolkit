@@ -33,7 +33,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint LastSalePrice { get; set; }
 
-		public uint LeagueId { get; set; }
+        public uint LeagueId { get; set; }
 
         public ushort LifeTimeAssists { get; set; }
 
@@ -66,5 +66,7 @@ namespace UltimateTeam.Toolkit.Models
         public int Training { get; set; }
 
         public bool Untradeable { get; set; }
+
+        public int Pile { get; set; }
     }
 }
