@@ -5,7 +5,7 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A761D7BC-C308-4AC5-8E9D-DFB02CAFE9CC}</ProjectGuid>
+    <ProjectGuid>{4A396EBA-0B7D-41E2-9088-FB3C40EFA76F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UltimateTeam.Toolkit</RootNamespace>
