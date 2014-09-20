@@ -12,6 +12,13 @@ Please report back on what's working or not in the issues section.
 - Xamarin.Android
 - Xamarin.iOS
 
+## Build status
+[![trydis MyGet Build Status](https://www.myget.org/BuildSource/Badge/trydis?identifier=d1708aa8-b649-41d2-ab05-daf80cec40c7)](https://www.myget.org/)
+
+## NuGet package
+
+[Install-Package UltimateTeam.2015.Toolkit](https://www.nuget.org/packages/UltimateTeam.2015.Toolkit/)
+
 ## Sample usage
 
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#initialization)  
