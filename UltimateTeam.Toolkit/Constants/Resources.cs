@@ -34,7 +34,7 @@
 
         public const string Bid = "trade/{0}/bid";
 
-        public const string TradeStatus = "trade?tradeIds={0}";
+        public const string TradeStatus = "trade/status?tradeIds={0}";
 
         public const string Credits = "user/credits";
 
