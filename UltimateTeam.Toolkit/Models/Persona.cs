@@ -11,5 +11,9 @@ namespace UltimateTeam.Toolkit.Models
         public IEnumerable<UserClub> UserClubList { get; set; }
 
         public bool ReturningUser { get; set; }
+
+        public bool Trial { get; set; }
+
+        public string UserState { get; set; }
     }
 }

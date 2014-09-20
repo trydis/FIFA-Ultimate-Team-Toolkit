@@ -21,7 +21,7 @@ namespace UltimateTeam.Toolkit.Tests
         {
             var mock = new Mock<IFutRequest<T>>();
             mock.Setup(request => request.PerformRequestAsync())
-                .Returns(() => TaskEx.FromResult(result));
+                .Returns(() => Task.FromResult(result));
 
             return mock;
         }
@@ -30,7 +30,7 @@ namespace UltimateTeam.Toolkit.Tests
         {
             var mock = new Mock<IFutRequest<T>>();
             mock.Setup(request => request.PerformRequestAsync())
-                .Returns(() => TaskEx.FromResult(default(T)));
+                .Returns(() => Task.FromResult(default(T)));
 
             return mock;
         }
@@ -50,7 +50,7 @@ namespace UltimateTeam.Toolkit.Tests
             Expression<Func<IHttpClient, Task<HttpResponseMessage>>> getExpression = client => client.GetAsync(It.IsAny<string>());
             Expression<Func<IHttpClient, Task<HttpResponseMessage>>> postExpression = client => client.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>());
             mock.Setup(method == HttpMethod.Get ? getExpression : postExpression)
-                .Returns(() => TaskEx.FromResult(new HttpResponseMessage { Content = new StringContent(json) }));
+                .Returns(() => Task.FromResult(new HttpResponseMessage { Content = new StringContent(json) }));
 
             return mock;
         }

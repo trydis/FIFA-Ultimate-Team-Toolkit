@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Services;
-using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -45,7 +45,7 @@ namespace UltimateTeam.Toolkit.Requests
                 var nucleusId = await GetNucleusIdAsync();
                 var shards = await GetShardsAsync(nucleusId);
                 var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
-                var sessionId = await GetSessionIdAsync(nucleusId, userAccounts, _loginDetails.Platform);
+                var sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
                 var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
                 return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
@@ -69,7 +69,7 @@ namespace UltimateTeam.Toolkit.Requests
             return validateResponse.Token;
         }
 
-        private async Task<string> GetSessionIdAsync(string nucleusId, UserAccounts userAccounts, Platform platform)
+        private async Task<string> GetSessionIdAsync(UserAccounts userAccounts, Platform platform)
         {
             var persona = userAccounts
                 .UserAccountInfo
@@ -80,8 +80,8 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new FutException("Couldn't find a persona matching the selected platform");
             }
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
-                string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT14WEB"", ""clientVersion"": 1, ""nuc"": {0}, ""nucleusPersonaId"": {1}, ""nucleusPersonaDisplayName"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
-                    nucleusId, persona.PersonaId, persona.PersonaName, GetNucleusPersonaPlatform(platform))));
+               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT15WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""nucleusPersonaPlatform"": ""{2}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
+                    persona.PersonaId, persona.PersonaName, GetNucleusPersonaPlatform(platform))));
             authResponseMessage.EnsureSuccessStatusCode();
             var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
                 .Value

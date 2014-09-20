@@ -1,47 +1,44 @@
-FIFA Ultimate Team 2014 Toolkit
+FIFA Ultimate Team 2015 Toolkit
 ===============================
 
+## Alpha notes
+
+Please report back on what's working or not in the issues section.
+
 ## Supported platforms
-- .NET 4 and higher
-- Silverlight 5
-- Windows Phone 8
-- Windows Store Apps
+- .NET 4.5
+- Windows 8.x
+- Windows Phone 8.1
 - Xamarin.Android
 - Xamarin.iOS
 
-## NuGet packages
-
-If you're targeting .NET 4.5 or .NET for Windows Store apps, you'll need:  
-[HttpClient](http://www.nuget.org/packages/Microsoft.Net.Http/)  
-[Async targeting pack](http://www.nuget.org/packages/Microsoft.Bcl.Async/)  
-
 ## Sample usage
 
-[Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#initialization)  
-[Login](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#login)  
-[Player search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-search)  
-[Place bid](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#place-bid)  
-[Trade status](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#trade-status)  
-[Item data](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#item-data)  
-[Player image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#player-image)  
-[Club image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#club-image)  
-[Nation image](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#nation-image)  
-[Credits](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#credits)  
-[List auction](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#list-auction)  
-[Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-trade-pile)  
-[Watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#watch-list)  
-[Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#purchased-items)  
-[Development search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#development-search)  
-[Training search](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#training-search)  
-[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#send-to-trade-pile)  
-[Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#quick-sell)  
-[Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-watch-list)  
-[Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#remove-from-trade-pile)  
-[Get pile sizes](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-pile-sizes)  
-[ReList Tradepile](https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#relist-tradepile)  
-[Get players from club] (https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-players-from-club)  
-[Get squads from club] (https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-squads-from-club)  
-[Get squad details] (https://github.com/trydis/FIFA-Ultimate-Team-2014-Toolkit#get-squad-details)  
+[Initialization](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#initialization)  
+[Login](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#login)  
+[Player search](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#player-search)  
+[Place bid](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#place-bid)  
+[Trade status](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#trade-status)  
+[Item data](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#item-data)  
+[Player image](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#player-image)  
+[Club image](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#club-image)  
+[Nation image](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#nation-image)  
+[Credits](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#credits)  
+[List auction](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#list-auction)  
+[Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-trade-pile)  
+[Watch list](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#watch-list)  
+[Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#purchased-items)  
+[Development search](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#development-search)  
+[Training search](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#training-search)  
+[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#send-to-trade-pile)  
+[Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#quick-sell)  
+[Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#remove-from-watch-list)  
+[Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#remove-from-trade-pile)  
+[Get pile sizes](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-pile-sizes)  
+[ReList Tradepile](https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#relist-tradepile)  
+[Get players from club] (https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-players-from-club)  
+[Get squads from club] (https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-squads-from-club)  
+[Get squad details] (https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-squad-details)  
 
 ### Initialization
 

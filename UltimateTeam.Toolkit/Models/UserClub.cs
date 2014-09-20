@@ -49,5 +49,7 @@ namespace UltimateTeam.Toolkit.Models
         public uint BadgeId { get; set; }
 
         public Dictionary<string, long> SkuAccessList { get; set; }
+
+        public uint AssetId { get; set; }
     }
 }
