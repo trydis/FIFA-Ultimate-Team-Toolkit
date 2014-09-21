@@ -49,7 +49,14 @@ namespace UltimateTeam.Toolkit
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.ItemRequestFactory(auctionInfo).PerformRequestAsync();
+            return _requestFactories.ItemRequestFactory(auctionInfo.CalculateBaseId()).PerformRequestAsync();
+        }
+
+        public Task<Item> GetItemAsync(long resourceId)
+        {
+            if (resourceId < 1) throw new ArgumentException("Definitely not valid", "resourceId");
+
+            return _requestFactories.ItemRequestFactory(resourceId.CalculateBaseId()).PerformRequestAsync();
         }
 
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)

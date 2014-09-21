@@ -1,18 +1,16 @@
 ﻿using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class ItemRequest : FutRequestBase, IFutRequest<Item>
     {
-        private readonly AuctionInfo _auctionInfo;
+        private readonly long _baseId;
 
-        public ItemRequest(AuctionInfo auctionInfo)
+        public ItemRequest(long baseId)
         {
-            auctionInfo.ThrowIfNullArgument();
-            _auctionInfo = auctionInfo;
+            _baseId = baseId;
         }
 
         public async Task<Item> PerformRequestAsync()
@@ -23,7 +21,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             var itemResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.Item, _auctionInfo.CalculateBaseId()))
+                .GetAsync(string.Format(Resources.Item, _baseId))
                 .ConfigureAwait(false);
             var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
 

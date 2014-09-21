@@ -18,6 +18,8 @@ namespace UltimateTeam.Toolkit
 
         Task<Item> GetItemAsync(AuctionInfo auctionInfo);
 
+        Task<Item> GetItemAsync(long resourceId);
+
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
 
         Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds);
