@@ -68,5 +68,7 @@
             else if (Rating < 75)
                 CardType = CardType.Silver;
         }
+
+        public string Desc { get; set; }
     }
 }
