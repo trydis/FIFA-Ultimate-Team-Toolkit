@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
@@ -121,6 +121,8 @@ namespace UltimateTeam.Toolkit.Requests
 
         private static void MapAndThrowException(Exception exception, FutError futError)
         {
+            // TODO: Should extract this to a separate class and keep them in a Dictionary<FutErrorCode, Func<FutError, Exception, FutErrorException>>
+
             switch (futError.Code)
             {
                 case FutErrorCode.ExpiredSession:
@@ -144,7 +146,9 @@ namespace UltimateTeam.Toolkit.Requests
                 case FutErrorCode.InvalidDeck:
                     throw new InvalidDeckException(futError, exception);
                 case FutErrorCode.DestinationFull:
-                    throw new DestinationFullException(futError, exception);                    
+                    throw new DestinationFullException(futError, exception);
+                case FutErrorCode.CaptchaTriggered:
+                    throw new CaptchaTriggeredException(futError, exception);
                 default:
                     var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
