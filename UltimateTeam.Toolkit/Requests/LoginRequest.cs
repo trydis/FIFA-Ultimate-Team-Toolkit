@@ -155,6 +155,35 @@ namespace UltimateTeam.Toolkit.Requests
                     new KeyValuePair<string, string>("facebookAuth", "")
                 }));
             loginResponseMessage.EnsureSuccessStatusCode();
+
+            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+            if (contentData.Contains("We sent a security code to your") ||
+                contentData.Contains("Your security code was sent to"))
+            {
+                await SetSecretCode(loginDetails, loginResponseMessage);
+            }
+        }
+
+        private async Task SetSecretCode(LoginDetails loginDetails, HttpResponseMessage loginResponse)
+        {
+            if (string.IsNullOrEmpty(loginDetails.SecretCode))
+                throw new Exception("Error during login process - code is required.");
+
+            AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
+            var codeResponseMessage =
+                await HttpClient.PostAsync(
+                    loginResponse.RequestMessage.RequestUri,
+                    new FormUrlEncodedContent(
+                        new[]
+                            {
+                                new KeyValuePair<string, string>("twoFactorCode", loginDetails.SecretCode),
+                                new KeyValuePair<string, string>("_eventId", "submit")
+                            }));
+            codeResponseMessage.EnsureSuccessStatusCode();
+
+            var contentData = await codeResponseMessage.Content.ReadAsStringAsync();
+            if (contentData.Contains("Incorrect code entered"))
+                throw new Exception("Error during login process - provided code is incorrect.");
         }
 
         private async Task<HttpResponseMessage> GetMainPageAsync()

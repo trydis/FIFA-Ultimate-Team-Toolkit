@@ -14,7 +14,7 @@ namespace UltimateTeam.Toolkit.Tests
 
         public static LoginDetails CreateValidLoginDetails()
         {
-            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps3);
+            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps3);
         }
 
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturning<T>(T result) where T : class
@@ -43,7 +43,7 @@ namespace UltimateTeam.Toolkit.Tests
 
             return mock;
         }
-        
+
         public static Mock<IHttpClient> CreateMockHttpClientReturningJson(HttpMethod method, string json)
         {
             var mock = new Mock<IHttpClient>();
