@@ -14,11 +14,11 @@ namespace UltimateTeam.Toolkit
 
         public FutRequestFactories RequestFactories { get { return _requestFactories; } }
 
-        public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails)
+        public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
             loginDetails.ThrowIfNullArgument();
 
-            var loginRequest = _requestFactories.LoginRequestFactory(loginDetails);
+            var loginRequest = _requestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
             var loginResponse = await loginRequest.PerformRequestAsync();
             RequestFactories.PhishingToken = loginResponse.PhishingToken;
             RequestFactories.SessionId = loginResponse.SessionId;
@@ -87,7 +87,7 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.ConsumablesRequestFactory().PerformRequestAsync();
         }
-        
+
         public Task<AuctionResponse> GetTradePileAsync()
         {
             return _requestFactories.TradePileRequestFactory().PerformRequestAsync();
@@ -107,7 +107,7 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.SquadListRequestFactory().PerformRequestAsync();
         }
-        
+
         public Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
         {
             return _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();
@@ -129,7 +129,7 @@ namespace UltimateTeam.Toolkit
 
         public Task AddToWatchlistRequestAsync(AuctionInfo auctionInfo)
         {
-            return AddToWatchlistRequestAsync(new [] { auctionInfo });
+            return AddToWatchlistRequestAsync(new[] { auctionInfo });
         }
 
         public Task RemoveFromWatchlistAsync(IEnumerable<AuctionInfo> auctionInfo)
@@ -182,9 +182,9 @@ namespace UltimateTeam.Toolkit
             if (itemIds == null) throw new ArgumentNullException("itemIds");
 
             foreach (var itemId in itemIds)
-                if (itemId < 1) 
+                if (itemId < 1)
                     throw new ArgumentException(string.Format("ItemId {0} is definitely not valid", itemId), "itemId");
-            
+
             return _requestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync();
         }
 
@@ -201,7 +201,7 @@ namespace UltimateTeam.Toolkit
 
             return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
-        
+
         public Task<byte> ReListAsync()
         {
             return _requestFactories.ReListRequestFactory().PerformRequestAsync();

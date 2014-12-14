@@ -21,7 +21,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private IHttpClient _httpClient;
 
-        private Func<LoginDetails, IFutRequest<LoginResponse>> _loginRequestFactory;
+        private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
 
         private Func<SearchParameters, IFutRequest<AuctionResponse>> _searchRequestFactory;
 
@@ -106,20 +106,20 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
+        public Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get
             {
-                return _loginRequestFactory ?? (_loginRequestFactory = details =>
+                return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
+                {
+                    if (details.Platform == Platform.Xbox360)
                     {
-                        if (details.Platform == Platform.Xbox360)
-                        {
-                            _resources.FutHome = Resources.FutHomeXbox360;
-                        }
-                        var loginRequest = new LoginRequest(details) { HttpClient = HttpClient, Resources = _resources };
-                        loginRequest.SetCookieContainer(_cookieContainer);
-                        return loginRequest;
-                    });
+                        _resources.FutHome = Resources.FutHomeXbox360;
+                    }
+                    var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                    loginRequest.SetCookieContainer(_cookieContainer);
+                    return loginRequest;
+                });
             }
             set
             {

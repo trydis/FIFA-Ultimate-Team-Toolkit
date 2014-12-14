@@ -79,6 +79,7 @@
     <Compile Include="Factories\FutRequestFactories.cs" />
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
+    <Compile Include="ITwoFactorCodeProvider.cs" />
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\AuctionDetails.cs" />
     <Compile Include="Models\AuctionDuration.cs" />

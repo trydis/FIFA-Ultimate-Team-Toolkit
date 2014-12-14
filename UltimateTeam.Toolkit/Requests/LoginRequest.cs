@@ -17,6 +17,8 @@ namespace UltimateTeam.Toolkit.Requests
     {
         private readonly LoginDetails _loginDetails;
 
+        private readonly ITwoFactorCodeProvider _twoFactorCodeProvider;
+
         private IHasher _hasher;
 
         public IHasher Hasher
@@ -25,10 +27,11 @@ namespace UltimateTeam.Toolkit.Requests
             set { _hasher = value; }
         }
 
-        public LoginRequest(LoginDetails loginDetails)
+        public LoginRequest(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
             loginDetails.ThrowIfNullArgument();
             _loginDetails = loginDetails;
+            _twoFactorCodeProvider = twoFactorCodeProvider;
         }
 
         public void SetCookieContainer(CookieContainer cookieContainer)
@@ -155,6 +158,34 @@ namespace UltimateTeam.Toolkit.Requests
                     new KeyValuePair<string, string>("facebookAuth", "")
                 }));
             loginResponseMessage.EnsureSuccessStatusCode();
+
+            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+
+            if (contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to"))
+                await SendTwoFactorCode(loginResponseMessage);
+        }
+
+        private async Task SendTwoFactorCode(HttpResponseMessage loginResponse)
+        {
+            var tfCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
+
+            var formData = new FormUrlEncodedContent(
+                        new[]
+                            {
+                                new KeyValuePair<string, string>("twofactorCode", tfCode),
+                                new KeyValuePair<string, string>("_eventId", "submit")
+                            });
+
+            AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
+
+            var codeResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, formData);
+
+            codeResponseMessage.EnsureSuccessStatusCode();
+
+            var contentData = await codeResponseMessage.Content.ReadAsStringAsync();
+
+            if (contentData.Contains("Incorrect code entered"))
+                throw new Exception(string.Format("Code {0} is incorrect.", tfCode));
         }
 
         private async Task<HttpResponseMessage> GetMainPageAsync()

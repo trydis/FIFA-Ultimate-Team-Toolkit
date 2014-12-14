@@ -10,7 +10,7 @@ namespace UltimateTeam.Toolkit
     {
         FutRequestFactories RequestFactories { get; }
 
-        Task<LoginResponse> LoginAsync(LoginDetails loginDetails);
+        Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider);
 
         Task<AuctionResponse> SearchAsync(SearchParameters searchParameters);
 
@@ -63,7 +63,7 @@ namespace UltimateTeam.Toolkit
         Task<ConsumablesResponse> GetConsumablesAsync();
 
         Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo);
-        
+
         Task<byte[]> GetNationImageAsync(Item item);
 
         Task<byte> ReListAsync();

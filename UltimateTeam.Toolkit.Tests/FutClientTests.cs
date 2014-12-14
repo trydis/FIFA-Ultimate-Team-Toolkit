@@ -26,7 +26,7 @@ namespace UltimateTeam.Toolkit.Tests
         [Test]
         public void LoginAsync_WhenPassedNull_ShouldThrowArgumentNullException()
         {
-            AssertEx.TaskThrows<ArgumentNullException>(async () => await _futClient.LoginAsync(null));
+            AssertEx.TaskThrows<ArgumentNullException>(async () => await _futClient.LoginAsync(null, null));
         }
 
         [Test]
@@ -35,9 +35,9 @@ namespace UltimateTeam.Toolkit.Tests
             const string dummyValue = "dummyValue";
             var loginResponse = new LoginResponse(dummyValue, new Shards(), new UserAccounts(), dummyValue, dummyValue);
             var mockRequest = TestHelpers.CreateMockFutRequestReturning(loginResponse);
-            _futClient.RequestFactories.LoginRequestFactory = details => mockRequest.Object;
+            _futClient.RequestFactories.LoginRequestFactory = (details, provider) => mockRequest.Object;
 
-            await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails());
+            await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails(), null);
 
             mockRequest.VerifyAll();
         }
@@ -46,9 +46,9 @@ namespace UltimateTeam.Toolkit.Tests
         public void LoginAsync_WhenPerformRequestThrowsException_ShouldThrowHttpRequestException()
         {
             var mockRequest = TestHelpers.CreateMockFutRequestThrowingException<LoginResponse>();
-            _futClient.RequestFactories.LoginRequestFactory = details => mockRequest.Object;
+            _futClient.RequestFactories.LoginRequestFactory = (details, provider) => mockRequest.Object;
 
-            AssertEx.TaskThrows<HttpRequestException>(async () => await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails()));
+            AssertEx.TaskThrows<HttpRequestException>(async () => await _futClient.LoginAsync(TestHelpers.CreateValidLoginDetails(), null));
 
             mockRequest.VerifyAll();
         }
@@ -192,7 +192,7 @@ namespace UltimateTeam.Toolkit.Tests
         public void PlaceBidAsync_WhenResponseContainsNotEnoughCreditError_ShouldThrowNotEnoughCreditException()
         {
             const string jsonError = "{\"debug\":\"\",\"string\":\"Not enough credit\",\"reason\":\"\",\"code\":\"470\"}";
-            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError); 
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Post, jsonError);
             _futClient.RequestFactories.PlaceBidRequestFactory = (auctionInfo, bidAmount) =>
                 new PlaceBidRequest(auctionInfo, bidAmount) { HttpClient = mock.Object, Resources = _resources };
 
