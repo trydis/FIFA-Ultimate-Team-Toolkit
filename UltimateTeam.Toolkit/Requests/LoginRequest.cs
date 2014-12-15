@@ -156,34 +156,77 @@ namespace UltimateTeam.Toolkit.Requests
                 }));
             loginResponseMessage.EnsureSuccessStatusCode();
 
-            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("We sent a security code to your") ||
-                contentData.Contains("Your security code was sent to"))
-            {
-                await SetSecretCode(loginDetails, loginResponseMessage);
-            }
+            if (UpdateIsRequired(loginResponseMessage))
+                loginResponseMessage = await SetMailSetting(loginResponseMessage);
+
+            if (SecureCodeIsRequired(loginResponseMessage))
+                await SetSecretCode(loginDetails.SecretCode, loginResponseMessage);
         }
 
-        private async Task SetSecretCode(LoginDetails loginDetails, HttpResponseMessage loginResponse)
+        private bool SecureCodeIsRequired(HttpResponseMessage loginResponseMessage)
         {
-            if (string.IsNullOrEmpty(loginDetails.SecretCode))
+            var contentData = loginResponseMessage.Content.ReadAsStringAsync().Result;
+            return contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to");
+        }
+        private async Task SetSecretCode(string code, HttpResponseMessage loginResponse)
+        {
+            if (string.IsNullOrEmpty(code))
                 throw new Exception("Error during login process - code is required.");
 
+            var contentData = await loginResponse.Content.ReadAsStringAsync();
+            var twoFactorFieldName = contentData.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode";
+
+            AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
+            loginResponse =
+                await HttpClient.PostAsync(
+                    loginResponse.RequestMessage.RequestUri,
+                    new FormUrlEncodedContent(
+                        new[]
+                            {
+                                new KeyValuePair<string, string>("_trustThisDevice", "on"),
+                                new KeyValuePair<string, string>("trustThisDevice", "on"),
+                                new KeyValuePair<string, string>(twoFactorFieldName, code),
+                                new KeyValuePair<string, string>("_eventId", "submit")
+                            }));
+            loginResponse.EnsureSuccessStatusCode();
+
+            contentData = await loginResponse.Content.ReadAsStringAsync();
+            if (contentData.Contains("Incorrect code entered"))
+                throw new Exception("Error during login process - provided code is incorrect.");
+        }
+
+        private bool UpdateIsRequired(HttpResponseMessage loginResponseMessage)
+        {
+            var contentData = loginResponseMessage.Content.ReadAsStringAsync().Result;
+            return contentData.Contains("Account Update");
+        }
+        private async Task<HttpResponseMessage> SetMailSetting(HttpResponseMessage loginResponse)
+        {
             AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
             var codeResponseMessage =
                 await HttpClient.PostAsync(
                     loginResponse.RequestMessage.RequestUri,
                     new FormUrlEncodedContent(
                         new[]
-                            {
-                                new KeyValuePair<string, string>("twoFactorCode", loginDetails.SecretCode),
-                                new KeyValuePair<string, string>("_eventId", "submit")
-                            }));
+                        {                              
+                            new KeyValuePair<string, string>("_eventId", "submit")
+                        }));
             codeResponseMessage.EnsureSuccessStatusCode();
 
-            var contentData = await codeResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("Incorrect code entered"))
-                throw new Exception("Error during login process - provided code is incorrect.");
+            var emailResponseMessage =
+               await HttpClient.PostAsync(
+                   codeResponseMessage.RequestMessage.RequestUri,
+                   new FormUrlEncodedContent(
+                       new[]
+                        {                              
+                            new KeyValuePair<string, string>("twofactorType", "EMAIL"),
+                            new KeyValuePair<string, string>("country", "0"),
+                            new KeyValuePair<string, string>("phoneNumber", ""),
+                            new KeyValuePair<string, string>("_eventId", "submit")
+                        }));
+
+            emailResponseMessage.EnsureSuccessStatusCode();
+            return emailResponseMessage;
         }
 
         private async Task<HttpResponseMessage> GetMainPageAsync()
