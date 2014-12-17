@@ -96,6 +96,7 @@
     <Compile Include="Models\DateOfBirth.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\FutError.cs" />
+    <Compile Include="Models\IsUserLoggedIn.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\ItemWrapper.cs" />

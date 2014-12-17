@@ -6,6 +6,8 @@
 
         public const string Auth = "https://www.easports.com/iframe/fut15/p/ut/auth";
 
+        public const string LoggedIn = "https://www.easports.com/fifa/api/isUserLoggedIn";
+
         public const string Home = "https://www.easports.com/fifa/ultimate-team/web-app";
 
         public const string NucleusId = "https://www.easports.com/iframe/fut15/?locale=en_US&baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app";

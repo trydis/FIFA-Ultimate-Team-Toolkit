@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
@@ -10,9 +11,19 @@ namespace UltimateTeam.Toolkit
 {
     public class FutClient : IFutClient
     {
-        private readonly FutRequestFactories _requestFactories = new FutRequestFactories();
+        private readonly FutRequestFactories _requestFactories;
 
         public FutRequestFactories RequestFactories { get { return _requestFactories; } }
+
+        public FutClient()
+        {
+            _requestFactories = new FutRequestFactories();
+        }
+
+        public FutClient(CookieContainer cookie)
+        {
+            _requestFactories = new FutRequestFactories(cookie);
+        }
 
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {

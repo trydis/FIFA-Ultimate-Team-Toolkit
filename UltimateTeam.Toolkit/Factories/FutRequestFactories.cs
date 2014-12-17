@@ -11,7 +11,7 @@ namespace UltimateTeam.Toolkit.Factories
 {
     public class FutRequestFactories
     {
-        private readonly CookieContainer _cookieContainer = new CookieContainer();
+        private readonly CookieContainer _cookieContainer;
 
         private readonly Resources _resources = new Resources();
 
@@ -70,6 +70,16 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IFutRequest<ConsumablesResponse>> _consumablesRequestFactory;
 
         private Func<IFutRequest<byte>> _reListRequestFactory;
+
+        public FutRequestFactories()
+        {
+            _cookieContainer = new CookieContainer();
+        }
+
+        public FutRequestFactories(CookieContainer cookieContainer)
+        {
+            _cookieContainer = cookieContainer;
+        }
 
         public string PhishingToken
         {
