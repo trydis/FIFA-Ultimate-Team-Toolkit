@@ -1,10 +1,6 @@
 FIFA Ultimate Team 2015 Toolkit
 ===============================
 
-## Alpha notes
-
-Please report back on what's working or not in the issues section.
-
 ## Supported platforms
 - .NET 4.5
 - Windows 8.x
@@ -57,7 +53,8 @@ var client = new FutClient();
 
 ```csharp
 var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps3 /* or Platform.Xbox360 / Platform.Pc */);
-var loginResponse = await client.LoginAsync(loginDetails);
+ITwoFactorCodeProvider provider = // initialize an implementation of this interface
+var loginResponse = await client.LoginAsync(loginDetails, provider);
 ```
 
 ### Player search
