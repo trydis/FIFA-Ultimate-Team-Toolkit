@@ -6,6 +6,7 @@ using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
+using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Factories
 {

@@ -79,7 +79,6 @@
     <Compile Include="Factories\FutRequestFactories.cs" />
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
-    <Compile Include="ITwoFactorCodeProvider.cs" />
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\AuctionDetails.cs" />
     <Compile Include="Models\AuctionDuration.cs" />
@@ -181,6 +180,7 @@
     <Compile Include="Requests\ReListRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
+    <Compile Include="Services\ITwoFactorCodeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
