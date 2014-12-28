@@ -66,6 +66,6 @@ namespace UltimateTeam.Toolkit
 
         Task<byte[]> GetNationImageAsync(Item item);
 
-        Task<byte> ReListAsync();
+        Task ReListAsync();
     }
 }
