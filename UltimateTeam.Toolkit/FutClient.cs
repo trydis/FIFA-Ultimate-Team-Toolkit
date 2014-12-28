@@ -21,9 +21,9 @@ namespace UltimateTeam.Toolkit
             _requestFactories = new FutRequestFactories();
         }
 
-        public FutClient(CookieContainer cookie)
+        public FutClient(CookieContainer cookieContainer)
         {
-            _requestFactories = new FutRequestFactories(cookie);
+            _requestFactories = new FutRequestFactories(cookieContainer);
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
