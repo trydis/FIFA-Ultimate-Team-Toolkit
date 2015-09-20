@@ -52,7 +52,7 @@ var client = new FutClient();
 ### Login
 
 ```csharp
-var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps3 /* or Platform.Xbox360 / Platform.Pc */);
+var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */);
 ITwoFactorCodeProvider provider = // initialize an implementation of this interface
 var loginResponse = await client.LoginAsync(loginDetails, provider);
 ```
