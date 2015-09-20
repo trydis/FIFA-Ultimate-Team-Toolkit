@@ -123,9 +123,9 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
-                    if (details.Platform == Platform.Xbox360)
+                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
-                        _resources.FutHome = Resources.FutHomeXbox360;
+                        _resources.FutHome = Resources.FutHomeXbox;
                     }
                     var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
                     loginRequest.SetCookieContainer(_cookieContainer);

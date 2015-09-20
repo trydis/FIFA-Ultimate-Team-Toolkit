@@ -26,9 +26,9 @@
 
         public const string ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/s{0}.png";
 
-        public string FutHome = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
+        public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa16/";
 
-        public const string FutHomeXbox360 = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
+        public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
 
         public const string MyClub = "club?level=10";
 
