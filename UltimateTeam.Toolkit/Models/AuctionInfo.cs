@@ -22,9 +22,13 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint SellerId { get; set; }
 
+        public bool TradeOwner { get; set; }
+
         public string SellerName { get; set; }
 
         public uint StartingBid { get; set; }
+
+        public byte ConfidenceValue { get; set; }
 
         public long TradeId { get; set; }
 
