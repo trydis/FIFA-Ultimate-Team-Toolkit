@@ -95,6 +95,7 @@
     <Compile Include="Models\DateOfBirth.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\FutError.cs" />
+    <Compile Include="Models\IsUserLoggedIn.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemData.cs" />
     <Compile Include="Models\ItemWrapper.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Requests\ReListRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
     <Compile Include="Services\IHasher.cs" />
+    <Compile Include="Services\ITwoFactorCodeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -197,8 +199,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

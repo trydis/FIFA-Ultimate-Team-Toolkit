@@ -6,12 +6,13 @@ using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
+using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Factories
 {
     public class FutRequestFactories
     {
-        private readonly CookieContainer _cookieContainer = new CookieContainer();
+        private readonly CookieContainer _cookieContainer;
 
         private readonly Resources _resources = new Resources();
 
@@ -21,7 +22,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private IHttpClient _httpClient;
 
-        private Func<LoginDetails, IFutRequest<LoginResponse>> _loginRequestFactory;
+        private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
 
         private Func<SearchParameters, IFutRequest<AuctionResponse>> _searchRequestFactory;
 
@@ -71,6 +72,16 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<byte>> _reListRequestFactory;
 
+        public FutRequestFactories()
+        {
+            _cookieContainer = new CookieContainer();
+        }
+
+        public FutRequestFactories(CookieContainer cookieContainer)
+        {
+            _cookieContainer = cookieContainer;
+        }
+
         public string PhishingToken
         {
             get { return _phishingToken; }
@@ -106,20 +117,20 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<LoginDetails, IFutRequest<LoginResponse>> LoginRequestFactory
+        public Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get
             {
-                return _loginRequestFactory ?? (_loginRequestFactory = details =>
+                return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
+                {
+                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
-                        if (details.Platform == Platform.Xbox360)
-                        {
-                            _resources.FutHome = Resources.FutHomeXbox360;
-                        }
-                        var loginRequest = new LoginRequest(details) { HttpClient = HttpClient, Resources = _resources };
-                        loginRequest.SetCookieContainer(_cookieContainer);
-                        return loginRequest;
-                    });
+                        _resources.FutHome = Resources.FutHomeXbox;
+                    }
+                    var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                    loginRequest.SetCookieContainer(_cookieContainer);
+                    return loginRequest;
+                });
             }
             set
             {
