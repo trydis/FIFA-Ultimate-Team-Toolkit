@@ -22,7 +22,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public uint SellerId { get; set; }
 
-        public bool TradeOwner { get; set; }
+        public bool? TradeOwner { get; set; }
 
         public string SellerName { get; set; }
 
