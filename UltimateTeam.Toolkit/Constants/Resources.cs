@@ -20,7 +20,7 @@
 
         public const string Item = "https://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
 
-        public const string PlayerImage = "http://fifa15.content.easports.com/fifa/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+        public const string PlayerImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
 
         public const string FlagsImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
 
