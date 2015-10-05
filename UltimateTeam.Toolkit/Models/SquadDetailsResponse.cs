@@ -34,5 +34,10 @@ namespace UltimateTeam.Toolkit.Models
 
         public bool Valid { get; set; }
 
+        public bool? DreamSquad { get; set; }
+
+        public string Custom { get; set; }
+
+        public string SquadType { get; set; }
     }
 }

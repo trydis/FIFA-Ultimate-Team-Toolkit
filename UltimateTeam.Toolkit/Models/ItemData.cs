@@ -37,6 +37,8 @@ namespace UltimateTeam.Toolkit.Models
 
         public ushort LifeTimeAssists { get; set; }
 
+        public ushort Loans { get; set; }
+
         public List<Attribute> LifeTimeStats { get; set; }
 
         public byte LoyaltyBonus { get; set; }
@@ -68,5 +70,7 @@ namespace UltimateTeam.Toolkit.Models
         public bool Untradeable { get; set; }
 
         public int Pile { get; set; }
+
+        public int Nation { get; set; }
     }
 }
