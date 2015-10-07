@@ -1,6 +1,8 @@
 FIFA Ultimate Team Toolkit
 ===============================
 
+[![Join the chat at https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## Supported platforms
 - .NET 4.5
 - Windows 8.x
