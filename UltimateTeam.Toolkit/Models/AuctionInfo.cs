@@ -36,6 +36,8 @@ namespace UltimateTeam.Toolkit.Models
 
         public bool? Watched { get; set; }
 
+        public uint? CoinsProcessed { get; set; }
+
         public uint CalculateBid()
         {
             return CurrentBid == 0 ? StartingBid : CalculateNextBid(CurrentBid);
