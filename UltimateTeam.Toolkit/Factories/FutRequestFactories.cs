@@ -72,6 +72,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<byte>> _reListRequestFactory;
 
+        private Func<IFutRequest<ListGiftsResponse>> _giftsRequestFactory;
+
+        private Func<int, IFutRequest<int>> _giftRequestFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -487,6 +491,33 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _reListRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<ListGiftsResponse>> GiftListResponseFactory
+        {
+            get
+            {
+                return _giftsRequestFactory ??
+                       (_giftsRequestFactory = () => SetSharedRequestProperties(new ListGiftsRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _giftsRequestFactory = value;
+            }
+        }
+
+        public Func<int, IFutRequest<int>> GiftRequestFactory
+        {
+            get
+            {
+                return _giftRequestFactory ?? (_giftRequestFactory = giftId => SetSharedRequestProperties(new GiftRequest(giftId)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _giftRequestFactory = value;
             }
         }
     }

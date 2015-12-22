@@ -218,5 +218,17 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.ReListRequestFactory().PerformRequestAsync();
         }
+
+        public Task<ListGiftsResponse> GetGiftsListAsync()
+        {
+            return _requestFactories.GiftListResponseFactory().PerformRequestAsync();
+        }
+
+        public Task<int> GetGiftAsync(int idGift)
+        {
+            return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
+        }
+
+        
     }
 }
