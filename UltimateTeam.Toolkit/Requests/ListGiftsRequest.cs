@@ -12,7 +12,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddCommonHeaders();
             AddMethodOverrideHeader(HttpMethod.Get);
             var responseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.Gifts))
+                .GetAsync(string.Format(Resources.FutHome + Resources.ActiveMessageList))
                 .ConfigureAwait(false);
 
             return await Deserialize<ListGiftsResponse>(responseMessage);

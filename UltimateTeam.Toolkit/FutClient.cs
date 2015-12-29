@@ -221,10 +221,10 @@ namespace UltimateTeam.Toolkit
 
         public Task<ListGiftsResponse> GetGiftsListAsync()
         {
-            return _requestFactories.GiftListResponseFactory().PerformRequestAsync();
+            return _requestFactories.GiftListRequestFactory().PerformRequestAsync();
         }
 
-        public Task<int> GetGiftAsync(int idGift)
+        public Task<byte> GetGiftAsync(int idGift)
         {
             return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
         }

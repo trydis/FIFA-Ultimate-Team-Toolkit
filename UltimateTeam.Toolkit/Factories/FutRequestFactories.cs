@@ -72,9 +72,9 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<byte>> _reListRequestFactory;
 
-        private Func<IFutRequest<ListGiftsResponse>> _giftsRequestFactory;
+        private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
 
-        private Func<int, IFutRequest<int>> _giftRequestFactory;
+        private Func<int, IFutRequest<byte>> _giftRequestFactory;
 
         public FutRequestFactories()
         {
@@ -84,6 +84,11 @@ namespace UltimateTeam.Toolkit.Factories
         public FutRequestFactories(CookieContainer cookieContainer)
         {
             _cookieContainer = cookieContainer;
+        }
+
+        public CookieContainer CookieContainer
+        {
+            get { return _cookieContainer; }
         }
 
         public string PhishingToken
@@ -494,21 +499,21 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<IFutRequest<ListGiftsResponse>> GiftListResponseFactory
+        public Func<IFutRequest<ListGiftsResponse>> GiftListRequestFactory
         {
             get
             {
-                return _giftsRequestFactory ??
-                       (_giftsRequestFactory = () => SetSharedRequestProperties(new ListGiftsRequest()));
+                return _giftListRequestFactory ??
+                       (_giftListRequestFactory = () => SetSharedRequestProperties(new ListGiftsRequest()));
             }
             set
             {
                 value.ThrowIfNullArgument();
-                _giftsRequestFactory = value;
+                _giftListRequestFactory = value;
             }
         }
 
-        public Func<int, IFutRequest<int>> GiftRequestFactory
+        public Func<int, IFutRequest<byte>> GiftRequestFactory
         {
             get
             {

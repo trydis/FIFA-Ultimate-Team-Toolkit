@@ -64,6 +64,8 @@
 
         public const string ReList = "relist";
 
-        public const string Gifts = "activeMessage";
+        public const string ActiveMessageList = "activeMessage";
+
+        public const string ActiveMessageGet = "activeMessage/{0}";
     }
 }

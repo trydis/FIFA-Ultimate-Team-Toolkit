@@ -4,7 +4,7 @@ using UltimateTeam.Toolkit.Constants;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    internal class GiftRequest : FutRequestBase, IFutRequest<int>
+    internal class GiftRequest : FutRequestBase, IFutRequest<byte>
     {
         private readonly int _idGift;
 
@@ -13,18 +13,15 @@ namespace UltimateTeam.Toolkit.Requests
             _idGift = idGift;
         }
 
-        public async Task<int> PerformRequestAsync()
+        public async Task<byte> PerformRequestAsync()
         {
-            var uriString = string.Format(Resources.FutHome + Resources.Gifts + "/" + _idGift);
-
-            AddMethodOverrideHeader(HttpMethod.Post);
+            AddMethodOverrideHeader(HttpMethod.Delete);
             AddCommonHeaders();
-            var responseMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
-                .ConfigureAwait(false);
-            //responseMessage.EnsureSuccessStatusCode();
-
-            return _idGift;
+            var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
+                string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
+                new StringContent(" ")).ConfigureAwait(false);
+            activeMessageRedeemResponseMessage.EnsureSuccessStatusCode();
+            return 0;
         }
     }
 }
