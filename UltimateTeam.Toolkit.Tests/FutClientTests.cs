@@ -278,5 +278,29 @@ namespace UltimateTeam.Toolkit.Tests
 
             AssertEx.TaskDoesNotThrow(async () => await _futClient.SendItemToTradePileAsync(new ItemData()));
         }
+
+        [Test]
+        public void GetGiftsListAsync_WhenResponseContainsValidData_ShouldNotThrow()
+        {
+            #region JSON
+            const string json = "{\"activeMessage\":[{\"id\":1,\"type\":\"coins\"}]}";
+            #endregion
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Get, json);
+            _futClient.RequestFactories.GiftListRequestFactory = () => new ListGiftsRequest { HttpClient = mock.Object, Resources = _resources };
+
+            AssertEx.TaskDoesNotThrow(async () => await _futClient.GetGiftsListAsync());
+        }
+
+        [Test]
+        public void GetGiftAsync_WhenResponseContainsValidData_ShouldNotThrow()
+        {
+            #region JSON
+            const string json = "{}";
+            #endregion
+            var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Delete, json);
+            _futClient.RequestFactories.GiftRequestFactory = (id) => new GiftRequest(id) { HttpClient = mock.Object, Resources = _resources };
+
+            AssertEx.TaskDoesNotThrow(async () => await _futClient.GetGiftAsync(1));
+        }
     }
 }
