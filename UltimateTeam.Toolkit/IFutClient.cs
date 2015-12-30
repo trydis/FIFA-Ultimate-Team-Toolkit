@@ -71,6 +71,6 @@ namespace UltimateTeam.Toolkit
 
         Task<ListGiftsResponse> GetGiftsListAsync();
 
-        Task<byte> GetGiftAsync(int idGift);
+        Task GetGiftAsync(int idGift);
     }
 }

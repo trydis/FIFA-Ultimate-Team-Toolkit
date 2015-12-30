@@ -224,11 +224,11 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.GiftListRequestFactory().PerformRequestAsync();
         }
 
-        public Task<byte> GetGiftAsync(int idGift)
+        public Task GetGiftAsync(int idGift)
         {
             return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
         }
 
-        
+
     }
 }
