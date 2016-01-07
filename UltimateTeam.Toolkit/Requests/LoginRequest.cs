@@ -45,7 +45,11 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
                 if (!(await IsLoggedInAsync()))
-                    await LoginAsync(_loginDetails, mainPageResponseMessage);
+                {
+                    var loginResponseMessage = await LoginAsync(_loginDetails, mainPageResponseMessage);
+                    loginResponseMessage = await SetTwoFactorCodeAsync(loginResponseMessage);
+                    await CancelUpdateAuthenticationModeAsync(loginResponseMessage);
+                }
                 var nucleusId = await GetNucleusIdAsync();
                 var shards = await GetShardsAsync(nucleusId);
                 var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
@@ -58,6 +62,21 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 throw new FutException("Unable to login", e);
             }
+        }
+
+        private async Task CancelUpdateAuthenticationModeAsync(HttpResponseMessage loginResponseMessage)
+        {
+            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+            if (!contentData.Contains("Set Up an App Authenticator")) return;
+
+
+            AddReferrerHeader(loginResponseMessage.RequestMessage.RequestUri.ToString());
+            var cancelSetUp = await HttpClient.PostAsync(loginResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(new[] {
+                    new KeyValuePair<string, string>("_eventId", "cancel"),
+                    new KeyValuePair<string, string>("appDevice","IPHONE") // ????? 
+                }));
+
+            cancelSetUp.EnsureSuccessStatusCode();
         }
 
         private async Task<bool> IsLoggedInAsync()
@@ -176,49 +195,58 @@ namespace UltimateTeam.Toolkit.Requests
         }
 
 
-        private async Task LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
+        private async Task<HttpResponseMessage> LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
         {
-            var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
-                                                                                                                         new[]
-                                                                                                                         {
-                                                                                                                             new KeyValuePair<string, string>("email", loginDetails.Username),
-                                                                                                                             new KeyValuePair<string, string>("password", loginDetails.Password),
-                                                                                                                             new KeyValuePair<string, string>("_rememberMe", "on"),
-                                                                                                                             new KeyValuePair<string, string>("rememberMe", "on"),
-                                                                                                                             new KeyValuePair<string, string>("_eventId", "submit"),
-                                                                                                                             new KeyValuePair<string, string>("facebookAuth", "")
-                                                                                                                         }));
+            var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri,
+                new FormUrlEncodedContent(
+                    new[]
+                    {
+                        new KeyValuePair<string, string>("email", loginDetails.Username),
+                        new KeyValuePair<string, string>("password", loginDetails.Password),
+                        new KeyValuePair<string, string>("_rememberMe", "on"),
+                        new KeyValuePair<string, string>("rememberMe", "on"),
+                        new KeyValuePair<string, string>("_eventId", "submit"),
+                        new KeyValuePair<string, string>("facebookAuth", "")
+                    }));
             loginResponseMessage.EnsureSuccessStatusCode();
 
-            //check if twofactorcode is required
-            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to"))
-                await SetTwoFactorCodeAsync(loginResponseMessage);
+            return loginResponseMessage;
+
         }
 
-        private async Task SetTwoFactorCodeAsync(HttpResponseMessage loginResponse)
+        private async Task<HttpResponseMessage> SetTwoFactorCodeAsync(HttpResponseMessage loginResponse)
         {
+            //check if twofactorcode is required
+            var contentData = await loginResponse.Content.ReadAsStringAsync();
+
+            if (!(contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to")))
+                return loginResponse;
+
+
             var tfCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
 
             var responseContent = await loginResponse.Content.ReadAsStringAsync();
 
             AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
 
-            var codeResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, new FormUrlEncodedContent(
-                                                                                                              new[]
-                                                                                                              {
-                                                                                                                  new KeyValuePair<string, string>(responseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", tfCode),
-                                                                                                                  new KeyValuePair<string, string>("_eventId", "submit"),
-                                                                                                                  new KeyValuePair<string, string>("_trustThisDevice", "on"),
-                                                                                                                  new KeyValuePair<string, string>("trustThisDevice", "on")
-                                                                                                              }));
+            var codeResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri,
+                new FormUrlEncodedContent(
+                    new[]
+                    {
+                        new KeyValuePair<string, string>(responseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", tfCode),
+                        new KeyValuePair<string, string>("_eventId", "submit"),
+                        new KeyValuePair<string, string>("_trustThisDevice", "on"),
+                        new KeyValuePair<string, string>("trustThisDevice", "on")
+                    }));
 
             codeResponseMessage.EnsureSuccessStatusCode();
 
-            var contentData = await codeResponseMessage.Content.ReadAsStringAsync();
+            var tfcResponseContent = await codeResponseMessage.Content.ReadAsStringAsync();
 
-            if (contentData.Contains("Incorrect code entered"))
+            if (tfcResponseContent.Contains("Incorrect code entered"))
                 throw new FutException("Incorrect TwoFactorCode entered.");
+
+            return codeResponseMessage;
         }
 
         private async Task<HttpResponseMessage> GetMainPageAsync()
