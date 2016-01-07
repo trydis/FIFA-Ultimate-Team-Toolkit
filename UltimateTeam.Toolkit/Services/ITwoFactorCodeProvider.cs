@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace UltimateTeam.Toolkit
+namespace UltimateTeam.Toolkit.Services
 {
     public interface ITwoFactorCodeProvider
     {

@@ -13,5 +13,7 @@
         public string[] Platforms { get; set; }
 
         public string[] CustomData1 { get; set; }
+
+        public string[] Skus { get; set; }
     }
 }

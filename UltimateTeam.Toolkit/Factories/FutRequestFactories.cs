@@ -6,6 +6,7 @@ using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
+using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Factories
 {
@@ -71,6 +72,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<byte>> _reListRequestFactory;
 
+        private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
+
+        private Func<int, IFutRequest<byte>> _giftRequestFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -79,6 +84,11 @@ namespace UltimateTeam.Toolkit.Factories
         public FutRequestFactories(CookieContainer cookieContainer)
         {
             _cookieContainer = cookieContainer;
+        }
+
+        public CookieContainer CookieContainer
+        {
+            get { return _cookieContainer; }
         }
 
         public string PhishingToken
@@ -122,9 +132,9 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
-                    if (details.Platform == Platform.Xbox360)
+                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
-                        _resources.FutHome = Resources.FutHomeXbox360;
+                        _resources.FutHome = Resources.FutHomeXbox;
                     }
                     var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
                     loginRequest.SetCookieContainer(_cookieContainer);
@@ -486,6 +496,33 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _reListRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<ListGiftsResponse>> GiftListRequestFactory
+        {
+            get
+            {
+                return _giftListRequestFactory ??
+                       (_giftListRequestFactory = () => SetSharedRequestProperties(new ListGiftsRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _giftListRequestFactory = value;
+            }
+        }
+
+        public Func<int, IFutRequest<byte>> GiftRequestFactory
+        {
+            get
+            {
+                return _giftRequestFactory ?? (_giftRequestFactory = giftId => SetSharedRequestProperties(new GiftRequest(giftId)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _giftRequestFactory = value;
             }
         }
     }

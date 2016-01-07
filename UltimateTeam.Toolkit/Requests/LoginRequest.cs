@@ -92,8 +92,8 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new FutException("Couldn't find a persona matching the selected platform");
             }
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
-               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT15WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""nucleusPersonaPlatform"": ""{2}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
-                    persona.PersonaId, persona.PersonaName, GetNucleusPersonaPlatform(platform))));
+               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT16WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
+                    persona.PersonaId, persona.PersonaName, GetGameSku(platform), GetNucleusPersonaPlatform(platform))));
             authResponseMessage.EnsureSuccessStatusCode();
             var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
                 .Value
@@ -103,13 +103,34 @@ namespace UltimateTeam.Toolkit.Requests
             return sessionId;
         }
 
+        private static string GetGameSku(Platform platform)
+        {
+            switch (platform)
+            {
+                case Platform.Ps3:
+                    return "FFA16PS3";
+                case Platform.Ps4:
+                    return "FFA16PS4";
+                case Platform.Xbox360:
+                    return "FFA16XBX";
+                case Platform.XboxOne:
+                    return "FFA16XBO";
+                case Platform.Pc:
+                    return "FFA16PCC";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
+            }
+        }
+
         private static string GetNucleusPersonaPlatform(Platform platform)
         {
             switch (platform)
             {
                 case Platform.Ps3:
+                case Platform.Ps4:
                     return "ps3";
                 case Platform.Xbox360:
+                case Platform.XboxOne:
                     return "360";
                 case Platform.Pc:
                     return "pc";
@@ -121,7 +142,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
             HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
-            var route = string.Format("https://utas.{0}fut.ea.com:443", platform == Platform.Xbox360 ? string.Empty : "s2.");
+            var route = string.Format("https://utas.{0}.fut.ea.com:443", platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
 
@@ -158,15 +179,15 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
         {
             var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
-                new[]
-                {
-                    new KeyValuePair<string, string>("email", loginDetails.Username),
-                    new KeyValuePair<string, string>("password", loginDetails.Password),
-                    new KeyValuePair<string, string>("_rememberMe", "on"),
-                    new KeyValuePair<string, string>("rememberMe", "on"),
-                    new KeyValuePair<string, string>("_eventId", "submit"),
-                    new KeyValuePair<string, string>("facebookAuth", "")
-                }));
+                                                                                                                         new[]
+                                                                                                                         {
+                                                                                                                             new KeyValuePair<string, string>("email", loginDetails.Username),
+                                                                                                                             new KeyValuePair<string, string>("password", loginDetails.Password),
+                                                                                                                             new KeyValuePair<string, string>("_rememberMe", "on"),
+                                                                                                                             new KeyValuePair<string, string>("rememberMe", "on"),
+                                                                                                                             new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                             new KeyValuePair<string, string>("facebookAuth", "")
+                                                                                                                         }));
             loginResponseMessage.EnsureSuccessStatusCode();
 
             //check if twofactorcode is required
@@ -184,13 +205,13 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
 
             var codeResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, new FormUrlEncodedContent(
-                        new[]
-                            {
-                                new KeyValuePair<string, string>(responseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", tfCode),
-                                new KeyValuePair<string, string>("_eventId", "submit"),
-                                new KeyValuePair<string, string>("_trustThisDevice", "on"),
-                                new KeyValuePair<string, string>("trustThisDevice", "on")
-                            }));
+                                                                                                              new[]
+                                                                                                              {
+                                                                                                                  new KeyValuePair<string, string>(responseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", tfCode),
+                                                                                                                  new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                  new KeyValuePair<string, string>("_trustThisDevice", "on"),
+                                                                                                                  new KeyValuePair<string, string>("trustThisDevice", "on")
+                                                                                                              }));
 
             codeResponseMessage.EnsureSuccessStatusCode();
 

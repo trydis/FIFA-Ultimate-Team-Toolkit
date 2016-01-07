@@ -6,6 +6,7 @@ using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
+using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit
 {
@@ -20,9 +21,9 @@ namespace UltimateTeam.Toolkit
             _requestFactories = new FutRequestFactories();
         }
 
-        public FutClient(CookieContainer cookie)
+        public FutClient(CookieContainer cookieContainer)
         {
-            _requestFactories = new FutRequestFactories(cookie);
+            _requestFactories = new FutRequestFactories(cookieContainer);
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
@@ -213,9 +214,21 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
 
-        public Task<byte> ReListAsync()
+        public Task ReListAsync()
         {
             return _requestFactories.ReListRequestFactory().PerformRequestAsync();
         }
+
+        public Task<ListGiftsResponse> GetGiftsListAsync()
+        {
+            return _requestFactories.GiftListRequestFactory().PerformRequestAsync();
+        }
+
+        public Task GetGiftAsync(int idGift)
+        {
+            return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
+        }
+
+
     }
 }
