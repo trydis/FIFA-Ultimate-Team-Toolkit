@@ -68,5 +68,9 @@ namespace UltimateTeam.Toolkit
         Task<byte[]> GetNationImageAsync(Item item);
 
         Task ReListAsync();
+
+        Task<ListGiftsResponse> GetGiftsListAsync();
+
+        Task GetGiftAsync(int idGift);
     }
 }

@@ -11,6 +11,7 @@
     <projectUrl>https://github.com/trydis/FIFA-Ultimate-Team-Toolkit</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
+    <releaseNotes>Added support for daily gifts</releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.5" />
     </dependencies>

@@ -20,11 +20,11 @@
 
         public const string Item = "https://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
 
-        public const string PlayerImage = "http://fifa15.content.easports.com/fifa/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+        public const string PlayerImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
 
         public const string FlagsImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
 
-        public const string ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/s{0}.png";
+        public const string ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
 
         public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa16/";
 
@@ -63,5 +63,9 @@
         public const string SquadDetails = "squad/{0}";
 
         public const string ReList = "relist";
+
+        public const string ActiveMessageList = "activeMessage";
+
+        public const string ActiveMessageGet = "activeMessage/{0}";
     }
 }
