@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Parameters;
-using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
