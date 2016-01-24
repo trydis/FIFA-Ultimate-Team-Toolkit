@@ -107,6 +107,7 @@
     <Compile Include="Models\PileSize.cs" />
     <Compile Include="Models\PileSizeResponse.cs" />
     <Compile Include="Models\Platform.cs" />
+    <Compile Include="Models\PriceRange.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
+    <Compile Include="Requests\PriceRangeRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
     <Compile Include="Requests\SquadListRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />

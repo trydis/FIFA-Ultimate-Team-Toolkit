@@ -317,3 +317,16 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 	//Positions seem to be set by index number and depend on formation
 }
 ```
+
+### Get PriceRanges
+
+Gets the EA pricerange - You can only use this method right after you get tradepile / watchlist!
+```csharp
+	var priceRanges = await client.GetPriceRangesAsync(//List of ItemIds);
+
+	foreach (PriceRange prices in priceRanges)
+	{
+		priceRange.MaxPrice = ///Maximum BIN
+		priceRange.MinPrice = //Minimum Starting BID
+	}
+```	
