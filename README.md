@@ -317,3 +317,16 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 	//Positions seem to be set by index number and depend on formation
 }
 ```
+
+### Get Definitions
+
+Gets all playercards (Standard, IF, SIF, TOTW,...) based on their Asset ID
+```csharp
+	var playerDefinitions = await client.GetDefinitionsAsync(//AssetId);
+
+	foreach (ItemData itemData in playerDefinitions.ItemData)
+	{
+		var DefinitionId = itemData.ResourceId;
+		//Contains the Definition ID for i.e. a TOTW card, which you can also in transfermarket to search only for this specific card
+	}
+```

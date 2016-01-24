@@ -72,5 +72,7 @@ namespace UltimateTeam.Toolkit
         Task<ListGiftsResponse> GetGiftsListAsync();
 
         Task GetGiftAsync(int idGift);
+
+        Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
     }
 }
