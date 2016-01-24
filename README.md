@@ -322,11 +322,24 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 
 Gets all playercards (Standard, IF, SIF, TOTW,...) based on their Asset ID
 ```csharp
-	var playerDefinitions = await client.GetDefinitionsAsync(//AssetId);
+var playerDefinitions = await client.GetDefinitionsAsync(//AssetId);
 
-	foreach (ItemData itemData in playerDefinitions.ItemData)
-	{
-		var DefinitionId = itemData.ResourceId;
-		//Contains the Definition ID for i.e. a TOTW card, which you can also in transfermarket to search only for this specific card
-	}
+foreach (ItemData itemData in playerDefinitions.ItemData)
+{
+    var DefinitionId = itemData.ResourceId;
+    //Contains the Definition ID for i.e. a TOTW card, which you can also in transfermarket to search only for this specific card
+}
+```
+
+### Get PriceRanges
+
+Gets the EA pricerange - You can only use this method right after you get tradepile / watchlist!
+```csharp
+var priceRanges = await client.GetPriceRangesAsync(//List of ItemIds);
+
+foreach (PriceRange prices in priceRanges)
+{
+    priceRange.MaxPrice = ///Maximum BIN
+    priceRange.MinPrice = //Minimum Starting BID
+}
 ```

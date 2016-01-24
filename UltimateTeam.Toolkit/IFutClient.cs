@@ -74,5 +74,7 @@ namespace UltimateTeam.Toolkit
         Task GetGiftAsync(int idGift);
 
         Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
+        
+        Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds);
     }
 }
