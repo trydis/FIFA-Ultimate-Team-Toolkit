@@ -229,6 +229,10 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
         }
 
+        public Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds)
+        {
+            return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
+        }
 
     }
 }
