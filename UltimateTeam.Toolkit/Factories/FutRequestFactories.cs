@@ -525,5 +525,17 @@ namespace UltimateTeam.Toolkit.Factories
                 _giftRequestFactory = value;
             }
         }
+		
+		public Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> GetPriceRangesFactory
+        {
+            get
+            {
+                return _getpriceRangesFactory ?? (_getpriceRangesFactory = (itemIds) => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _getpriceRangesFactory = value;
+            }
     }
 }
