@@ -67,5 +67,7 @@
         public const string ActiveMessageList = "activeMessage";
 
         public const string ActiveMessageGet = "activeMessage/{0}";
+
+        public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
     }
 }

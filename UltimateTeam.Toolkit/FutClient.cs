@@ -229,6 +229,11 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
         }
 
+        public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
+        {
+            baseId.ThrowIfNullArgument();
 
+            return _requestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
+        }
     }
 }

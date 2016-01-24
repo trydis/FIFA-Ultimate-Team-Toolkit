@@ -76,6 +76,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<int, IFutRequest<byte>> _giftRequestFactory;
 
+        private Func<long, IFutRequest<DefinitionResponse>> _definitionRequestFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -523,6 +525,20 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _giftRequestFactory = value;
+            }
+        }
+
+        public Func<long, IFutRequest<DefinitionResponse>> DefinitionRequestFactory
+        {
+            get
+            {
+                return _definitionRequestFactory ??
+                       (_definitionRequestFactory = baseId => SetSharedRequestProperties(new DefinitionRequest(baseId)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _definitionRequestFactory = value;
             }
         }
     }

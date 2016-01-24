@@ -93,6 +93,7 @@
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
+    <Compile Include="Models\DefinitionResponse.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\FutError.cs" />
     <Compile Include="Models\GiftMessage.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
+    <Compile Include="Requests\DefinitionRequest.cs" />
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
