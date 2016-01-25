@@ -44,6 +44,8 @@ FIFA Ultimate Team Toolkit
 [Get players from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-players-from-club)  
 [Get squads from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squads-from-club)  
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
+[Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
+[Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 
 ### Initialization
 
@@ -318,28 +320,28 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 }
 ```
 
-### Get Definitions
+### Get definitions
 
-Gets all playercards (Standard, IF, SIF, TOTW,...) based on their Asset ID
+Gets all player cards (Standard, IF, SIF, TOTW,...) based on their Asset ID
 ```csharp
-var playerDefinitions = await client.GetDefinitionsAsync(//AssetId);
+var playerDefinitions = await client.GetDefinitionsAsync(/* AssetId */);
 
 foreach (ItemData itemData in playerDefinitions.ItemData)
 {
-    var DefinitionId = itemData.ResourceId;
-    //Contains the Definition ID for i.e. a TOTW card, which you can also in transfermarket to search only for this specific card
+    var definitionId = itemData.ResourceId;
+    // Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
 }
 ```
 
-### Get PriceRanges
+### Get price ranges
 
-Gets the EA pricerange - You can only use this method right after you get tradepile / watchlist!
+Gets the EA price range - **You can only use this method right after you get tradepile / watchlist!**
 ```csharp
-var priceRanges = await client.GetPriceRangesAsync(//List of ItemIds);
+var priceRanges = await client.GetPriceRangesAsync(/* List of ItemIds */);
 
-foreach (PriceRange prices in priceRanges)
+foreach (PriceRange priceRange in priceRanges)
 {
-    priceRange.MaxPrice = ///Maximum BIN
-    priceRange.MinPrice = //Minimum Starting BID
+    priceRange.MaxPrice = // Maximum BIN
+    priceRange.MinPrice = // Minimum Starting BID
 }
 ```
