@@ -78,6 +78,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<long, IFutRequest<DefinitionResponse>> _definitionRequestFactory;
 
+        private Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> _getpriceRangesFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -133,15 +135,15 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
-                {
-                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
-                    {
-                        _resources.FutHome = Resources.FutHomeXbox;
-                    }
-                    var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
-                    loginRequest.SetCookieContainer(_cookieContainer);
-                    return loginRequest;
-                });
+                                                                       {
+                                                                           if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
+                                                                           {
+                                                                               _resources.FutHome = Resources.FutHomeXbox;
+                                                                           }
+                                                                           var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                                                                           loginRequest.SetCookieContainer(_cookieContainer);
+                                                                           return loginRequest;
+                                                                       });
             }
             set
             {
@@ -180,7 +182,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _placeBidRequestFactory ??
                        (_placeBidRequestFactory =
-                           (info, amount) => SetSharedRequestProperties(new PlaceBidRequest(info, amount)));
+                        (info, amount) => SetSharedRequestProperties(new PlaceBidRequest(info, amount)));
             }
             set
             {
@@ -378,7 +380,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _removeFromWatchlistRequestFactory ??
                        (_removeFromWatchlistRequestFactory =
-                           info => SetSharedRequestProperties(new RemoveFromWatchlistRequest(info)));
+                        info => SetSharedRequestProperties(new RemoveFromWatchlistRequest(info)));
             }
             set
             {
@@ -393,7 +395,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _removeFromTradePileRequestFactory ??
                        (_removeFromTradePileRequestFactory =
-                           info => SetSharedRequestProperties(new RemoveFromTradePileRequest(info)));
+                        info => SetSharedRequestProperties(new RemoveFromTradePileRequest(info)));
             }
             set
             {
@@ -422,7 +424,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _sendItemToClubRequestFactory ??
                        (_sendItemToClubRequestFactory =
-                           itemData => SetSharedRequestProperties(new SendItemToClubRequest(itemData)));
+                        itemData => SetSharedRequestProperties(new SendItemToClubRequest(itemData)));
             }
             set
             {
@@ -437,7 +439,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _sendItemToTradePileRequestFactory ??
                        (_sendItemToTradePileRequestFactory =
-                           itemData => SetSharedRequestProperties(new SendItemToTradePileRequest(itemData)));
+                        itemData => SetSharedRequestProperties(new SendItemToTradePileRequest(itemData)));
             }
             set
             {
@@ -490,10 +492,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         public Func<IFutRequest<byte>> ReListRequestFactory
         {
-            get
-            {
-                return _reListRequestFactory ?? (_reListRequestFactory = () => SetSharedRequestProperties(new ReListRequest()));
-            }
+            get { return _reListRequestFactory ?? (_reListRequestFactory = () => SetSharedRequestProperties(new ReListRequest())); }
             set
             {
                 value.ThrowIfNullArgument();
@@ -517,10 +516,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         public Func<int, IFutRequest<byte>> GiftRequestFactory
         {
-            get
-            {
-                return _giftRequestFactory ?? (_giftRequestFactory = giftId => SetSharedRequestProperties(new GiftRequest(giftId)));
-            }
+            get { return _giftRequestFactory ?? (_giftRequestFactory = giftId => SetSharedRequestProperties(new GiftRequest(giftId))); }
             set
             {
                 value.ThrowIfNullArgument();
@@ -544,14 +540,12 @@ namespace UltimateTeam.Toolkit.Factories
 
         public Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> GetPriceRangesFactory
         {
-            get
-            {
-                return _getpriceRangesFactory ?? (_getpriceRangesFactory = (itemIds) => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
-            }
+            get { return _getpriceRangesFactory ?? (_getpriceRangesFactory = itemIds => SetSharedRequestProperties(new PriceRangesRequest(itemIds))); }
             set
             {
                 value.ThrowIfNullArgument();
                 _getpriceRangesFactory = value;
             }
         }
+    }
 }
