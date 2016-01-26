@@ -15,6 +15,8 @@ namespace UltimateTeam.Toolkit.Models
 
         public byte Contract { get; set; }
 
+        public bool Dream { get; set; }
+
         public ushort? DiscardValue { get; set; }
 
         public byte Fitness { get; set; }
