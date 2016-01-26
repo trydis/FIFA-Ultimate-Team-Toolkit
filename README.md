@@ -318,6 +318,7 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 }
 ```
 
+<<<<<<< HEAD
 ### Get Definitions
 
 Gets all playercards (Standard, IF, SIF, TOTW,...) based on their Asset ID
@@ -330,3 +331,17 @@ Gets all playercards (Standard, IF, SIF, TOTW,...) based on their Asset ID
 		//Contains the Definition ID for i.e. a TOTW card, which you can also in transfermarket to search only for this specific card
 	}
 ```
+=======
+### Get PriceRanges
+
+Gets the EA pricerange - You can only use this method right after you get tradepile / watchlist!
+```csharp
+	var priceRanges = await client.GetPriceRangesAsync(//List of ItemIds);
+
+	foreach (PriceRange prices in priceRanges)
+	{
+		priceRange.MaxPrice = ///Maximum BIN
+		priceRange.MinPrice = //Minimum Starting BID
+	}
+```	
+>>>>>>> refs/remotes/origin/master

@@ -229,9 +229,16 @@ namespace UltimateTeam.Toolkit
             return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
         }
 
+<<<<<<< HEAD
         public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
         {
             baseId.ThrowIfNullArgument();
+=======
+        public Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds)
+        {
+            return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
+        }
+>>>>>>> refs/remotes/origin/master
 
             return _requestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
         }
