@@ -30,6 +30,8 @@
 
         public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
 
+        public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
+
         public const string MyClub = "club?level=10";
 
         public const string TransferMarket = "transfermarket";
@@ -67,5 +69,7 @@
         public const string ActiveMessageList = "activeMessage";
 
         public const string ActiveMessageGet = "activeMessage/{0}";
+
+        public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
     }
 }

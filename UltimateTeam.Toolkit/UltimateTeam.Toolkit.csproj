@@ -93,6 +93,7 @@
     <Compile Include="Models\CreditsResponse.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
+    <Compile Include="Models\DefinitionResponse.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\FutError.cs" />
     <Compile Include="Models\GiftMessage.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Models\PileSize.cs" />
     <Compile Include="Models\PileSizeResponse.cs" />
     <Compile Include="Models\Platform.cs" />
+    <Compile Include="Models\PriceRange.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
@@ -155,8 +157,10 @@
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
+    <Compile Include="Requests\DefinitionRequest.cs" />
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
+    <Compile Include="Requests\PriceRangeRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
     <Compile Include="Requests\SquadListRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
