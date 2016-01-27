@@ -40,8 +40,7 @@ namespace UltimateTeam.Toolkit.Parameters
 
             if (ResourceId <= 16777216)
                 uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
-
-            if (ResourceId > 16777216)
+            else
                 uriString += "&definitionId=" + ResourceId;
 
             SetPosition(ref uriString);
