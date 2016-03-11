@@ -2,12 +2,14 @@
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class PlayerImageRequest : FutRequestBase, IFutRequest<byte[]>
     {
         private readonly AuctionInfo _auctionInfo;
+        private AppVersion _appVersion;
 
         public PlayerImageRequest(AuctionInfo auctionInfo)
         {
@@ -15,17 +17,28 @@ namespace UltimateTeam.Toolkit.Requests
             _auctionInfo = auctionInfo;
         }
 
-        public async Task<byte[]> PerformRequestAsync()
+        public async Task<byte[]> PerformRequestAsync(AppVersion appVersion)
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            _appVersion = appVersion;
 
-            return await HttpClient
-                .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
-                .ConfigureAwait(false);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
+                    .ConfigureAwait(false);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddAnonymousMobileHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+            }
         }
     }
 }

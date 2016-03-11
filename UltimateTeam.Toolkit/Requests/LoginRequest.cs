@@ -16,10 +16,10 @@ namespace UltimateTeam.Toolkit.Requests
     internal class LoginRequest : FutRequestBase, IFutRequest<LoginResponse>
     {
         private readonly LoginDetails _loginDetails;
-
+        private AppVersion _appVersion;
         private readonly ITwoFactorCodeProvider _twoFactorCodeProvider;
-
         private IHasher _hasher;
+        private string _personaId;
 
         public IHasher Hasher
         {
@@ -39,8 +39,10 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.MessageHandler.CookieContainer = cookieContainer;
         }
 
-        public async Task<LoginResponse> PerformRequestAsync()
+        public async Task<LoginResponse> PerformRequestAsync(AppVersion appVersion)
         {
+            _appVersion = appVersion;
+
             try
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
@@ -56,11 +58,11 @@ namespace UltimateTeam.Toolkit.Requests
                 var sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
                 var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
-                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
+                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken, _personaId);
             }
             catch (Exception e)
             {
-                throw new FutException("Unable to login", e);
+                throw new FutException(string.Format("Unable to login to {0}", appVersion.ToString()), e);
             }
         }
 
@@ -105,11 +107,13 @@ namespace UltimateTeam.Toolkit.Requests
             var persona = userAccounts
                 .UserAccountInfo
                 .Personas
-                .FirstOrDefault(p => p.UserClubList.Any(club => club.Platform == GetNucleusPersonaPlatform(platform)));
+                .FirstOrDefault(p => p.UserClubList.Any(club => club.Platform == GetNucleusPersonaPlatform(platform)));          
             if (persona == null)
             {
                 throw new FutException("Couldn't find a persona matching the selected platform");
             }
+            _personaId = persona.PersonaId.ToString();
+
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
                string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT16WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
                     persona.PersonaId, persona.PersonaName, GetGameSku(platform), GetNucleusPersonaPlatform(platform))));

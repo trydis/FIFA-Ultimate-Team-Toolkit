@@ -1,6 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -13,21 +16,42 @@ namespace UltimateTeam.Toolkit.Requests
         // 100 = Staff
         // 142 = ClubItems
         // Consumables are different
+        private AppVersion _appVersion;
+
         public ClubItemRequest()
         {
             _listType = 1;
         }
 
-        public async Task<ClubItemResponse> PerformRequestAsync()
+        public async Task<ClubItemResponse> PerformRequestAsync(AppVersion appVersion)
         {
-            var uriString = string.Format(Resources.FutHome + Resources.MyClub + "&type={0}",_listType);
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var clubItemResponseMessage = await HttpClient
-                .GetAsync(uriString)
-                .ConfigureAwait(false);
+            _appVersion = appVersion;
 
-            return await Deserialize<ClubItemResponse>(clubItemResponseMessage);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.MyClub + "&type={0}", _listType);
+                AddMethodOverrideHeader(HttpMethod.Get);
+                AddCommonHeaders();
+                var clubItemResponseMessage = await HttpClient
+                    .GetAsync(uriString)
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ClubItemResponse>(clubItemResponseMessage);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.MyClub + "&type={0}", _listType + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now));
+                AddCommonMobileHeaders();
+                var clubItemResponseMessage = await HttpClient
+                    .GetAsync(uriString)
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ClubItemResponse>(clubItemResponseMessage);
+            }
+            else
+            {
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+            }
         }
     }
 }

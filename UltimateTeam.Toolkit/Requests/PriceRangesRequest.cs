@@ -6,7 +6,6 @@ using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
 using System;
-using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -38,15 +37,15 @@ namespace UltimateTeam.Toolkit.Requests
             else if (_appVersion == AppVersion.CompanionApp)
             {
                 AddCommonMobileHeaders();
-                var priceRangesResponseMessage = await HttpClient
-                  .GetAsync(string.Format(Resources.FutHome + Resources.PriceRange + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), string.Join(",", _itemIds)))
-                  .ConfigureAwait(false);
+                  var priceRangesResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.FutHome + Resources.PriceRange + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), string.Join(",", _itemIds)))
+                    .ConfigureAwait(false);
 
                 return await Deserialize<List<PriceRange>>(priceRangesResponseMessage);
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                return null;
             }
         }
     }

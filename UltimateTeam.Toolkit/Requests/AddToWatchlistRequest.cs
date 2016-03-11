@@ -5,6 +5,8 @@ using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -12,6 +14,7 @@ namespace UltimateTeam.Toolkit.Requests
     {
 
          private readonly IEnumerable<AuctionInfo> _auctioninfo;
+         private AppVersion _appVersion;
 
          public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
         {
@@ -19,23 +22,46 @@ namespace UltimateTeam.Toolkit.Requests
             _auctioninfo = auctioninfo;
         }
 
-         // Request	POST ut/game/fifa14/watchlist?tradeId=140174434046
-         // {"auctionInfo":[{"id":140196790669}]}
-
-         public async Task<byte> PerformRequestAsync()
+         public async Task<byte> PerformRequestAsync(AppVersion appVersion)
          {
-             var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
-             var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", tradeIds);
-             var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
-             AddMethodOverrideHeader(HttpMethod.Put);
-             AddCommonHeaders();
-             var addToWatchlistResponseMessage = await HttpClient
-                 .PostAsync(uriString, new StringContent(content))
-                 .ConfigureAwait(false);
-             addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+            _appVersion = appVersion;
 
-             return 0;
-         }
+            if (_appVersion == AppVersion.WebApp)
+            {
 
+                AddMethodOverrideHeader(HttpMethod.Put);
+                AddCommonHeaders();
+
+                var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
+                var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", tradeIds);
+                var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
+
+                var addToWatchlistResponseMessage = await HttpClient
+                    .PostAsync(uriString, new StringContent(content))
+                    .ConfigureAwait(false);
+                addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddCommonMobileHeaders();
+
+                var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
+                var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}" + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), tradeIds);
+                var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
+
+                var addToWatchlistResponseMessage = await HttpClient
+                    .PutAsync(uriString, new StringContent(content))
+                    .ConfigureAwait(false);
+                addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else
+            {
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+            }
+        }
     }
 }
