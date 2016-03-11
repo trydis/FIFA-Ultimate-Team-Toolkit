@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
@@ -37,7 +38,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        internal Resources Resources { get; set; }
+		internal Resources Resources { get; set; }
 
         internal IHttpClient HttpClient
         {
@@ -60,12 +61,58 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
             AddUserAgent();
-            HttpClient.AddConnectionKeepAliveHeader();
+			HttpClient.AddConnectionKeepAliveHeader();
+
+            AddUserAgent();
+            AddAcceptHeader("*/*");
+            AddReferrerHeader(Resources.BaseShowoff);
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+        }
+
+        protected void AddContentHeader(string contentType)
+        {
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, contentType);
+        }
+
+        protected void AddEncodingHeader(string encodingType)
+        {
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, encodingType);
+        }
+
+        protected void AddCommonMobileHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            AddAcceptMobileEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddAcceptHeader("text/plain, */*; q=0.01");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddMobileUserAgent();
+        }
+
+        protected void AddMobileLoginHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
+            AddAcceptHeader("*/*");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptMobileEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddMobileUserAgent();
         }
 
         protected void AddUserAgent()
         {
             HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
+        }
+
+        protected void AddMobileUserAgent()
+        {
+            HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "User-Agent: Mozilla/5.0 (Linux; Android 4.2.2; AndyWin Build/JDQ39E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Crosswalk/14.43.343.25 Safari/537.36");
         }
 
         protected void AddAcceptHeader(string value)
@@ -83,14 +130,29 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");
         }
 
+        protected void AddAcceptMobileEncodingHeader()
+        {
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate");
+        }
+
         protected void AddAcceptLanguageHeader()
         {
             HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");
         }
 
+        protected void AddAcceptMobileLanguageHeader()
+        {
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en");
+        }
+
         protected void AddMethodOverrideHeader(HttpMethod httpMethod)
         {
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);
+        }
+
+        protected void AddAuthorizationHeader(string authCode)
+        {
+            HttpClient.AddRequestHeader("Authorization", "Bearer " + authCode);
         }
 
         protected static async Task<T> Deserialize<T>(HttpResponseMessage message) where T : class

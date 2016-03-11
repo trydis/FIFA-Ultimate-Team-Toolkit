@@ -14,11 +14,15 @@ namespace UltimateTeam.Toolkit.Factories
     {
         private readonly CookieContainer _cookieContainer;
 
-        private readonly Resources _resources = new Resources();
+        private readonly Resources _resources = new Resources(AppVersion.WebApp);
+
+        private readonly Resources _mobileresources = new Resources(AppVersion.CompanionApp);
 
         private string _phishingToken;
 
         private string _sessionId;
+
+        private string _nucleusId;
 
         private IHttpClient _httpClient;
 
@@ -90,11 +94,6 @@ namespace UltimateTeam.Toolkit.Factories
             _cookieContainer = cookieContainer;
         }
 
-        public CookieContainer CookieContainer
-        {
-            get { return _cookieContainer; }
-        }
-
         public string PhishingToken
         {
             get { return _phishingToken; }
@@ -112,6 +111,16 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfInvalidArgument();
                 _sessionId = value;
+            }
+        }
+
+        public string NucleusId
+        {
+            get { return _nucleusId; }
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _nucleusId = value;
             }
         }
 
@@ -135,15 +144,32 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
-                                                                       {
-                                                                           if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
-                                                                           {
-                                                                               _resources.FutHome = Resources.FutHomeXbox;
-                                                                           }
-                                                                           var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
-                                                                           loginRequest.SetCookieContainer(_cookieContainer);
-                                                                           return loginRequest;
-                                                                       });
+                {
+                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
+                    {
+                        _resources.FutHome = Resources.FutHomeXbox;
+                    }
+
+                    if (details.AppVersion == AppVersion.WebApp)
+                    {
+                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                        loginRequest.SetCookieContainer(_cookieContainer);
+                        return loginRequest;
+                    }
+                    else if (details.AppVersion == AppVersion.CompanionApp)
+                    {
+                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileresources };
+                        loginRequest.SetCookieContainer(_cookieContainer);
+                        return loginRequest;
+                    }
+                    else
+                    {
+                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                        loginRequest.SetCookieContainer(_cookieContainer);
+                        return loginRequest;
+                    }
+
+                });
             }
             set
             {
@@ -182,7 +208,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _placeBidRequestFactory ??
                        (_placeBidRequestFactory =
-                        (info, amount) => SetSharedRequestProperties(new PlaceBidRequest(info, amount)));
+                           (info, amount) => SetSharedRequestProperties(new PlaceBidRequest(info, amount)));
             }
             set
             {
@@ -380,7 +406,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _removeFromWatchlistRequestFactory ??
                        (_removeFromWatchlistRequestFactory =
-                        info => SetSharedRequestProperties(new RemoveFromWatchlistRequest(info)));
+                           info => SetSharedRequestProperties(new RemoveFromWatchlistRequest(info)));
             }
             set
             {
@@ -395,7 +421,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _removeFromTradePileRequestFactory ??
                        (_removeFromTradePileRequestFactory =
-                        info => SetSharedRequestProperties(new RemoveFromTradePileRequest(info)));
+                           info => SetSharedRequestProperties(new RemoveFromTradePileRequest(info)));
             }
             set
             {
@@ -424,7 +450,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _sendItemToClubRequestFactory ??
                        (_sendItemToClubRequestFactory =
-                        itemData => SetSharedRequestProperties(new SendItemToClubRequest(itemData)));
+                           itemData => SetSharedRequestProperties(new SendItemToClubRequest(itemData)));
             }
             set
             {
@@ -439,7 +465,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _sendItemToTradePileRequestFactory ??
                        (_sendItemToTradePileRequestFactory =
-                        itemData => SetSharedRequestProperties(new SendItemToTradePileRequest(itemData)));
+                           itemData => SetSharedRequestProperties(new SendItemToTradePileRequest(itemData)));
             }
             set
             {
@@ -489,10 +515,26 @@ namespace UltimateTeam.Toolkit.Factories
                 _consumablesRequestFactory = value;
             }
         }
+        public Func<long, IFutRequest<DefinitionResponse>> DefinitionRequestFactory
+        {
+            get
+            {
+                return _definitionRequestFactory ??
+                       (_definitionRequestFactory = baseId => SetSharedRequestProperties(new DefinitionRequest(baseId)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _definitionRequestFactory = value;
+            }
+        }
 
         public Func<IFutRequest<byte>> ReListRequestFactory
         {
-            get { return _reListRequestFactory ?? (_reListRequestFactory = () => SetSharedRequestProperties(new ReListRequest())); }
+            get
+            {
+                return _reListRequestFactory ?? (_reListRequestFactory = () => SetSharedRequestProperties(new ReListRequest()));
+            }
             set
             {
                 value.ThrowIfNullArgument();
@@ -524,23 +566,12 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<long, IFutRequest<DefinitionResponse>> DefinitionRequestFactory
+        public Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> GetPriceRangesFactory
         {
             get
             {
-                return _definitionRequestFactory ??
-                       (_definitionRequestFactory = baseId => SetSharedRequestProperties(new DefinitionRequest(baseId)));
+                return _getpriceRangesFactory ?? (_getpriceRangesFactory = (itemIds) => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
             }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _definitionRequestFactory = value;
-            }
-        }
-
-        public Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> GetPriceRangesFactory
-        {
-            get { return _getpriceRangesFactory ?? (_getpriceRangesFactory = itemIds => SetSharedRequestProperties(new PriceRangesRequest(itemIds))); }
             set
             {
                 value.ThrowIfNullArgument();

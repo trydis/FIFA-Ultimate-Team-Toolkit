@@ -15,5 +15,17 @@
         public const string Route = "X-UT-Route";
 
         public const string SessionId = "X-UT-SID";
+
+        public const string PowSessionId = "X-POW-SID";
+
+        public const string CSP = "CSP";
+
+        public const string OriginFile = "file://";
+
+        public const string EAGameID = "x-ea-game-id";
+
+        public const string EAGameType = "x-ea-game-type";
+
+        public const string EATaxV = "x-ea-taxv";
     }
 }
