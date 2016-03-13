@@ -30,6 +30,10 @@
 
         public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
 
+        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
+
+        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
+
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
         public const string MyClub = "club?level=10";
