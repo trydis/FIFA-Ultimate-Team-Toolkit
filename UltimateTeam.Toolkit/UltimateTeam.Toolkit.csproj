@@ -161,6 +161,7 @@
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
     <Compile Include="Requests\PriceRangeRequest.cs" />
+    <Compile Include="Requests\RemoveSoldItemsFromTradePileRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
     <Compile Include="Requests\SquadListRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
