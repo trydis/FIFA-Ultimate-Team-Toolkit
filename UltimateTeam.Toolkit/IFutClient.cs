@@ -80,5 +80,7 @@ namespace UltimateTeam.Toolkit
         Task<CaptchaResponse> GetCaptchaAsync();
 
         Task<byte> ValidateCaptchaAsync(int answer);
+
+        Task RemoveSoldItemsFromTradePileAsync();
     }
 }

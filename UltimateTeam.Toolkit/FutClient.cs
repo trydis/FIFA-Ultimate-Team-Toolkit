@@ -287,5 +287,10 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.ValidateCaptchaFactory(answer).PerformRequestAsync(_requestFactories.AppVersion);
         }
+
+        public Task RemoveSoldItemsFromTradePileAsync()
+        {
+            return _requestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();
+        }
     }
 }

@@ -47,6 +47,7 @@ FIFA Ultimate Team Toolkit
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
+[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 
 ### Initialization
 
@@ -357,4 +358,12 @@ CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
 Solve Captcha
 ```csharp
 var CaptchaValidate = await futClient.ValidateCaptchaAsync(/* answer */);
+```
+
+### Remove sold items from trade pile
+
+Removes all sold items from the trade pile.
+
+```csharp
+await client.RemoveSoldItemsFromTradePileAsync();
 ```

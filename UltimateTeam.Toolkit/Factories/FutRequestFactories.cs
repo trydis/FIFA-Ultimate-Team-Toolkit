@@ -92,6 +92,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<CaptchaResponse>> _getCaptchaFactory;
 
+        private Func<IFutRequest<byte>> _removeSoldItemsFromTradepileRequestFactory;
+
         private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
 
         public FutRequestFactories()
@@ -640,6 +642,20 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _getCaptchaFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<byte>> RemoveSoldItemsFromTradePileRequestFactory
+        {
+            get
+            {
+                return _removeSoldItemsFromTradepileRequestFactory ??
+                       (_removeSoldItemsFromTradepileRequestFactory = () => SetSharedRequestProperties(new RemoveSoldItemsFromTradePileRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _removeSoldItemsFromTradepileRequestFactory = value;
             }
         }
     }
