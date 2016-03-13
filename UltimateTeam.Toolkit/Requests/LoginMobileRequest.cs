@@ -81,6 +81,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<AuthToken> GetAuthTokenAsync(string code)
         {
             AddMobileLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
             AddContentHeader("application/x-www-form-urlencoded");
             var authTokenResponseMessage = await HttpClient.PostAsync(Resources.Token, new FormUrlEncodedContent(
                                                                                                                          new[]
@@ -120,6 +121,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<Auth> AuthPOWAsync(string AuthCode)
         {
             AddMobileLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.POWAuth, CreateTimestamp()), new StringContent(
@@ -161,6 +163,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<Auth> AuthAsync(string AuthCode, string PersonaId, string Sku)
         {
             AddMobileLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, CreateTimestamp()), new StringContent(
@@ -173,6 +176,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<string> ValidateAsync(LoginDetails loginDetails)
         {
             AddMobileLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
             var validateResponseMessage = await HttpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(

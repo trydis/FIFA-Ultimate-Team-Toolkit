@@ -20,6 +20,6 @@
 
         public const string CSP = "CSP";
 
-        public const string OriginFile = "file://";
+        public const string OriginFile = "Origin";
     }
 }
