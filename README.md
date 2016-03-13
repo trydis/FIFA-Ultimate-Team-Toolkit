@@ -46,6 +46,7 @@ FIFA Ultimate Team Toolkit
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 
 ### Initialization
 
@@ -344,4 +345,16 @@ foreach (PriceRange priceRange in priceRanges)
     priceRange.MaxPrice = // Maximum BIN
     priceRange.MinPrice = // Minimum Starting BID
 }
+```
+
+### Get & Solve Captcha
+
+Get Captcha as Base64 encoded image
+```csharp
+CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
+```
+
+Solve Captcha
+```csharp
+var CaptchaValidate = await futClient.ValidateCaptchaAsync(/* answer */);
 ```

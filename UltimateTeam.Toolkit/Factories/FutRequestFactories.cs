@@ -90,6 +90,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> _getpriceRangesFactory;
 
+        private Func<IFutRequest<CaptchaResponse>> _getCaptchaFactory;
+
+        private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -610,6 +614,32 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _getpriceRangesFactory = value;
+            }
+        }
+
+        public Func<int, IFutRequest<byte>> ValidateCaptchaFactory
+        {
+            get
+            {
+                return _validateCaptchaFactory ?? (_validateCaptchaFactory = answer => SetSharedRequestProperties(new ValidateCaptcha(answer)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _validateCaptchaFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<CaptchaResponse>> GetCaptchaFactory
+        {
+            get
+            {
+                return _getCaptchaFactory ?? (_getCaptchaFactory = () => SetSharedRequestProperties(new CaptchaRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _getCaptchaFactory = value;
             }
         }
     }

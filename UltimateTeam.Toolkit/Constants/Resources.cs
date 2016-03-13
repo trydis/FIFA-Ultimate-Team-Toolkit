@@ -34,6 +34,10 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string AuthCode = "https://accounts.ea.com/connect/auth";
 
+        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
+
+        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
+
         public const string Token = "https://accounts.ea.com/connect/token";
 
         public const string Pid = "https://gateway.ea.com/proxy/identity/pids/me";

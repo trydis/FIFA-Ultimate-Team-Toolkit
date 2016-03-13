@@ -100,6 +100,23 @@ namespace UltimateTeam.Toolkit.Requests
 			HttpClient.AddConnectionKeepAliveHeader();
         }
 
+        protected void AddLoginHeaders()
+        {
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            AddAcceptHeader("application/json");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
+            AddUserAgent();
+        }
+
+
+
         protected void AddCommonMobileHeaders()
         {
             HttpClient.ClearRequestHeaders();
@@ -114,22 +131,6 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             AddMobileUserAgent();
             HttpClient.AddConnectionKeepAliveHeader();
-        }
-
-        protected void AddLoginHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
-            AddAcceptHeader("application/json");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
-            AddUserAgent();
         }
 
         protected void AddMobileLoginHeaders()
