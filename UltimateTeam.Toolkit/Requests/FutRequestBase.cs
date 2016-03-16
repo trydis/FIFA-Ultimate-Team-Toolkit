@@ -18,6 +18,12 @@ namespace UltimateTeam.Toolkit.Requests
 
         private string _sessionId;
 
+        private string _nucleusId;
+
+        private string _personaId;
+
+        private AppVersion _appVersion;
+
         private IHttpClient _httpClient;
 
         public string PhishingToken
@@ -38,7 +44,34 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-		internal Resources Resources { get; set; }
+        public string NucleusId
+        {
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _nucleusId = value;
+            }
+        }
+
+        public string PersonaId
+        {
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _personaId = value;
+            }
+        }
+
+        public AppVersion AppVersion
+        {
+            set
+            {
+                value.ThrowIfNullArgument();
+                _appVersion = value;
+            }
+        }
+
+        internal Resources Resources { get; set; }
 
         internal IHttpClient HttpClient
         {
@@ -52,20 +85,93 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected void AddCommonHeaders()
         {
+            HttpClient.ClearRequestHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "ShockwaveFlash/21.0.0.182");
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            AddAcceptHeader("application/json");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");
+            AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
+            AddUserAgent();
+			HttpClient.AddConnectionKeepAliveHeader();
+        }
+
+        protected void AddCommonMobileHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"file://");
+            AddAcceptEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddAcceptHeader("text/plain, */*; q=0.01");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddMobileUserAgent();
+            HttpClient.AddConnectionKeepAliveHeader();
+        }
+
+        protected void AddLoginHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             AddAcceptHeader("application/json");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf");
+            AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
             AddUserAgent();
-			HttpClient.AddConnectionKeepAliveHeader();
+        }
 
-            AddUserAgent();
+        protected void AddMobileLoginHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
             AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddMobileUserAgent();
+        }
+
+        protected void AddPinHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddConnectionKeepAliveHeader();
+            HttpClient.AddRequestHeader("Origin", "https://www.easports.com");
+            HttpClient.AddRequestHeader("x-ea-taxv", "1.1");
+            HttpClient.AddRequestHeader("x-ea-game-type", "sku");
+            AddUserAgent();
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/20.0.0.286");
+            HttpClient.AddRequestHeader("x-ea-game-id", "fifa16");
+            AddAcceptHeader("*/*");
+            AddReferrerHeader("https://www.easports.com/iframe/fut16/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+        }
+
+        protected void AddPinHeadersMobile()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddConnectionKeepAliveHeader();
+            HttpClient.AddRequestHeader("Origin", "file://");
+            HttpClient.AddRequestHeader("x-ea-taxv", "1");
+            HttpClient.AddRequestHeader("CSP", "active");
+            AddMobileUserAgent();
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptHeader("text/plain, */*; q=0.01");
+            HttpClient.AddRequestHeader("x-ea-game-id-type", "sellid");
+            HttpClient.AddRequestHeader("x-ea-game-id", "859051");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
         }
@@ -78,31 +184,6 @@ namespace UltimateTeam.Toolkit.Requests
         protected void AddEncodingHeader(string encodingType)
         {
             HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, encodingType);
-        }
-
-        protected void AddCommonMobileHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
-            AddAcceptMobileEncodingHeader();
-            AddAcceptMobileLanguageHeader();
-            AddAcceptHeader("text/plain, */*; q=0.01");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddMobileUserAgent();
-        }
-
-        protected void AddMobileLoginHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.OriginFile, @"file://");
-            AddAcceptHeader("*/*");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddAcceptMobileEncodingHeader();
-            AddAcceptMobileLanguageHeader();
-            AddMobileUserAgent();
         }
 
         protected void AddUserAgent()
@@ -127,17 +208,12 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected void AddAcceptEncodingHeader()
         {
-            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate,sdch");
-        }
-
-        protected void AddAcceptMobileEncodingHeader()
-        {
             HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate");
         }
 
         protected void AddAcceptLanguageHeader()
         {
-            HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8");
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8,en-US;q=0.6,en;q=0.4");
         }
 
         protected void AddAcceptMobileLanguageHeader()
@@ -180,7 +256,23 @@ namespace UltimateTeam.Toolkit.Requests
 
             return deserializedObject;
         }
+        
+        protected static string Serialize<T>(T classContent) where T : class
+        {
+            string serializedObject = string.Empty;
 
+            try
+            {
+                serializedObject = JsonConvert.SerializeObject(classContent);
+            }
+            catch (JsonSerializationException serializationException)
+            {
+                throw serializationException;
+            }
+
+            return serializedObject;
+        }
+        
         private static void MapAndThrowException(Exception exception, FutError futError)
         {
             // TODO: Should extract this to a separate class and keep them in a Dictionary<FutErrorCode, Func<FutError, Exception, FutErrorException>>
