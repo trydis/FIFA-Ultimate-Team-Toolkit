@@ -240,5 +240,10 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
         }
+
+        public Task RemoveSoldItemsFromTradePileAsync()
+        {
+            return _requestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();
+        }
     }
 }

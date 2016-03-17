@@ -80,6 +80,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> _getpriceRangesFactory;
 
+        private Func<IFutRequest<byte>> _removeSoldItemsFromTradepileRequestFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -545,6 +547,20 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _getpriceRangesFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<byte>> RemoveSoldItemsFromTradePileRequestFactory
+        {
+            get
+            {
+                return _removeSoldItemsFromTradepileRequestFactory ??
+                       (_removeSoldItemsFromTradepileRequestFactory = () => SetSharedRequestProperties(new RemoveSoldItemsFromTradePileRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _removeSoldItemsFromTradepileRequestFactory = value;
             }
         }
     }

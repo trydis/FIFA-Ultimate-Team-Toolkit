@@ -45,7 +45,8 @@ FIFA Ultimate Team Toolkit
 [Get squads from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squads-from-club)  
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
-[Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)
+[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 
 ### Initialization
 
@@ -344,4 +345,12 @@ foreach (PriceRange priceRange in priceRanges)
     priceRange.MaxPrice = // Maximum BIN
     priceRange.MinPrice = // Minimum Starting BID
 }
+```
+
+### Remove sold items from trade pile
+
+Removes all sold items from the trade pile.
+
+```csharp
+await client.RemoveSoldItemsFromTradePileAsync();
 ```
