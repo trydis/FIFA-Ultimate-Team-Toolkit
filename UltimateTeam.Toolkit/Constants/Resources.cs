@@ -18,6 +18,14 @@ namespace UltimateTeam.Toolkit.Constants
 
         public string AccountInfo;
 
+        public string Item;
+
+        public string PlayerImage;
+
+        public string FlagsImage;
+
+        public string ClubImage;
+
         public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa16/";
 
         public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
@@ -33,14 +41,6 @@ namespace UltimateTeam.Toolkit.Constants
         public const string LoggedIn = "https://www.easports.com/fifa/api/isUserLoggedIn";
 
         public const string BaseShowoff = "http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
-
-        public const string Item = "https://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
-
-        public const string PlayerImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
-
-        public const string FlagsImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
-
-        public const string ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
 
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
@@ -105,6 +105,14 @@ namespace UltimateTeam.Toolkit.Constants
 
                     AccountInfo = "https://www.easports.com/iframe/fut16/p/ut/game/fifa16/user/accountinfo?sku=FUT16WEB&_={0}";
 
+                    Item = "https://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
+
+                    PlayerImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+
+                    FlagsImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
+
+                    ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
+
                     break;
 
                 case AppVersion.CompanionApp:
@@ -120,6 +128,14 @@ namespace UltimateTeam.Toolkit.Constants
                     Shards = "https://utas.mob.v3.fut.ea.com/ut/shards/v2?_={0}";
 
                     AccountInfo = "https://utas.s2.fut.ea.com/ut/game/fifa16/user/accountinfo?sku=FUT16AND&_={0}";
+
+                    Item = "https://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
+
+                    PlayerImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+
+                    FlagsImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
+
+                    ClubImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
             }

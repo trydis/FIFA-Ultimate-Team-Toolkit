@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using System;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class RemoveFromTradePileRequest : FutRequestBase, IFutRequest<byte>
     {
         private readonly AuctionInfo _auctioninfo;
+        private AppVersion _appVersion;
 
         public RemoveFromTradePileRequest(AuctionInfo auctioninfo)
         {
@@ -16,18 +18,39 @@ namespace UltimateTeam.Toolkit.Requests
             _auctioninfo = auctioninfo;
         }
 
-        public async Task<byte> PerformRequestAsync()
+        public async Task<byte> PerformRequestAsync(AppVersion appVersion)
         {
-            var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, _auctioninfo.TradeId);
-            
-            AddMethodOverrideHeader(HttpMethod.Delete);
-            AddCommonHeaders();
-            var removeFromTradePileMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
-                .ConfigureAwait(false);
-            removeFromTradePileMessage.EnsureSuccessStatusCode();
+            _appVersion = appVersion;
 
-            return 0;
+            if (_appVersion == AppVersion.WebApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, _auctioninfo.TradeId);
+
+                AddMethodOverrideHeader(HttpMethod.Delete);
+                AddCommonHeaders();
+                var removeFromTradePileMessage = await HttpClient
+                    .PostAsync(uriString, new StringContent(" "))
+                    .ConfigureAwait(false);
+                removeFromTradePileMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, _auctioninfo.TradeId + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now));
+
+                AddCommonMobileHeaders();
+                var removeFromTradePileMessage = await HttpClient
+                    .DeleteAsync(uriString)
+                    .ConfigureAwait(false);
+                removeFromTradePileMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

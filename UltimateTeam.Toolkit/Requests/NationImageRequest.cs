@@ -8,6 +8,7 @@ namespace UltimateTeam.Toolkit.Requests
     internal class NationImageRequest : FutRequestBase, IFutRequest<byte[]>
     {
         private readonly Item _auctionInfo;
+        private AppVersion _appVersion;
 
         public NationImageRequest(Item auctionInfo)
         {
@@ -16,17 +17,28 @@ namespace UltimateTeam.Toolkit.Requests
             
         }
 
-        public async Task<byte[]> PerformRequestAsync()
+        public async Task<byte[]> PerformRequestAsync(AppVersion appVersion)
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            _appVersion = appVersion;
 
-            return await HttpClient
-                .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.NationId))
-                .ConfigureAwait(false);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.NationId))
+                    .ConfigureAwait(false);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddAnonymousMobileHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.NationId))
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

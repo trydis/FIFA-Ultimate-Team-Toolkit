@@ -20,6 +20,12 @@
 
         public const string CSP = "CSP";
 
-        public const string OriginFile = "Origin";
+        public const string Origin = "Origin";
+
+        public const string EAGameID = "x-ea-game-id";
+
+        public const string EAGameType = "x-ea-game-type";
+
+        public const string EATaxV = "x-ea-taxv";
     }
 }

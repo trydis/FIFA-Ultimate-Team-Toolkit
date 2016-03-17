@@ -176,6 +176,27 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
         }
 
+        protected void AddAnonymousHeader()
+        {
+            AddUserAgent();
+            AddAcceptHeader("*/*");
+            AddReferrerHeader(Resources.BaseShowoff);
+            HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/21.0.0.182");
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            HttpClient.AddConnectionKeepAliveHeader();
+        }
+
+        protected void AddAnonymousMobileHeader()
+        {
+            AddMobileUserAgent();
+            AddAcceptHeader("*/*");
+            HttpClient.AddRequestHeader("CSP", "active");
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            HttpClient.AddConnectionKeepAliveHeader();
+        }
+
         protected void AddContentHeader(string contentType)
         {
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, contentType);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
@@ -29,20 +30,56 @@ namespace UltimateTeam.Toolkit
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
             loginDetails.ThrowIfNullArgument();
+            _requestFactories.AppVersion.ThrowIfNullArgument();
 
-            var loginRequest = _requestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
-            var loginResponse = await loginRequest.PerformRequestAsync();
-            RequestFactories.PhishingToken = loginResponse.PhishingToken;
-            RequestFactories.SessionId = loginResponse.SessionId;
+            if (_requestFactories.AppVersion == AppVersion.WebApp)
+            {
+                var loginRequest = _requestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
+                var loginResponse = await loginRequest.PerformRequestAsync(_requestFactories.AppVersion);
+                RequestFactories.PhishingToken = loginResponse.PhishingToken;
+                RequestFactories.SessionId = loginResponse.SessionId;
+                RequestFactories.NucleusId = loginResponse.NucleusId;
+                RequestFactories.PersonaId = loginResponse.PersonaId;
 
-            return loginResponse;
+                return loginResponse;
+            }
+            else if (_requestFactories.AppVersion == AppVersion.CompanionApp)
+            {
+                var loginRequest = _requestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
+                var loginResponse = await loginRequest.PerformRequestAsync(_requestFactories.AppVersion);
+
+                RequestFactories.PhishingToken = loginResponse.PhishingToken;
+                RequestFactories.SessionId = loginResponse.SessionId;
+                RequestFactories.NucleusId = loginResponse.NucleusId;
+                RequestFactories.PersonaId = loginResponse.PersonaId;
+
+                return loginResponse;
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
+        public async Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
         {
             searchParameters.ThrowIfNullArgument();
+            _requestFactories.AppVersion.ThrowIfNullArgument();
 
-            return _requestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync();
+            if (_requestFactories.AppVersion == AppVersion.WebApp)
+            {
+                var searchResponse = await _requestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync(_requestFactories.AppVersion);
+                return searchResponse;
+            }
+            else if (_requestFactories.AppVersion == AppVersion.CompanionApp)
+            {
+                var searchResponse = await _requestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync(_requestFactories.AppVersion);
+                return searchResponse;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0)
@@ -54,89 +91,89 @@ namespace UltimateTeam.Toolkit
                 bidAmount = auctionInfo.CalculateBid();
             }
 
-            return _requestFactories.PlaceBidRequestFactory(auctionInfo, bidAmount).PerformRequestAsync();
+            return _requestFactories.PlaceBidRequestFactory(auctionInfo, bidAmount).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<Item> GetItemAsync(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.ItemRequestFactory(auctionInfo.CalculateBaseId()).PerformRequestAsync();
+            return _requestFactories.ItemRequestFactory(auctionInfo.CalculateBaseId()).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<Item> GetItemAsync(long resourceId)
         {
             if (resourceId < 1) throw new ArgumentException("Definitely not valid", "resourceId");
 
-            return _requestFactories.ItemRequestFactory(resourceId.CalculateBaseId()).PerformRequestAsync();
+            return _requestFactories.ItemRequestFactory(resourceId.CalculateBaseId()).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.PlayerImageRequestFactory(auctionInfo).PerformRequestAsync();
+            return _requestFactories.PlayerImageRequestFactory(auctionInfo).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds)
         {
             tradeIds.ThrowIfNullArgument();
 
-            return _requestFactories.TradeStatusRequestFactory(tradeIds).PerformRequestAsync();
+            return _requestFactories.TradeStatusRequestFactory(tradeIds).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<CreditsResponse> GetCreditsAsync()
         {
-            return _requestFactories.CreditsRequestFactory().PerformRequestAsync();
+            return _requestFactories.CreditsRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<PileSizeResponse> GetPileSizeAsync()
         {
-            return _requestFactories.PileSizeRequestFactory().PerformRequestAsync();
+            return _requestFactories.PileSizeRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<ConsumablesResponse> GetConsumablesAsync()
         {
-            return _requestFactories.ConsumablesRequestFactory().PerformRequestAsync();
+            return _requestFactories.ConsumablesRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<AuctionResponse> GetTradePileAsync()
         {
-            return _requestFactories.TradePileRequestFactory().PerformRequestAsync();
+            return _requestFactories.TradePileRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<WatchlistResponse> GetWatchlistAsync()
         {
-            return _requestFactories.WatchlistRequestFactory().PerformRequestAsync();
+            return _requestFactories.WatchlistRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<ClubItemResponse> GetClubItemsAsync()
         {
-            return _requestFactories.ClubItemRequestFactory().PerformRequestAsync();
+            return _requestFactories.ClubItemRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<SquadListResponse> GetSquadListAsync()
         {
-            return _requestFactories.SquadListRequestFactory().PerformRequestAsync();
+            return _requestFactories.SquadListRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<PurchasedItemsResponse> GetPurchasedItemsAsync()
         {
-            return _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync();
+            return _requestFactories.PurchasedItemsRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<ListAuctionResponse> ListAuctionAsync(AuctionDetails auctionDetails)
         {
             auctionDetails.ThrowIfNullArgument();
 
-            return _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync();
+            return _requestFactories.ListAuctionFactory(auctionDetails).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task AddToWatchlistRequestAsync(IEnumerable<AuctionInfo> auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.AddToWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
+            return _requestFactories.AddToWatchlistRequestFactory(auctionInfo).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task AddToWatchlistRequestAsync(AuctionInfo auctionInfo)
@@ -148,7 +185,7 @@ namespace UltimateTeam.Toolkit
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.RemoveFromWatchlistRequestFactory(auctionInfo).PerformRequestAsync();
+            return _requestFactories.RemoveFromWatchlistRequestFactory(auctionInfo).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task RemoveFromWatchlistAsync(AuctionInfo auctionInfo)
@@ -160,26 +197,26 @@ namespace UltimateTeam.Toolkit
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync();
+            return _requestFactories.RemoveFromTradePileRequestFactory(auctionInfo).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<SquadDetailsResponse> GetSquadDetailsAsync(ushort squadId)
         {
-            return _requestFactories.SquadDetailsRequestFactory(squadId).PerformRequestAsync();
+            return _requestFactories.SquadDetailsRequestFactory(squadId).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<SendItemToClubResponse> SendItemToClubAsync(ItemData itemData)
         {
             itemData.ThrowIfNullArgument();
 
-            return _requestFactories.SendItemToClubRequestFactory(itemData).PerformRequestAsync();
+            return _requestFactories.SendItemToClubRequestFactory(itemData).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<SendItemToTradePileResponse> SendItemToTradePileAsync(ItemData itemData)
         {
             itemData.ThrowIfNullArgument();
 
-            return _requestFactories.SendItemToTradePileRequestFactory(itemData).PerformRequestAsync();
+            return _requestFactories.SendItemToTradePileRequestFactory(itemData).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<QuickSellResponse> QuickSellItemAsync(long itemId)
@@ -197,48 +234,48 @@ namespace UltimateTeam.Toolkit
                 if (itemId < 1)
                     throw new ArgumentException(string.Format("ItemId {0} is definitely not valid", itemId), "itemId");
 
-            return _requestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync();
+            return _requestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return _requestFactories.ClubImageRequestFactory(auctionInfo).PerformRequestAsync();
-        }
-
-        public Task<byte[]> GetNationImageAsync(Item item)
-        {
-            item.ThrowIfNullArgument();
-
-            return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync();
-        }
-
-        public Task ReListAsync()
-        {
-            return _requestFactories.ReListRequestFactory().PerformRequestAsync();
-        }
-
-        public Task<ListGiftsResponse> GetGiftsListAsync()
-        {
-            return _requestFactories.GiftListRequestFactory().PerformRequestAsync();
-        }
-
-        public Task GetGiftAsync(int idGift)
-        {
-            return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
+            return _requestFactories.ClubImageRequestFactory(auctionInfo).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
         {
             baseId.ThrowIfNullArgument();
 
-            return _requestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
+            return _requestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync(_requestFactories.AppVersion);
+        }
+
+        public Task<byte[]> GetNationImageAsync(Item item)
+        {
+            item.ThrowIfNullArgument();
+
+            return _requestFactories.NationImageRequestFactory(item).PerformRequestAsync(_requestFactories.AppVersion);
+        }
+
+        public Task ReListAsync()
+        {
+            return _requestFactories.ReListRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
+        }
+
+        public Task<ListGiftsResponse> GetGiftsListAsync()
+        {
+            return _requestFactories.GiftListRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
+        }
+
+        public Task GetGiftAsync(int idGift)
+        {
+            return _requestFactories.GiftRequestFactory(idGift).PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds)
         {
-            return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
+            return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync(_requestFactories.AppVersion);
         }
     }
 }

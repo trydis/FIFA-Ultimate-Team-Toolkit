@@ -8,6 +8,7 @@ namespace UltimateTeam.Toolkit.Requests
     internal class ClubImageRequest : FutRequestBase, IFutRequest<byte[]>
     {
         private readonly AuctionInfo _auctionInfo;
+        private AppVersion _appVersion;
 
         public ClubImageRequest(AuctionInfo auctionInfo)
         {
@@ -15,17 +16,28 @@ namespace UltimateTeam.Toolkit.Requests
             _auctionInfo = auctionInfo;
         }
 
-        public async Task<byte[]> PerformRequestAsync()
+        public async Task<byte[]> PerformRequestAsync(AppVersion appVersion)
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            _appVersion = appVersion;
 
-            return await HttpClient
-                .GetByteArrayAsync(string.Format(Resources.ClubImage, _auctionInfo.ItemData.TeamId))
-                .ConfigureAwait(false);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.ClubImage, _auctionInfo.ItemData.TeamId))
+                    .ConfigureAwait(false);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddAnonymousMobileHeader();
+                return await HttpClient
+                    .GetByteArrayAsync(string.Format(Resources.ClubImage, _auctionInfo.ItemData.TeamId))
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

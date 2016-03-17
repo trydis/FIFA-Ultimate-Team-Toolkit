@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
@@ -9,6 +10,7 @@ namespace UltimateTeam.Toolkit.Requests
     internal class ListAuctionRequest : FutRequestBase, IFutRequest<ListAuctionResponse>
     {
         private readonly AuctionDetails _auctionDetails;
+        private AppVersion _appVersion;
 
         public ListAuctionRequest(AuctionDetails auctionDetails)
         {
@@ -16,17 +18,37 @@ namespace UltimateTeam.Toolkit.Requests
             _auctionDetails = auctionDetails;
         }
 
-        public async Task<ListAuctionResponse> PerformRequestAsync()
+        public async Task<ListAuctionResponse> PerformRequestAsync(AppVersion appVersion)
         {
-            AddMethodOverrideHeader(HttpMethod.Post);
-            AddCommonHeaders();
-            var content = string.Format("{{\"buyNowPrice\":{0},\"startingBid\":{1},\"duration\":{2},\"itemData\":{{\"id\":{3}}}}}",
-                _auctionDetails.BuyNowPrice, _auctionDetails.StartingBid, (uint)_auctionDetails.AuctionDuration, _auctionDetails.ItemDataId);
-            var tradepileResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.FutHome + Resources.Auctionhouse), new StringContent(content))
-                .ConfigureAwait(false);
+            _appVersion = appVersion;
 
-            return await Deserialize<ListAuctionResponse>(tradepileResponseMessage);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddMethodOverrideHeader(HttpMethod.Post);
+                AddCommonHeaders();
+                var content = string.Format("{{\"buyNowPrice\":{0},\"startingBid\":{1},\"duration\":{2},\"itemData\":{{\"id\":{3}}}}}",
+                    _auctionDetails.BuyNowPrice, _auctionDetails.StartingBid, (uint)_auctionDetails.AuctionDuration, _auctionDetails.ItemDataId);
+                var tradepileResponseMessage = await HttpClient
+                    .PostAsync(string.Format(Resources.FutHome + Resources.Auctionhouse), new StringContent(content))
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ListAuctionResponse>(tradepileResponseMessage);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddCommonMobileHeaders();
+                var content = string.Format("{{\"buyNowPrice\":{0},\"startingBid\":{1},\"duration\":{2},\"itemData\":{{\"id\":{3}}}}}",
+                    _auctionDetails.BuyNowPrice, _auctionDetails.StartingBid, (uint)_auctionDetails.AuctionDuration, _auctionDetails.ItemDataId);
+                var tradepileResponseMessage = await HttpClient
+                    .PostAsync(string.Format(Resources.FutHome + Resources.Auctionhouse + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now)), new StringContent(content))
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ListAuctionResponse>(tradepileResponseMessage);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

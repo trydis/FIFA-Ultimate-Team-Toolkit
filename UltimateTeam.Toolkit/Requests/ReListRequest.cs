@@ -1,23 +1,49 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class ReListRequest : FutRequestBase, IFutRequest<byte>
     {
-        public async Task<byte> PerformRequestAsync()
+        private AppVersion _appVersion;
+
+        public async Task<byte> PerformRequestAsync(AppVersion appVersion)
         {
-            var uriString = string.Format(Resources.FutHome + Resources.Auctionhouse + "/" + Resources.ReList);
+            _appVersion = appVersion;
 
-            AddMethodOverrideHeader(HttpMethod.Put);
-            AddCommonHeaders();
-            var reListMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
-                .ConfigureAwait(false);
-            reListMessage.EnsureSuccessStatusCode();
+            if (_appVersion == AppVersion.WebApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.Auctionhouse + "/" + Resources.ReList);
 
-            return 0;
+                AddMethodOverrideHeader(HttpMethod.Put);
+                AddCommonHeaders();
+                var reListMessage = await HttpClient
+                    .PostAsync(uriString, new StringContent(" "))
+                    .ConfigureAwait(false);
+                reListMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                var uriString = string.Format(Resources.FutHome + Resources.Auctionhouse + "/" + Resources.ReList + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now));
+
+                AddCommonMobileHeaders();
+                var reListMessage = await HttpClient
+                    .PutAsync(uriString, new StringContent(" "))
+                    .ConfigureAwait(false);
+                reListMessage.EnsureSuccessStatusCode();
+
+                return 0;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

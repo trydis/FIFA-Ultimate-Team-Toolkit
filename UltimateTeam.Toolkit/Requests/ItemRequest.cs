@@ -7,25 +7,41 @@ namespace UltimateTeam.Toolkit.Requests
     internal class ItemRequest : FutRequestBase, IFutRequest<Item>
     {
         private readonly long _baseId;
+        private AppVersion _appVersion;
 
         public ItemRequest(long baseId)
         {
             _baseId = baseId;
         }
 
-        public async Task<Item> PerformRequestAsync()
+        public async Task<Item> PerformRequestAsync(AppVersion appVersion)
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
-            var itemResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.Item, _baseId))
-                .ConfigureAwait(false);
-            var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
+            _appVersion = appVersion;
 
-            return itemWrapper.Item;
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+                var itemResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.Item, _baseId))
+                    .ConfigureAwait(false);
+                var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
+
+                return itemWrapper.Item;
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddAnonymousMobileHeader();
+                var itemResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.Item, _baseId))
+                    .ConfigureAwait(false);
+                var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
+
+                return itemWrapper.Item;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

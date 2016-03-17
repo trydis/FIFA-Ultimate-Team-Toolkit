@@ -14,15 +14,21 @@ namespace UltimateTeam.Toolkit.Factories
     {
         private readonly CookieContainer _cookieContainer;
 
-        private readonly Resources _resources = new Resources(AppVersion.WebApp);
+        private readonly Resources _webResources = new Resources(AppVersion.WebApp);
 
-        private readonly Resources _mobileresources = new Resources(AppVersion.CompanionApp);
+        private readonly Resources _mobileResources = new Resources(AppVersion.CompanionApp);
+
+        private Resources _resources;
 
         private string _phishingToken;
 
         private string _sessionId;
 
         private string _nucleusId;
+
+        private string _personaId;
+
+        private AppVersion _appVersion;
 
         private IHttpClient _httpClient;
 
@@ -124,6 +130,26 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
+        public string PersonaId
+        {
+            get { return _personaId; }
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _personaId = value;
+            }
+        }
+
+        public AppVersion AppVersion
+        {
+            get { return _appVersion; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _appVersion = value;
+            }
+        }
+
         internal IHttpClient HttpClient
         {
             get
@@ -145,26 +171,31 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
+                    _appVersion = details.AppVersion;
+
                     if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
-                        _resources.FutHome = Resources.FutHomeXbox;
+                        _webResources.FutHome = Resources.FutHomeXbox;
                     }
 
                     if (details.AppVersion == AppVersion.WebApp)
                     {
-                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
+                        _resources = _webResources;
                         loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     }
                     else if (details.AppVersion == AppVersion.CompanionApp)
                     {
-                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileresources };
+                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileResources };
+                        _resources = _mobileResources;
                         loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     }
                     else
                     {
-                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
+                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
+                        _resources = _webResources;
                         loginRequest.SetCookieContainer(_cookieContainer);
                         return loginRequest;
                     }
@@ -184,6 +215,9 @@ namespace UltimateTeam.Toolkit.Factories
             request.SessionId = SessionId;
             request.HttpClient = HttpClient;
             request.Resources = _resources;
+            request.NucleusId = _nucleusId;
+            request.PersonaId = _personaId;
+            request.AppVersion = _appVersion;
 
             return request;
         }
@@ -435,7 +469,7 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _squadDetailsRequestFactory ??
-                       (_squadDetailsRequestFactory = squadId => SetSharedRequestProperties(new SquadDetailsRequest(squadId)));
+                       (_squadDetailsRequestFactory = squadId => SetSharedRequestProperties(new SquadDetailsRequest(squadId, _personaId)));
             }
             set
             {

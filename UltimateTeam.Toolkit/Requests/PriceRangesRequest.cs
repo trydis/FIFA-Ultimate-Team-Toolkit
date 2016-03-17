@@ -37,9 +37,9 @@ namespace UltimateTeam.Toolkit.Requests
             else if (_appVersion == AppVersion.CompanionApp)
             {
                 AddCommonMobileHeaders();
-                var priceRangesResponseMessage = await HttpClient
-                  .GetAsync(string.Format(Resources.FutHome + Resources.PriceRange + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), string.Join(",", _itemIds)))
-                  .ConfigureAwait(false);
+                  var priceRangesResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.FutHome + Resources.PriceRange + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), string.Join(",", _itemIds)))
+                    .ConfigureAwait(false);
 
                 return await Deserialize<List<PriceRange>>(priceRangesResponseMessage);
             }
