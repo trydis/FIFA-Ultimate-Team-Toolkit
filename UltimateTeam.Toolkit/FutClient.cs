@@ -290,7 +290,7 @@ namespace UltimateTeam.Toolkit
 
         public Task RemoveSoldItemsFromTradePileAsync()
         {
-            return _requestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();
+            return _requestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
     }
 }
