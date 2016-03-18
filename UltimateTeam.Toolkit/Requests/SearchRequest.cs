@@ -52,7 +52,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
             else
             {
-                return null;
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
             }
         }
     }

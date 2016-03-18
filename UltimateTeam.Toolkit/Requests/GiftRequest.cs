@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -31,12 +32,11 @@ namespace UltimateTeam.Toolkit.Requests
             }
             else if (_appVersion == AppVersion.CompanionApp)
             {
-                //I don't know if Gifts are available via CompanionApp
-                return 0;
+                throw new FutException(string.Format("Not implemented via {0}", appVersion.ToString()));
             }
             else
             {
-                return 0;
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
             }
         }
     }

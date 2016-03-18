@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -40,7 +41,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
             else
             {
-                return null;
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
             }
         }
     }
