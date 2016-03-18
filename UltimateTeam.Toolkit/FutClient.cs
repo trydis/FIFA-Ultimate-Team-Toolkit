@@ -243,11 +243,12 @@ namespace UltimateTeam.Toolkit
 
         public Task<CaptchaResponse> GetCaptchaAsync()
         {
-            return _requestFactories.GetCaptchaFactory().PerformRequestAsync();
+            return _requestFactories.GetCaptchaFactory().PerformRequestAsync(_requestFactories.AppVersion);
         }
 
         public Task<byte> ValidateCaptchaAsync(int answer)
         {
-            return _requestFactories.ValidateCaptchaFactory(answer).PerformRequestAsync();
+            return _requestFactories.ValidateCaptchaFactory(answer).PerformRequestAsync(_requestFactories.AppVersion);
         }
+    }
 }
