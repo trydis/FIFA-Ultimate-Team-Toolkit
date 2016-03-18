@@ -24,6 +24,10 @@ namespace UltimateTeam.Toolkit.Requests
 
         Task<HttpResponseMessage> PostAsync(Uri requestUri, HttpContent httpContent);
 
+        Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent httpContent);
+
+        Task<HttpResponseMessage> DeleteAsync(string requestUri);
+
         Task<byte[]> GetByteArrayAsync(string requestUri);
     }
 }

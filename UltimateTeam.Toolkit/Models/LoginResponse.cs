@@ -14,7 +14,9 @@ namespace UltimateTeam.Toolkit.Models
 
         public string PhishingToken { get; private set; }
 
-        public LoginResponse(string nucleusId, Shards shards, UserAccounts userAccounts, string sessionId, string phishingToken)
+        public string PersonaId { get; private set; }
+
+        public LoginResponse(string nucleusId, Shards shards, UserAccounts userAccounts, string sessionId, string phishingToken, string personaId)
         {
             nucleusId.ThrowIfInvalidArgument();
             shards.ThrowIfNullArgument();
@@ -26,6 +28,7 @@ namespace UltimateTeam.Toolkit.Models
             UserAccounts = userAccounts;
             SessionId = sessionId;
             PhishingToken = phishingToken;
+            PersonaId = personaId;
         }
     }
 }

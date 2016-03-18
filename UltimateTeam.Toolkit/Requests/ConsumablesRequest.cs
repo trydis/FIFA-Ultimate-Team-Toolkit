@@ -1,21 +1,43 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class ConsumablesRequest : FutRequestBase, IFutRequest<ConsumablesResponse>
     {
-        public async Task<ConsumablesResponse> PerformRequestAsync()
+        private AppVersion _appVersion;
+        public async Task<ConsumablesResponse> PerformRequestAsync(AppVersion appVersion)
         {
-            AddCommonHeaders();
-            AddMethodOverrideHeader(HttpMethod.Get);
-            var consumablesResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.Consumables))
-                .ConfigureAwait(false);
+            _appVersion = appVersion;
 
-            return await Deserialize<ConsumablesResponse>(consumablesResponseMessage);
+            if (_appVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders();
+                AddMethodOverrideHeader(HttpMethod.Get);
+                var consumablesResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.FutHome + Resources.Consumables))
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ConsumablesResponse>(consumablesResponseMessage);
+            }
+            else if (_appVersion == AppVersion.CompanionApp)
+            {
+                AddCommonMobileHeaders();
+                var consumablesResponseMessage = await HttpClient
+                    .GetAsync(string.Format(Resources.FutHome + Resources.Consumables + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now)))
+                    .ConfigureAwait(false);
+
+                return await Deserialize<ConsumablesResponse>(consumablesResponseMessage);
+            }
+            else
+            {
+                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+            }
         }
     }
 }

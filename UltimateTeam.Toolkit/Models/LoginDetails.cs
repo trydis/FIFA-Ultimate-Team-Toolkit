@@ -1,4 +1,5 @@
-﻿using UltimateTeam.Toolkit.Extensions;
+﻿using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Models
 {
@@ -12,7 +13,9 @@ namespace UltimateTeam.Toolkit.Models
 
         public Platform Platform { get; set; }
 
-        public LoginDetails(string username, string password, string secretAnswer, Platform platform)
+        public AppVersion AppVersion { get; set; }
+
+        public LoginDetails(string username, string password, string secretAnswer, Platform platform, AppVersion appVersion)
         {
             username.ThrowIfInvalidArgument();
             password.ThrowIfInvalidArgument();
@@ -21,6 +24,7 @@ namespace UltimateTeam.Toolkit.Models
             Password = password;
             SecretAnswer = secretAnswer;
             Platform = platform;
+            AppVersion = appVersion;
         }
     }
 }
