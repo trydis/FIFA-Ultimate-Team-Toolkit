@@ -5,6 +5,7 @@ using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Extensions;
 using System;
+using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {

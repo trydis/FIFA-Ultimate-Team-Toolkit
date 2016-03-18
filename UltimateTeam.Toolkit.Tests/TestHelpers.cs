@@ -14,13 +14,13 @@ namespace UltimateTeam.Toolkit.Tests
 
         public static LoginDetails CreateValidLoginDetails()
         {
-            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps4);
+            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps4, AppVersion.WebApp);
         }
 
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturning<T>(T result) where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync())
+            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
                 .Returns(() => Task.FromResult(result));
 
             return mock;
@@ -29,7 +29,7 @@ namespace UltimateTeam.Toolkit.Tests
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturningNull<T>() where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync())
+            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
                 .Returns(() => Task.FromResult(default(T)));
 
             return mock;
@@ -38,7 +38,7 @@ namespace UltimateTeam.Toolkit.Tests
         public static Mock<IFutRequest<T>> CreateMockFutRequestThrowingException<T>()
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync())
+            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
                 .Throws(new HttpRequestException("Things went south..."));
 
             return mock;
