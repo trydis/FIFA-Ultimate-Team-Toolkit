@@ -240,5 +240,15 @@ namespace UltimateTeam.Toolkit
         {
             return _requestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
         }
+
+        public Task<CaptchaResponse> GetCaptchaAsync()
+        {
+            return _requestFactories.GetCaptchaFactory().PerformRequestAsync(_requestFactories.AppVersion);
+        }
+
+        public Task<byte> ValidateCaptchaAsync(int answer)
+        {
+            return _requestFactories.ValidateCaptchaFactory(answer).PerformRequestAsync(_requestFactories.AppVersion);
+        }
     }
 }

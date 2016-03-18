@@ -20,6 +20,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private string _sessionId;
 
+        private string _nucleusId;
+
         private IHttpClient _httpClient;
 
         private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
@@ -80,6 +82,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> _getpriceRangesFactory;
 
+        private Func<IFutRequest<CaptchaResponse>> _getCaptchaFactory;
+
+        private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
+
         public FutRequestFactories()
         {
             _cookieContainer = new CookieContainer();
@@ -112,6 +118,16 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfInvalidArgument();
                 _sessionId = value;
+            }
+        }
+
+        public string NucleusId
+        {
+            get { return _nucleusId; }
+            set
+            {
+                value.ThrowIfInvalidArgument();
+                _nucleusId = value;
             }
         }
 
@@ -545,6 +561,32 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _getpriceRangesFactory = value;
+            }
+        }
+
+        public Func<int, IFutRequest<byte>> ValidateCaptchaFactory
+        {
+            get
+            {
+                return _validateCaptchaFactory ?? (_validateCaptchaFactory = answer => SetSharedRequestProperties(new ValidateCaptcha(answer)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _validateCaptchaFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<CaptchaResponse>> GetCaptchaFactory
+        {
+            get
+            {
+                return _getCaptchaFactory ?? (_getCaptchaFactory = () => SetSharedRequestProperties(new CaptchaRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _getCaptchaFactory = value;
             }
         }
     }
