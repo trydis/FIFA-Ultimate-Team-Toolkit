@@ -9,29 +9,19 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class CaptchaRequest : FutRequestBase, IFutRequest<CaptchaResponse>
     {
-        private AppVersion _appVersion;
-
-        public async Task<CaptchaResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<CaptchaResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            if (AppVersion != AppVersion.WebApp)
+            {
+                throw new FutException($"Not implemented for {AppVersion}");
+            }
 
-            if (_appVersion == AppVersion.WebApp)
-            {
-                AddLoginHeaders();
-                var captchaResponse = await HttpClient
-                    .GetAsync(string.Format(Resources.CaptchaImage, DateTimeExtensions.ToUnixTime(DateTime.Now)))
-                    .ConfigureAwait(false);
+            AddLoginHeaders();
+            var captchaResponse = await HttpClient
+                .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
+                .ConfigureAwait(false);
 
-                return await Deserialize<CaptchaResponse>(captchaResponse);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                throw new FutException(string.Format("Not implemented via {0}", appVersion.ToString()));
-            }
-            else
-            {
-                throw new FutException(string.Format("Unknown AppVersion ({0})", appVersion.ToString()));
-            }
+            return await Deserialize<CaptchaResponse>(captchaResponse);
         }
     }
 }

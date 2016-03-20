@@ -19,8 +19,6 @@ namespace UltimateTeam.Toolkit.Requests
 
         private string _nucleusId;
 
-        private string _personaId;
-
         private AppVersion _appVersion;
 
         private IHttpClient _httpClient;
@@ -52,17 +50,12 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        public string PersonaId
-        {
-            set
-            {
-                value.ThrowIfInvalidArgument();
-                _personaId = value;
-            }
-        }
-
         public AppVersion AppVersion
         {
+            get
+            {
+                return _appVersion;
+            }
             set
             {
                 value.ThrowIfNullArgument();

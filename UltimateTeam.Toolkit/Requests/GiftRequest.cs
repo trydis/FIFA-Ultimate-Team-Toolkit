@@ -8,35 +8,28 @@ namespace UltimateTeam.Toolkit.Requests
     internal class GiftRequest : FutRequestBase, IFutRequest<byte>
     {
         private readonly int _idGift;
-        private AppVersion _appVersion;
 
         public GiftRequest(int idGift)
         {
             _idGift = idGift;
         }
 
-        public async Task<byte> PerformRequestAsync(AppVersion appVersion)
+        public async Task<byte> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            if (AppVersion != AppVersion.WebApp)
+            {
+                throw new FutException($"Not implemented for {AppVersion}");
+            }
 
-            if (_appVersion == AppVersion.WebApp)
-            {
-                AddMethodOverrideHeader(HttpMethod.Delete);
-                AddCommonHeaders();
-                var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
-                    string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
-                    new StringContent(" ")).ConfigureAwait(false);
-                activeMessageRedeemResponseMessage.EnsureSuccessStatusCode();
-                return 0;
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                throw new FutException(string.Format("Not implemented via {0}", appVersion.ToString()));
-            }
-            else
-            {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
-            }
+            AddMethodOverrideHeader(HttpMethod.Delete);
+            AddCommonHeaders();
+            var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
+                string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
+                new StringContent(" ")).ConfigureAwait(false);
+
+            activeMessageRedeemResponseMessage.EnsureSuccessStatusCode();
+
+            return 0;
         }
     }
 }

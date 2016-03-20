@@ -1,17 +1,15 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
-using System;
-using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class PlaceBidRequest : FutRequestBase, IFutRequest<AuctionResponse>
     {
         private readonly AuctionInfo _auctionInfo;
-        private AppVersion _appVersion;
         private readonly uint _bidAmount;
 
         public PlaceBidRequest(AuctionInfo auctionInfo, uint bidAmount)
@@ -21,35 +19,27 @@ namespace UltimateTeam.Toolkit.Requests
             _bidAmount = bidAmount;
         }
 
-        public async Task<AuctionResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<AuctionResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            Task<HttpResponseMessage> bidResponseMessageTask;
+            var uriString = string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId);
+            var content = new StringContent($"{{\"bid\":{_bidAmount}}}");
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddMethodOverrideHeader(HttpMethod.Put);
                 AddCommonHeaders();
-                var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
-                var bidResponseMessage = await HttpClient
-                    .PostAsync(string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId), new StringContent(content))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(bidResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var content = string.Format("{{\"bid\":{0}}}", _bidAmount);
-                var bidResponseMessage = await HttpClient
-                    .PutAsync(string.Format(Resources.FutHome + Resources.Bid + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), _auctionInfo.TradeId), new StringContent(content))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(bidResponseMessage);
+                bidResponseMessageTask = HttpClient.PostAsync(uriString, content);
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                bidResponseMessageTask = HttpClient.PutAsync(uriString + $"?_={DateTime.Now.ToUnixTime()}", content);
             }
+
+            var bidResponseMessage = await bidResponseMessageTask.ConfigureAwait(false);
+
+            return await Deserialize<AuctionResponse>(bidResponseMessage);
         }
     }
 }

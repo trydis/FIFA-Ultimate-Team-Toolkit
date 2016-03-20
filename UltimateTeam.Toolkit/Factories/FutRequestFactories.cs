@@ -222,7 +222,6 @@ namespace UltimateTeam.Toolkit.Factories
             request.HttpClient = HttpClient;
             request.Resources = _resources;
             request.NucleusId = _nucleusId;
-            request.PersonaId = _personaId;
             request.AppVersion = _appVersion;
 
             return request;

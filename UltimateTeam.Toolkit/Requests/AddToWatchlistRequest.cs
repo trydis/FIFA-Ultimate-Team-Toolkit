@@ -1,67 +1,55 @@
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using UltimateTeam.Toolkit.Exceptions;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-     internal class AddToWatchlistRequest : FutRequestBase, IFutRequest<byte>
+    internal class AddToWatchlistRequest : FutRequestBase, IFutRequest<byte>
     {
+        private readonly IEnumerable<AuctionInfo> _auctioninfo;
 
-         private readonly IEnumerable<AuctionInfo> _auctioninfo;
-         private AppVersion _appVersion;
-
-         public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
+        public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
         {
             auctioninfo.ThrowIfNullArgument();
             _auctioninfo = auctioninfo;
         }
 
-         public async Task<byte> PerformRequestAsync(AppVersion appVersion)
-         {
-            _appVersion = appVersion;
+        public async Task<byte> PerformRequestAsync()
+        {
+            var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
+            var content = $"{{\"auctionInfo\":[{{\"id\":{tradeIds}}}]}}";
+            var uriString = Resources.FutHome + Resources.Watchlist + $"?tradeId={tradeIds}";
+            ConfiguredTaskAwaitable<HttpResponseMessage> addToWatchlistTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
-
                 AddMethodOverrideHeader(HttpMethod.Put);
                 AddCommonHeaders();
-
-                var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
-                var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", tradeIds);
-                var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
-
-                var addToWatchlistResponseMessage = await HttpClient
+                addToWatchlistTask = HttpClient
                     .PostAsync(uriString, new StringContent(content))
                     .ConfigureAwait(false);
-                addToWatchlistResponseMessage.EnsureSuccessStatusCode();
 
-                return 0;
             }
-            else if (_appVersion == AppVersion.CompanionApp)
+            if (AppVersion == AppVersion.CompanionApp)
             {
                 AddCommonMobileHeaders();
+                uriString += $"&_={DateTime.Now.ToUnixTime()}";
 
-                var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
-                var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}" + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), tradeIds);
-                var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
-
-                var addToWatchlistResponseMessage = await HttpClient
+                addToWatchlistTask = HttpClient
                     .PutAsync(uriString, new StringContent(content))
                     .ConfigureAwait(false);
-                addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+            }
 
-                return 0;
-            }
-            else
-            {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
-            }
+            var addToWatchlistResponseMessage = await addToWatchlistTask;
+            addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+
+            return 0;
         }
     }
 }

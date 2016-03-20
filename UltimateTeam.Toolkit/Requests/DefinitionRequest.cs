@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
@@ -11,42 +10,31 @@ namespace UltimateTeam.Toolkit.Requests
     internal class DefinitionRequest : FutRequestBase, IFutRequest<DefinitionResponse>
     {
         private readonly long _baseId;
-        private AppVersion _appVersion;
 
         public DefinitionRequest(long baseId)
         {
             _baseId = baseId;
         }
 
-        public async Task<DefinitionResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<DefinitionResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = Resources.FutHome + string.Format(Resources.Definition, _baseId);
+            Task<HttpResponseMessage> definitionResponseTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddMethodOverrideHeader(HttpMethod.Get);
                 AddCommonHeaders();
-                var uriString = string.Format(Resources.FutHome + Resources.Definition, _baseId);
-                var definitionResponseMessage = await HttpClient
-                    .PostAsync(uriString, new StringContent(" "))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<DefinitionResponse>(definitionResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var uriString = string.Format(Resources.FutHome + Resources.Definition + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), _baseId);
-                var definitionResponseMessage = await HttpClient
-                    .GetAsync(uriString)
-                    .ConfigureAwait(false);
-
-                return await Deserialize<DefinitionResponse>(definitionResponseMessage);
+                definitionResponseTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                uriString += $"&_={DateTime.Now.ToUnixTime()}";
+                definitionResponseTask = HttpClient.GetAsync(uriString);
             }
+
+            return await Deserialize<DefinitionResponse>(await definitionResponseTask.ConfigureAwait(false));
         }
     }
 }

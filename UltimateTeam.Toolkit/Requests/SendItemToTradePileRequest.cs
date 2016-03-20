@@ -1,17 +1,15 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
-using System;
-using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class SendItemToTradePileRequest : FutRequestBase, IFutRequest<SendItemToTradePileResponse>
     {
         private readonly ItemData _itemData;
-        private AppVersion _appVersion;
 
         public SendItemToTradePileRequest(ItemData itemData)
         {
@@ -19,35 +17,28 @@ namespace UltimateTeam.Toolkit.Requests
             _itemData = itemData;
         }
 
-        public async Task<SendItemToTradePileResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<SendItemToTradePileResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = Resources.FutHome + Resources.ListItem;
+            var content = new StringContent($"{{\"itemData\":[{{\"id\":\"{_itemData.Id}\",\"pile\":\"trade\"}}]}}");
+            Task<HttpResponseMessage> tradepileResponseMessageTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddMethodOverrideHeader(HttpMethod.Put);
                 AddCommonHeaders();
-                var content = string.Format("{{\"itemData\":[{{\"id\":\"{0}\",\"pile\":\"trade\"}}]}}", _itemData.Id);
-                var tradepileResponseMessage = await HttpClient
-                    .PostAsync(string.Format(Resources.FutHome + Resources.ListItem), new StringContent(content))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<SendItemToTradePileResponse>(tradepileResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var content = string.Format("{{\"itemData\":[{{\"id\":\"{0}\",\"pile\":\"trade\"}}]}}", _itemData.Id);
-                var tradepileResponseMessage = await HttpClient
-                    .PutAsync(string.Format(Resources.FutHome + Resources.ListItem + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now)), new StringContent(content))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<SendItemToTradePileResponse>(tradepileResponseMessage);
+                tradepileResponseMessageTask = HttpClient.PostAsync(uriString, content);
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
+                tradepileResponseMessageTask = HttpClient.PutAsync(uriString, content);
             }
+
+            var tradepileResponseMessage = await tradepileResponseMessageTask.ConfigureAwait(false);
+
+            return await Deserialize<SendItemToTradePileResponse>(tradepileResponseMessage);
         }
     }
 }

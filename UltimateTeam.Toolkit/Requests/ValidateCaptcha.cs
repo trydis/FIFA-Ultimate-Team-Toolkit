@@ -8,37 +8,29 @@ namespace UltimateTeam.Toolkit.Requests
     internal class ValidateCaptcha : FutRequestBase, IFutRequest<byte>
     {
         private readonly int _answer;
-        private AppVersion _appVersion;
 
         public ValidateCaptcha(int answer)
         {
             _answer = answer;
         }
 
-        public async Task<byte> PerformRequestAsync(AppVersion appVersion)
+        public async Task<byte> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            if (AppVersion != AppVersion.WebApp)
+            {
+                throw new FutException($"Not implemented for {AppVersion}");
+            }
 
-            if (_appVersion == AppVersion.WebApp)
-            {
-                AddMethodOverrideHeader(HttpMethod.Post);
-                AddLoginHeaders();
-                var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
-                var captchaResponseMessage = await HttpClient
-                    .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(content))
-                    .ConfigureAwait(false);
-                captchaResponseMessage.EnsureSuccessStatusCode();
+            AddMethodOverrideHeader(HttpMethod.Post);
+            AddLoginHeaders();
+            var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
+            var captchaResponseMessage = await HttpClient
+                .PostAsync(Resources.CaptchaValidate, new StringContent(content))
+                .ConfigureAwait(false);
 
-                return 0;
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                throw new FutException(string.Format("Not implemented via {0}", appVersion.ToString()));
-            }
-            else
-            {
-                throw new FutException(string.Format("Unknown AppVersion ({0})", appVersion.ToString()));
-            }
+            captchaResponseMessage.EnsureSuccessStatusCode();
+
+            return 0;
         }
     }
 }

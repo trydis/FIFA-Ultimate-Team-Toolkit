@@ -6,41 +6,27 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class RemoveSoldItemsFromTradePileRequest : FutRequestBase, IFutRequest<byte>
     {
-        private AppVersion _appVersion;
-
-        public async Task<byte> PerformRequestAsync(AppVersion appVersion)
+        public async Task<byte> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, "sold");
+            Task<HttpResponseMessage> removeFromTradePileMessageTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
-                var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, "sold");
-
                 AddMethodOverrideHeader(HttpMethod.Delete);
                 AddCommonHeaders();
-                var removeFromTradePileMessage = await HttpClient
-                    .PostAsync(uriString, new StringContent(" "))
-                    .ConfigureAwait(false);
-                removeFromTradePileMessage.EnsureSuccessStatusCode();
-
-                return 0;
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, "sold");
-
-                AddCommonMobileHeaders();
-                var removeFromTradePileMessage = await HttpClient
-                    .DeleteAsync(uriString)
-                    .ConfigureAwait(false);
-                removeFromTradePileMessage.EnsureSuccessStatusCode();
-
-                return 0;
+                removeFromTradePileMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else
             {
-                return 0;
+                AddCommonMobileHeaders();
+                removeFromTradePileMessageTask = HttpClient.DeleteAsync(uriString);
             }
+
+            var removeFromTradePileMessage = await removeFromTradePileMessageTask.ConfigureAwait(false);
+            removeFromTradePileMessage.EnsureSuccessStatusCode();
+
+            return 0;
         }
     }
 }

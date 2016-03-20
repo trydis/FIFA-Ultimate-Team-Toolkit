@@ -21,7 +21,7 @@ namespace UltimateTeam.Toolkit.Tests
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturning<T>(T result) where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
+            mock.Setup(request => request.PerformRequestAsync())
                 .Returns(() => Task.FromResult(result));
 
             return mock;
@@ -30,7 +30,7 @@ namespace UltimateTeam.Toolkit.Tests
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturningNull<T>() where T : class
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
+            mock.Setup(request => request.PerformRequestAsync())
                 .Returns(() => Task.FromResult(default(T)));
 
             return mock;
@@ -39,7 +39,7 @@ namespace UltimateTeam.Toolkit.Tests
         public static Mock<IFutRequest<T>> CreateMockFutRequestThrowingException<T>()
         {
             var mock = new Mock<IFutRequest<T>>();
-            mock.Setup(request => request.PerformRequestAsync(AppVersion.WebApp))
+            mock.Setup(request => request.PerformRequestAsync())
                 .Throws(new HttpRequestException("Things went south..."));
 
             return mock;

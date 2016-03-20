@@ -14,9 +14,9 @@ namespace UltimateTeam.Toolkit.Extensions
 
         public static long ToUnixTime(this DateTime input)
         {
-            var duration = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
+            var duration = input - new DateTime(1970, 1, 1, 0, 0, 0);
 
-            return ((long)(1000 * duration.TotalSeconds));
+            return (long)(1000 * duration.TotalSeconds);
         }
     }
 }

@@ -16,10 +16,10 @@ namespace UltimateTeam.Toolkit.Requests
     {
         private readonly LoginDetails _loginDetails;
         private readonly ITwoFactorCodeProvider _twoFactorCodeProvider;
-        private AppVersion _appVersion;
         private IHasher _hasher;
 
-        private string _machineKey = GetRandomHexNumber(16);
+        private static readonly Random Random = new Random();
+        private readonly string _machineKey = GetRandomHexNumber(16);
         private string _sessionId = string.Empty;
         private string _powSessionId = string.Empty;
         private string _nucUserId = string.Empty;
@@ -44,10 +44,8 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.MessageHandler.CookieContainer = cookieContainer;
         }
 
-        public async Task<LoginResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<LoginResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
-
             try
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
@@ -62,10 +60,10 @@ namespace UltimateTeam.Toolkit.Requests
                 _powSessionId = powSessionId.Sid;
 
                 var nucleusId = await GetMobileNucleusIdAsync();
-                _nucPersonaId = nucleusId.UserData.Data.Where(n => n.Sku == GetGameSku(_loginDetails.Platform)).LastOrDefault().NucPersId;
+                _nucPersonaId = nucleusId.UserData.Data.LastOrDefault(n => n.Sku == GetGameSku(_loginDetails.Platform)).NucPersId;
                 var shards = await GetMobileShardsAsync();
                 var userAccounts = await GetMobileUserAccountsAsync(_loginDetails.Platform);
-                var sessionId = await AuthAsync(authCode.Code, nucleusId.UserData.Data.Where(n => n.Sku == GetGameSku(_loginDetails.Platform)).LastOrDefault().NucPersId, GetGameSku(_loginDetails.Platform));
+                var sessionId = await AuthAsync(authCode.Code, nucleusId.UserData.Data.LastOrDefault(n => n.Sku == GetGameSku(_loginDetails.Platform)).NucPersId, GetGameSku(_loginDetails.Platform));
                 _sessionId = sessionId.Sid;
 
                 var phishingToken = await ValidateAsync(_loginDetails);
@@ -74,7 +72,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
             catch (Exception e)
             {
-                throw new FutException(string.Format("Unable to login to {0}", appVersion.ToString()), e);
+                throw new FutException($"Unable to login to {AppVersion}", e);
             }
         }
 
@@ -83,13 +81,13 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             AddContentHeader("application/x-www-form-urlencoded");
             var authTokenResponseMessage = await HttpClient.PostAsync(Resources.Token, new FormUrlEncodedContent(
-                                                                                                                         new[]
-                                                                                                                         {
-                                                                                                                             new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                                                                                                                             new KeyValuePair<string, string>("code", code),
-                                                                                                                             new KeyValuePair<string, string>("client_id", "FIFA-16-MOBILE-COMPANION"),
-                                                                                                                             new KeyValuePair<string, string>("client_secret", "KrEoFK9ssvXKRWnTMgAu1OAMn7Y37ueUh1Vy7dIk2earFDUDABCvZuNIidYxxNbhwbj3y8pq6pSf8zBW"),
-                                                                                                                         }));
+                                                                                           new[]
+                                                                                           {
+                                                                                               new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                                                                                               new KeyValuePair<string, string>("code", code),
+                                                                                               new KeyValuePair<string, string>("client_id", "FIFA-16-MOBILE-COMPANION"),
+                                                                                               new KeyValuePair<string, string>("client_secret", "KrEoFK9ssvXKRWnTMgAu1OAMn7Y37ueUh1Vy7dIk2earFDUDABCvZuNIidYxxNbhwbj3y8pq6pSf8zBW"),
+                                                                                           }));
             return await Deserialize<AuthToken>(authTokenResponseMessage);
         }
 
@@ -97,33 +95,33 @@ namespace UltimateTeam.Toolkit.Requests
         {
             AddMobileLoginHeaders();
             AddAuthorizationHeader(authCode);
-            var PidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pid));
-            return await Deserialize<PidData>(PidDataResponseMessage);
+            var pidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pid));
+            return await Deserialize<PidData>(pidDataResponseMessage);
         }
 
         private async Task<AuthCode> GetMobileAuthCodeAsync(string accessToken)
         {
             AddMobileLoginHeaders();
             var authTokenResponseMessage = await HttpClient.PostAsync(Resources.AuthCode, new FormUrlEncodedContent(
-                                                                                                                         new[]
-                                                                                                                         {
-                                                                                                                             new KeyValuePair<string, string>("client_id", "FOS-SERVER"),
-                                                                                                                             new KeyValuePair<string, string>("redirect_uri", "nucleus:rest"),
-                                                                                                                             new KeyValuePair<string, string>("response_type", "code"),
-                                                                                                                             new KeyValuePair<string, string>("access_token", accessToken),
-                                                                                                                             new KeyValuePair<string, string>("machineProfileKey", _machineKey),
-                                                                                                                         }));
+                                                                                              new[]
+                                                                                              {
+                                                                                                  new KeyValuePair<string, string>("client_id", "FOS-SERVER"),
+                                                                                                  new KeyValuePair<string, string>("redirect_uri", "nucleus:rest"),
+                                                                                                  new KeyValuePair<string, string>("response_type", "code"),
+                                                                                                  new KeyValuePair<string, string>("access_token", accessToken),
+                                                                                                  new KeyValuePair<string, string>("machineProfileKey", _machineKey),
+                                                                                              }));
             return await Deserialize<AuthCode>(authTokenResponseMessage);
         }
 
 
-        private async Task<Auth> AuthPOWAsync(string AuthCode)
+        private async Task<Auth> AuthPOWAsync(string authCode)
         {
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-            var authMessage = await HttpClient.PostAsync(string.Format(Resources.POWAuth, CreateTimestamp()), new StringContent(
-               string.Format(@"{{ ""isReadOnly"":true,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{0}"",""redirectUrl"":""nucleus:rest""}} }}", AuthCode)));
+            var content = $@"{{ ""isReadOnly"":true,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}} }}";
+            var authMessage = await HttpClient.PostAsync(string.Format(Resources.POWAuth, DateTime.Now.ToUnixTime()), new StringContent(content));
             var authResponse = await Deserialize<Auth>(authMessage);
 
             _powSessionId = authResponse.Sid;
@@ -136,7 +134,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, _powSessionId);
-            var nucleusResponseMessage = await HttpClient.GetAsync(string.Format(Resources.NucleusId, _nucUserId, CreateTimestamp()));
+            var nucleusResponseMessage = await HttpClient.GetAsync(string.Format(Resources.NucleusId, _nucUserId, DateTime.Now.ToUnixTime()));
             return await Deserialize<User>(nucleusResponseMessage);
         }
 
@@ -145,7 +143,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
+            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
             return await Deserialize<Shards>(shardsResponseMessage);
         }
 
@@ -154,17 +152,17 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
+            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
             return await Deserialize<UserAccounts>(accountInfoResponseMessage);
         }
 
-        private async Task<Auth> AuthAsync(string AuthCode, string PersonaId, string Sku)
+        private async Task<Auth> AuthAsync(string authCode, string personaId, string sku)
         {
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
-            var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, CreateTimestamp()), new StringContent(
-               string.Format(@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{0}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{1}"",""gameSku"":""{2}"" }}", AuthCode, PersonaId, Sku)));
+            var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
+            var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, DateTime.Now.ToUnixTime()), new StringContent(content));
             var authResponse = await Deserialize<Auth>(authMessage);
 
             return authResponse;
@@ -255,7 +253,7 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new FutException("Incorrect TwoFactorCode entered.");
 
             if (contentData.Contains("Tired of waiting for your code?"))
-                await SkipAuthenticatorAdvertise(codeResponseMessage);
+                await SkipAuthenticatorAdvertiseAsync(codeResponseMessage);
 
             //TO DO: How to verify, that content is a companion code
             else if (contentData.Length <= 64)
@@ -264,7 +262,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        private async Task SkipAuthenticatorAdvertise(HttpResponseMessage codeResponse)
+        private async Task SkipAuthenticatorAdvertiseAsync(HttpResponseMessage codeResponse)
         {
             var responseContent = await codeResponse.Content.ReadAsStringAsync();
 
@@ -291,28 +289,24 @@ namespace UltimateTeam.Toolkit.Requests
 
             //check if twofactorcode is required
             var contentData = await mainPageResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to") || contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator"))
+            if (contentData.Contains("We sent a security code to your") ||
+                contentData.Contains("Your security code was sent to") ||
+                contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator"))
+            {
                 await SetTwoFactorCodeAsync(mainPageResponseMessage);
+            }
 
             return mainPageResponseMessage;
         }
 
-        private static long CreateTimestamp()
-        {
-            var duration = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
-
-            return ((long)(1000 * duration.TotalSeconds));
-        }
-
-        static Random random = new Random();
         public static string GetRandomHexNumber(int digits)
         {
             byte[] buffer = new byte[digits / 2];
-            random.NextBytes(buffer);
+            Random.NextBytes(buffer);
             string result = String.Concat(buffer.Select(x => x.ToString("X2")).ToArray());
             if (digits % 2 == 0)
                 return result;
-            return result + random.Next(16).ToString("X");
+            return result + Random.Next(16).ToString("X");
         }
     }
 }

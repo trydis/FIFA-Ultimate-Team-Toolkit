@@ -1,44 +1,34 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
-using System;
-using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class TradePileRequest : FutRequestBase, IFutRequest<AuctionResponse>
     {
-        private AppVersion _appVersion;
-
-        public async Task<AuctionResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<AuctionResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = Resources.FutHome + Resources.TradePile;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddCommonHeaders();
                 AddMethodOverrideHeader(HttpMethod.Get);
-                var tradePileResponseMessage = await HttpClient
-                    .GetAsync(string.Format(Resources.FutHome + Resources.TradePile))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(tradePileResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var tradePileResponseMessage = await HttpClient
-                    .GetAsync(string.Format(Resources.FutHome + Resources.TradePile + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now)))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(tradePileResponseMessage);
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
             }
+
+            var tradePileResponseMessage = await HttpClient
+                .GetAsync(string.Format(uriString))
+                .ConfigureAwait(false);
+
+            return await Deserialize<AuctionResponse>(tradePileResponseMessage);
         }
     }
 }

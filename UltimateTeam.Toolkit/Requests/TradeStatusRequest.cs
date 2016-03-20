@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
-using System;
-using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class TradeStatusRequest : FutRequestBase, IFutRequest<AuctionResponse>
     {
         private readonly IEnumerable<long> _tradeIds;
-        private AppVersion _appVersion;
 
         public TradeStatusRequest(IEnumerable<long> tradeIds)
         {
@@ -20,36 +18,26 @@ namespace UltimateTeam.Toolkit.Requests
             _tradeIds = tradeIds;
         }
 
-        public async Task<AuctionResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<AuctionResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds));
+            Task<HttpResponseMessage> tradeStatusResponseMessageTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddCommonHeaders();
                 AddMethodOverrideHeader(HttpMethod.Get);
-                var tradeStatusResponseMessage = await HttpClient
-                    .PostAsync(
-                    string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds)),
-                    new StringContent(" "))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var tradeStatusResponseMessage = await HttpClient
-                    .GetAsync(
-                    string.Format(Resources.FutHome + Resources.TradeStatus + "&_=" + DateTimeExtensions.ToUnixTime(DateTime.Now), string.Join("%2C", _tradeIds)))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
+                tradeStatusResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                tradeStatusResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
             }
+
+            var tradeStatusResponseMessage = await tradeStatusResponseMessageTask.ConfigureAwait(false);
+
+            return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
         }
     }
 }

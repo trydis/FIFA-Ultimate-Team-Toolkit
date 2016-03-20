@@ -78,7 +78,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string SquadDetails = "squad/{0}";
 
-        public const string ReList = "relist";
+        public const string ReList = "/relist";
 
         public const string ActiveMessageList = "activeMessage";
 

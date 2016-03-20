@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
@@ -10,35 +9,26 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class WatchlistRequest : FutRequestBase, IFutRequest<WatchlistResponse>
     {
-        private AppVersion _appVersion;
-
-        public async Task<WatchlistResponse> PerformRequestAsync(AppVersion appVersion)
+        public async Task<WatchlistResponse> PerformRequestAsync()
         {
-            _appVersion = appVersion;
+            var uriString = Resources.FutHome + Resources.Watchlist;
+            Task<HttpResponseMessage> watchlistResponseMessageTask;
 
-            if (_appVersion == AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
                 AddMethodOverrideHeader(HttpMethod.Get);
                 AddCommonHeaders();
-                var watchlistResponseMessage = await HttpClient
-                    .GetAsync(string.Format(Resources.FutHome + Resources.Watchlist))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
-            }
-            else if (_appVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                var watchlistResponseMessage = await HttpClient
-                    .GetAsync(string.Format(Resources.FutHome + Resources.Watchlist + "?_=" + DateTimeExtensions.ToUnixTime(DateTime.Now)))
-                    .ConfigureAwait(false);
-
-                return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
+                watchlistResponseMessageTask = HttpClient.GetAsync(uriString);
             }
             else
             {
-                throw new FutException(string.Format("Unknown AppVersion: {0}", appVersion.ToString()));
+                AddCommonMobileHeaders();
+                watchlistResponseMessageTask = HttpClient.GetAsync(uriString + $"?_={ DateTime.Now.ToUnixTime()}");
             }
+
+            var watchlistResponseMessage = await watchlistResponseMessageTask.ConfigureAwait(false);
+
+            return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
         }
     }
 }
