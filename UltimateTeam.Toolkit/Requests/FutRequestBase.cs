@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
@@ -97,7 +96,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");
             AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
             AddUserAgent();
-			HttpClient.AddConnectionKeepAliveHeader();
+            HttpClient.AddConnectionKeepAliveHeader();
         }
 
         protected void AddLoginHeaders()
@@ -278,23 +277,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             return deserializedObject;
         }
-        
-        protected static string Serialize<T>(T classContent) where T : class
-        {
-            string serializedObject = string.Empty;
 
-            try
-            {
-                serializedObject = JsonConvert.SerializeObject(classContent);
-            }
-            catch (JsonSerializationException serializationException)
-            {
-                throw serializationException;
-            }
-
-            return serializedObject;
-        }
-        
         private static void MapAndThrowException(Exception exception, FutError futError)
         {
             // TODO: Should extract this to a separate class and keep them in a Dictionary<FutErrorCode, Func<FutError, Exception, FutErrorException>>

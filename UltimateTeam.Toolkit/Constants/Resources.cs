@@ -1,11 +1,9 @@
-﻿using UltimateTeam.Toolkit.Models;
+﻿using System;
 
 namespace UltimateTeam.Toolkit.Constants
 {
     internal class Resources
     {
-        private AppVersion _appVersion;
-
         public string Validate;
 
         public string Auth;
@@ -91,9 +89,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public Resources(AppVersion appVersion)
         {
-            _appVersion = appVersion;
-
-            switch (_appVersion)
+            switch (appVersion)
             {
                 case AppVersion.WebApp:
 
@@ -142,6 +138,8 @@ namespace UltimateTeam.Toolkit.Constants
                     ClubImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(appVersion), appVersion, null);
             }
         }
     }

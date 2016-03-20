@@ -610,7 +610,7 @@ namespace UltimateTeam.Toolkit.Factories
         {
             get
             {
-                return _getpriceRangesFactory ?? (_getpriceRangesFactory = (itemIds) => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
+                return _getpriceRangesFactory ?? (_getpriceRangesFactory = itemIds => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
             }
             set
             {

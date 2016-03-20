@@ -1,10 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
-using NUnit.Framework;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
 
@@ -20,7 +19,7 @@ namespace UltimateTeam.Toolkit.Tests
         {
             _futClient = new FutClient();
         }
-        
+
         /// <summary>
         /// Tests how many searches can be done per second, excluding any server communication.
         /// </summary>

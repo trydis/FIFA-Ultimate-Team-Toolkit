@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Constants;
 
 namespace UltimateTeam.Toolkit.Requests
 {

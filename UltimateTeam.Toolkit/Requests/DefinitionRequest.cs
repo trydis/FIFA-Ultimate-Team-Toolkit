@@ -1,11 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Parameters;
-using UltimateTeam.Toolkit.Extensions;
-using System;
 using UltimateTeam.Toolkit.Exceptions;
+using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {

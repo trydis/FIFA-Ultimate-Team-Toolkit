@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Moq;
+using System;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Moq;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Requests;
 
@@ -43,7 +44,7 @@ namespace UltimateTeam.Toolkit.Tests
 
             return mock;
         }
-        
+
         public static Mock<IHttpClient> CreateMockHttpClientReturningJson(HttpMethod method, string json)
         {
             var mock = new Mock<IHttpClient>();

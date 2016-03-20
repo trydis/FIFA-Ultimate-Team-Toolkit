@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
