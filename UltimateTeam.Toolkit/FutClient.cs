@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
@@ -29,56 +28,23 @@ namespace UltimateTeam.Toolkit
         public async Task<LoginResponse> LoginAsync(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
             loginDetails.ThrowIfNullArgument();
-            RequestFactories.AppVersion.ThrowIfNullArgument();
 
-            if (RequestFactories.AppVersion == AppVersion.WebApp)
-            {
-                var loginRequest = RequestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
-                var loginResponse = await loginRequest.PerformRequestAsync(RequestFactories.AppVersion);
-                RequestFactories.PhishingToken = loginResponse.PhishingToken;
-                RequestFactories.SessionId = loginResponse.SessionId;
-                RequestFactories.NucleusId = loginResponse.NucleusId;
-                RequestFactories.PersonaId = loginResponse.PersonaId;
+            var loginRequest = RequestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
+            var loginResponse = await loginRequest.PerformRequestAsync(RequestFactories.AppVersion);
+            RequestFactories.PhishingToken = loginResponse.PhishingToken;
+            RequestFactories.SessionId = loginResponse.SessionId;
+            RequestFactories.NucleusId = loginResponse.NucleusId;
+            RequestFactories.PersonaId = loginResponse.PersonaId;
 
-                return loginResponse;
-            }
-            else if (RequestFactories.AppVersion == AppVersion.CompanionApp)
-            {
-                var loginRequest = RequestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
-                var loginResponse = await loginRequest.PerformRequestAsync(RequestFactories.AppVersion);
-
-                RequestFactories.PhishingToken = loginResponse.PhishingToken;
-                RequestFactories.SessionId = loginResponse.SessionId;
-                RequestFactories.NucleusId = loginResponse.NucleusId;
-                RequestFactories.PersonaId = loginResponse.PersonaId;
-
-                return loginResponse;
-            }
-            else
-            {
-                return null;
-            }
+            return loginResponse;
         }
 
         public async Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
         {
             searchParameters.ThrowIfNullArgument();
-            RequestFactories.AppVersion.ThrowIfNullArgument();
 
-            if (RequestFactories.AppVersion == AppVersion.WebApp)
-            {
-                var searchResponse = await RequestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync(RequestFactories.AppVersion);
-                return searchResponse;
-            }
-            else if (RequestFactories.AppVersion == AppVersion.CompanionApp)
-            {
-                var searchResponse = await RequestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync(RequestFactories.AppVersion);
-                return searchResponse;
-            }
-            else
-            {
-                return null;
-            }
+            var searchResponse = await RequestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync(RequestFactories.AppVersion);
+            return searchResponse;
         }
 
         public Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0)
