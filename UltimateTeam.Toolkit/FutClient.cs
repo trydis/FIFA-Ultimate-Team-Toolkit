@@ -39,12 +39,11 @@ namespace UltimateTeam.Toolkit
             return loginResponse;
         }
 
-        public async Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
+        public Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
         {
             searchParameters.ThrowIfNullArgument();
 
-            var searchResponse = await RequestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync();
-            return searchResponse;
+            return RequestFactories.SearchRequestFactory(searchParameters).PerformRequestAsync();
         }
 
         public Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0)
