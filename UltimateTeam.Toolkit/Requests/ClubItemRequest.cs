@@ -40,7 +40,7 @@ namespace UltimateTeam.Toolkit.Requests
                     .GetAsync(uriString)
                     .ConfigureAwait(false);
 
-            return await Deserialize<ClubItemResponse>(clubItemResponseMessage);
+            return await DeserializeAsync<ClubItemResponse>(clubItemResponseMessage);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<bool> IsLoggedInAsync()
         {
             var loginResponse = await HttpClient.GetAsync(Resources.LoggedIn);
-            var loggedInResponse = await Deserialize<IsUserLoggedIn>(loginResponse);
+            var loggedInResponse = await DeserializeAsync<IsUserLoggedIn>(loginResponse);
 
             return loggedInResponse.IsLoggedIn;
         }
@@ -94,7 +94,7 @@ namespace UltimateTeam.Toolkit.Requests
                 {
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
-            var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
+            var validateResponse = await DeserializeAsync<ValidateResponse>(validateResponseMessage);
 
             return validateResponse.Token;
         }
@@ -166,7 +166,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
 
-            return await Deserialize<UserAccounts>(accountInfoResponseMessage);
+            return await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
         }
 
         private async Task<Shards> GetShardsAsync(string nucleusId)
@@ -180,7 +180,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader(Resources.BaseShowoff);
             var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
 
-            return await Deserialize<Shards>(shardsResponseMessage);
+            return await DeserializeAsync<Shards>(shardsResponseMessage);
         }
 
         private async Task<string> GetNucleusIdAsync()

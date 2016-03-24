@@ -88,7 +88,7 @@ namespace UltimateTeam.Toolkit.Requests
                                                                                                new KeyValuePair<string, string>("client_id", "FIFA-16-MOBILE-COMPANION"),
                                                                                                new KeyValuePair<string, string>("client_secret", "KrEoFK9ssvXKRWnTMgAu1OAMn7Y37ueUh1Vy7dIk2earFDUDABCvZuNIidYxxNbhwbj3y8pq6pSf8zBW"),
                                                                                            }));
-            return await Deserialize<AuthToken>(authTokenResponseMessage);
+            return await DeserializeAsync<AuthToken>(authTokenResponseMessage);
         }
 
         private async Task<PidData> GetMobilePidAsync(string authCode)
@@ -96,7 +96,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             AddAuthorizationHeader(authCode);
             var pidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pid));
-            return await Deserialize<PidData>(pidDataResponseMessage);
+            return await DeserializeAsync<PidData>(pidDataResponseMessage);
         }
 
         private async Task<AuthCode> GetMobileAuthCodeAsync(string accessToken)
@@ -111,7 +111,7 @@ namespace UltimateTeam.Toolkit.Requests
                                                                                                   new KeyValuePair<string, string>("access_token", accessToken),
                                                                                                   new KeyValuePair<string, string>("machineProfileKey", _machineKey),
                                                                                               }));
-            return await Deserialize<AuthCode>(authTokenResponseMessage);
+            return await DeserializeAsync<AuthCode>(authTokenResponseMessage);
         }
 
 
@@ -122,7 +122,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             var content = $@"{{ ""isReadOnly"":true,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}} }}";
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.POWAuth, DateTime.Now.ToUnixTime()), new StringContent(content));
-            var authResponse = await Deserialize<Auth>(authMessage);
+            var authResponse = await DeserializeAsync<Auth>(authMessage);
 
             _powSessionId = authResponse.Sid;
 
@@ -135,7 +135,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, _powSessionId);
             var nucleusResponseMessage = await HttpClient.GetAsync(string.Format(Resources.NucleusId, _nucUserId, DateTime.Now.ToUnixTime()));
-            return await Deserialize<User>(nucleusResponseMessage);
+            return await DeserializeAsync<User>(nucleusResponseMessage);
         }
 
         private async Task<Shards> GetMobileShardsAsync()
@@ -144,7 +144,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
-            return await Deserialize<Shards>(shardsResponseMessage);
+            return await DeserializeAsync<Shards>(shardsResponseMessage);
         }
 
         private async Task<UserAccounts> GetMobileUserAccountsAsync(Platform platform)
@@ -153,7 +153,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
-            return await Deserialize<UserAccounts>(accountInfoResponseMessage);
+            return await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
         }
 
         private async Task<Auth> AuthAsync(string authCode, string personaId, string sku)
@@ -163,7 +163,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, DateTime.Now.ToUnixTime()), new StringContent(content));
-            var authResponse = await Deserialize<Auth>(authMessage);
+            var authResponse = await DeserializeAsync<Auth>(authMessage);
 
             return authResponse;
         }
@@ -178,7 +178,7 @@ namespace UltimateTeam.Toolkit.Requests
                 {
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
-            var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
+            var validateResponse = await DeserializeAsync<ValidateResponse>(validateResponseMessage);
 
             return validateResponse.Token;
         }

@@ -21,7 +21,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .GetAsync(Resources.FutHome + Resources.ActiveMessageList)
                 .ConfigureAwait(false);
 
-            return await Deserialize<ListGiftsResponse>(responseMessage);
+            return await DeserializeAsync<ListGiftsResponse>(responseMessage);
         }
     }
 }

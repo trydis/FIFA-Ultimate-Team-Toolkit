@@ -38,7 +38,7 @@ namespace UltimateTeam.Toolkit.Requests
                     .GetAsync(uriString)
                     .ConfigureAwait(false);
 
-            return await Deserialize<SquadDetailsResponse>(squadResponseMessage);
+            return await DeserializeAsync<SquadDetailsResponse>(squadResponseMessage);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace UltimateTeam.Toolkit.Requests
                 definitionResponseTask = HttpClient.GetAsync(uriString);
             }
 
-            return await Deserialize<DefinitionResponse>(await definitionResponseTask.ConfigureAwait(false));
+            return await DeserializeAsync<DefinitionResponse>(await definitionResponseTask.ConfigureAwait(false));
         }
     }
 }

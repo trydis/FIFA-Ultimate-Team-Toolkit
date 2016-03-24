@@ -39,7 +39,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             var searchResponseMessage = await searchResponseMessageTask.ConfigureAwait(false);
 
-            return await Deserialize<AuctionResponse>(searchResponseMessage);
+            return await DeserializeAsync<AuctionResponse>(searchResponseMessage);
         }
     }
 }

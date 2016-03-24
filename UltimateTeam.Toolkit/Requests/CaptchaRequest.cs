@@ -21,7 +21,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
                 .ConfigureAwait(false);
 
-            return await Deserialize<CaptchaResponse>(captchaResponse);
+            return await DeserializeAsync<CaptchaResponse>(captchaResponse);
         }
     }
 }

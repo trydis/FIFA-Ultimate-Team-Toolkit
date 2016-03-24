@@ -28,7 +28,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             var watchlistResponseMessage = await watchlistResponseMessageTask.ConfigureAwait(false);
 
-            return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
+            return await DeserializeAsync<WatchlistResponse>(watchlistResponseMessage);
         }
     }
 }

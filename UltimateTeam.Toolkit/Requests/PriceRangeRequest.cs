@@ -37,7 +37,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             var priceRangesResponseMessage = await priceRangesResponseMessageTask.ConfigureAwait(false);
 
-            return await Deserialize<List<PriceRange>>(priceRangesResponseMessage);
+            return await DeserializeAsync<List<PriceRange>>(priceRangesResponseMessage);
         }
     }
 }

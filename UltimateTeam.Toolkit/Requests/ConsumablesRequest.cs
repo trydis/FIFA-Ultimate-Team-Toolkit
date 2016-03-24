@@ -28,7 +28,7 @@ namespace UltimateTeam.Toolkit.Requests
                 .GetAsync(string.Format(uriString))
                 .ConfigureAwait(false);
 
-            return await Deserialize<ConsumablesResponse>(consumablesResponseMessage);
+            return await DeserializeAsync<ConsumablesResponse>(consumablesResponseMessage);
         }
     }
 }

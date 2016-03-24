@@ -245,7 +245,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader("Authorization", "Bearer " + authCode);
         }
 
-        protected static async Task<T> Deserialize<T>(HttpResponseMessage message) where T : class
+        protected static async Task<T> DeserializeAsync<T>(HttpResponseMessage message) where T : class
         {
             message.EnsureSuccessStatusCode();
             var messageContent = await message.Content.ReadAsStringAsync();

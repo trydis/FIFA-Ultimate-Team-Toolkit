@@ -27,7 +27,7 @@ namespace UltimateTeam.Toolkit.Requests
             var itemResponseMessage = await HttpClient
                                                 .GetAsync(string.Format(Resources.Item, _baseId))
                                                 .ConfigureAwait(false);
-            var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
+            var itemWrapper = await DeserializeAsync<ItemWrapper>(itemResponseMessage);
 
             return itemWrapper.Item;
         }

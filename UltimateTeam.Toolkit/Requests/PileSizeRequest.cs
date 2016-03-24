@@ -28,7 +28,7 @@ namespace UltimateTeam.Toolkit.Requests
                                                    .GetAsync(uriString)
                                                    .ConfigureAwait(false);
 
-            return await Deserialize<PileSizeResponse>(creditsResponseMessage);
+            return await DeserializeAsync<PileSizeResponse>(creditsResponseMessage);
         }
     }
 }
