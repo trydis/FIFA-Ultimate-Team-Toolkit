@@ -75,7 +75,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        protected void AddCommonHeaders()
+        protected void AddCommonHeaders(HttpMethod methodOverrideHeader = null)
         {
             HttpClient.ClearRequestHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
@@ -90,6 +90,10 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
             AddUserAgent();
             HttpClient.AddConnectionKeepAliveHeader();
+            if (methodOverrideHeader != null)
+            {
+                AddMethodOverrideHeader(methodOverrideHeader);
+            }
         }
 
         protected void AddLoginHeaders()
@@ -106,8 +110,6 @@ namespace UltimateTeam.Toolkit.Requests
             AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
             AddUserAgent();
         }
-
-
 
         protected void AddCommonMobileHeaders()
         {

@@ -23,8 +23,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddMethodOverrideHeader(HttpMethod.Get);
-                AddCommonHeaders();
+                AddCommonHeaders(HttpMethod.Get);
                 definitionResponseTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else

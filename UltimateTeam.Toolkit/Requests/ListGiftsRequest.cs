@@ -15,8 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new FutException($"Not implemented for {AppVersion}");
             }
 
-            AddCommonHeaders();
-            AddMethodOverrideHeader(HttpMethod.Get);
+            AddCommonHeaders(HttpMethod.Get);
             var responseMessage = await HttpClient
                 .GetAsync(Resources.FutHome + Resources.ActiveMessageList)
                 .ConfigureAwait(false);

@@ -21,8 +21,7 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new FutException($"Not implemented for {AppVersion}");
             }
 
-            AddMethodOverrideHeader(HttpMethod.Delete);
-            AddCommonHeaders();
+            AddCommonHeaders(HttpMethod.Delete);
             var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
                 string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
                 new StringContent(" ")).ConfigureAwait(false);

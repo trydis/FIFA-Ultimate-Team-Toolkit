@@ -25,8 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddMethodOverrideHeader(HttpMethod.Post);
-                AddCommonHeaders();
+                AddCommonHeaders(HttpMethod.Post);
             }
             else
             {

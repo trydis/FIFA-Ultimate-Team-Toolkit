@@ -13,8 +13,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddMethodOverrideHeader(HttpMethod.Delete);
-                AddCommonHeaders();
+                AddCommonHeaders(HttpMethod.Delete);
                 removeFromTradePileMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else

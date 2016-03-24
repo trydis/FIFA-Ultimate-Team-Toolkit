@@ -29,8 +29,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddMethodOverrideHeader(HttpMethod.Put);
-                AddCommonHeaders();
+                AddCommonHeaders(HttpMethod.Put);
                 addToWatchlistTask = HttpClient
                     .PostAsync(uriString, new StringContent(content))
                     .ConfigureAwait(false);

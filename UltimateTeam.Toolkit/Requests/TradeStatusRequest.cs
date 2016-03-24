@@ -25,8 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders();
-                AddMethodOverrideHeader(HttpMethod.Get);
+                AddCommonHeaders(HttpMethod.Get);
                 tradeStatusResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
             }
             else

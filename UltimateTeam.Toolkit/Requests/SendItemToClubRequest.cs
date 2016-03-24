@@ -25,8 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddMethodOverrideHeader(HttpMethod.Put);
-                AddCommonHeaders();
+                AddCommonHeaders(HttpMethod.Put);
                 clubResponseMessageTask = HttpClient.PostAsync(uriString, content);
             }
             else
