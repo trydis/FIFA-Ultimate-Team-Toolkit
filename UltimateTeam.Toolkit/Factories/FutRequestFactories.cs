@@ -12,8 +12,6 @@ namespace UltimateTeam.Toolkit.Factories
 {
     public class FutRequestFactories
     {
-        private readonly CookieContainer _cookieContainer;
-
         private readonly Resources _webResources = new Resources(AppVersion.WebApp);
 
         private readonly Resources _mobileResources = new Resources(AppVersion.CompanionApp);
@@ -98,13 +96,15 @@ namespace UltimateTeam.Toolkit.Factories
 
         public FutRequestFactories()
         {
-            _cookieContainer = new CookieContainer();
+            CookieContainer = new CookieContainer();
         }
 
         public FutRequestFactories(CookieContainer cookieContainer)
         {
-            _cookieContainer = cookieContainer;
+            CookieContainer = cookieContainer;
         }
+
+        public CookieContainer CookieContainer { get; }
 
         public string PhishingToken
         {
@@ -188,21 +188,21 @@ namespace UltimateTeam.Toolkit.Factories
                     {
                         var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
                         _resources = _webResources;
-                        loginRequest.SetCookieContainer(_cookieContainer);
+                        loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
                     }
                     else if (details.AppVersion == AppVersion.CompanionApp)
                     {
                         var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileResources };
                         _resources = _mobileResources;
-                        loginRequest.SetCookieContainer(_cookieContainer);
+                        loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
                     }
                     else
                     {
                         var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
                         _resources = _webResources;
-                        loginRequest.SetCookieContainer(_cookieContainer);
+                        loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
                     }
 
