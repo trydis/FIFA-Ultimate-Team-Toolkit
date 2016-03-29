@@ -278,6 +278,12 @@ namespace UltimateTeam.Toolkit.Requests
             authenticatorResponseMessage.EnsureSuccessStatusCode();
 
             var contentData = await authenticatorResponseMessage.Content.ReadAsStringAsync();
+
+            //TO DO: How to verify, that content is a companion code
+            if (contentData.Length <= 64)
+            {
+                _code = contentData;
+            }
         }
 
         private async Task<HttpResponseMessage> GetMainPageAsync()
