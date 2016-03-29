@@ -1,9 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
-using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -20,15 +21,24 @@ namespace UltimateTeam.Toolkit.Requests
         public async Task<AuctionResponse> PerformRequestAsync()
         {
             var uriString = string.Format(Resources.FutHome + Resources.TransferMarket + "?start={0}&num={1}",
-                (_searchParameters.Page - 1) * _searchParameters.PageSize, _searchParameters.PageSize + 1);
+                                          (_searchParameters.Page - 1) * _searchParameters.PageSize, _searchParameters.PageSize + 1);
             _searchParameters.BuildUriString(ref uriString);
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var searchResponseMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
-                .ConfigureAwait(false);
+            Task<HttpResponseMessage> searchResponseMessageTask;
 
-            return await Deserialize<AuctionResponse>(searchResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+                searchResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                searchResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
+            }
+
+            var searchResponseMessage = await searchResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<AuctionResponse>(searchResponseMessage);
         }
     }
 }

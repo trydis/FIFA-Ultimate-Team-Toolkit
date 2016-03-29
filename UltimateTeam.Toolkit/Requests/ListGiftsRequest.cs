@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -9,13 +10,17 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<ListGiftsResponse> PerformRequestAsync()
         {
-            AddCommonHeaders();
-            AddMethodOverrideHeader(HttpMethod.Get);
+            if (AppVersion != AppVersion.WebApp)
+            {
+                throw new FutException($"Not implemented for {AppVersion}");
+            }
+
+            AddCommonHeaders(HttpMethod.Get);
             var responseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.ActiveMessageList))
+                .GetAsync(Resources.FutHome + Resources.ActiveMessageList)
                 .ConfigureAwait(false);
 
-            return await Deserialize<ListGiftsResponse>(responseMessage);
+            return await DeserializeAsync<ListGiftsResponse>(responseMessage);
         }
     }
 }

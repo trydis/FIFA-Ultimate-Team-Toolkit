@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -20,13 +20,23 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<List<PriceRange>> PerformRequestAsync()
         {
-            AddCommonHeaders();
-            AddMethodOverrideHeader(HttpMethod.Get);
-            var priceRangesResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.FutHome + Resources.PriceRange, string.Join(",", _itemIds)), new StringContent(" ", Encoding.UTF8, "application/json"))
-                .ConfigureAwait(false);
+            var uriString = string.Format(Resources.FutHome + Resources.PriceRange, string.Join(",", _itemIds));
+            Task<HttpResponseMessage> priceRangesResponseMessageTask;
 
-            return await Deserialize<List<PriceRange>>(priceRangesResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+                priceRangesResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                priceRangesResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
+            }
+
+            var priceRangesResponseMessage = await priceRangesResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<List<PriceRange>>(priceRangesResponseMessage);
         }
     }
 }

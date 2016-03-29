@@ -1,6 +1,4 @@
-﻿using UltimateTeam.Toolkit.Constants;
-
-namespace UltimateTeam.Toolkit.Models
+﻿namespace UltimateTeam.Toolkit.Models
 {
     public class GiftMessage
     {

@@ -53,6 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Constants\AppVersion.cs" />
     <Compile Include="Constants\FutErrorCode.cs" />
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Exceptions\PermissionDeniedException.cs" />
     <Compile Include="Exceptions\ServiceUnavailableException.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -84,7 +86,11 @@
     <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
+    <Compile Include="Models\Auth.cs" />
+    <Compile Include="Models\AuthCode.cs" />
+    <Compile Include="Models\AuthToken.cs" />
     <Compile Include="Models\BidTokens.cs" />
+    <Compile Include="Models\CaptchaResponse.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Consumables.cs" />
     <Compile Include="Models\ConsumablesCategory.cs" />
@@ -105,6 +111,8 @@
     <Compile Include="Models\ListAuctionResponse.cs" />
     <Compile Include="Models\ListGiftsResponse.cs" />
     <Compile Include="Models\Persona.cs" />
+    <Compile Include="Models\Pid.cs" />
+    <Compile Include="Models\PidData.cs" />
     <Compile Include="Models\PileSize.cs" />
     <Compile Include="Models\PileSizeResponse.cs" />
     <Compile Include="Models\Platform.cs" />
@@ -119,6 +127,7 @@
     <Compile Include="Models\SquadListResponse.cs" />
     <Compile Include="Models\TradePileItem.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserAccountInfo.cs" />
     <Compile Include="Models\LoginDetails.cs" />
     <Compile Include="Models\LoginResponse.cs" />
@@ -127,6 +136,9 @@
     <Compile Include="Models\Shards.cs" />
     <Compile Include="Models\UserAccounts.cs" />
     <Compile Include="Models\UserClub.cs" />
+    <Compile Include="Models\UserData.cs" />
+    <Compile Include="Models\UserDataInfo.cs" />
+    <Compile Include="Models\UserDataInfoSettings.cs" />
     <Compile Include="Models\ValidateResponse.cs" />
     <Compile Include="Models\WatchlistResponse.cs" />
     <Compile Include="Parameters\ChemistryStyle.cs" />
@@ -154,13 +166,16 @@
     <Compile Include="Parameters\TrainingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
+    <Compile Include="Requests\CaptchaRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\DefinitionRequest.cs" />
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
+    <Compile Include="Requests\LoginMobileRequest.cs" />
     <Compile Include="Requests\PriceRangeRequest.cs" />
+    <Compile Include="Requests\RemoveSoldItemsFromTradePileRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
     <Compile Include="Requests\SquadListRequest.cs" />
     <Compile Include="Requests\HttpClientWrapper.cs" />
@@ -184,6 +199,7 @@
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Requests\RemoveFromWatchlistRequest.cs" />
+    <Compile Include="Requests\ValidateCaptcha.cs" />
     <Compile Include="Requests\WatchlistRequest.cs" />
     <Compile Include="Requests\ReListRequest.cs" />
     <Compile Include="Services\Hasher.cs" />

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
-using NUnit.Framework;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Parameters;
 using UltimateTeam.Toolkit.Requests;
@@ -12,14 +12,14 @@ namespace UltimateTeam.Toolkit.Tests
     public class PerformanceTests
     {
         private IFutClient _futClient;
-        private readonly Resources _resources = new Resources();
+        private readonly Resources _resources = new Resources(AppVersion.WebApp);
 
         [SetUp]
         public void Setup()
         {
             _futClient = new FutClient();
         }
-        
+
         /// <summary>
         /// Tests how many searches can be done per second, excluding any server communication.
         /// </summary>

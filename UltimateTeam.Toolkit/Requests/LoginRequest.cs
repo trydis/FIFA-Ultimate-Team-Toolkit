@@ -16,10 +16,9 @@ namespace UltimateTeam.Toolkit.Requests
     internal class LoginRequest : FutRequestBase, IFutRequest<LoginResponse>
     {
         private readonly LoginDetails _loginDetails;
-
         private readonly ITwoFactorCodeProvider _twoFactorCodeProvider;
-
         private IHasher _hasher;
+        private string _personaId;
 
         public IHasher Hasher
         {
@@ -56,11 +55,11 @@ namespace UltimateTeam.Toolkit.Requests
                 var sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
                 var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
-                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken);
+                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken, _personaId);
             }
             catch (Exception e)
             {
-                throw new FutException("Unable to login", e);
+                throw new FutException($"Unable to login to {AppVersion}", e);
             }
         }
 
@@ -82,7 +81,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<bool> IsLoggedInAsync()
         {
             var loginResponse = await HttpClient.GetAsync(Resources.LoggedIn);
-            var loggedInResponse = await Deserialize<IsUserLoggedIn>(loginResponse);
+            var loggedInResponse = await DeserializeAsync<IsUserLoggedIn>(loginResponse);
 
             return loggedInResponse.IsLoggedIn;
         }
@@ -95,7 +94,7 @@ namespace UltimateTeam.Toolkit.Requests
                 {
                     new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
                 }));
-            var validateResponse = await Deserialize<ValidateResponse>(validateResponseMessage);
+            var validateResponse = await DeserializeAsync<ValidateResponse>(validateResponseMessage);
 
             return validateResponse.Token;
         }
@@ -110,6 +109,8 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 throw new FutException("Couldn't find a persona matching the selected platform");
             }
+            _personaId = persona.PersonaId.ToString();
+
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
                string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT16WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
                     persona.PersonaId, persona.PersonaName, GetGameSku(platform), GetNucleusPersonaPlatform(platform))));
@@ -154,18 +155,18 @@ namespace UltimateTeam.Toolkit.Requests
                 case Platform.Pc:
                     return "pc";
                 default:
-                    throw new ArgumentOutOfRangeException("platform");
+                    throw new ArgumentOutOfRangeException(nameof(platform));
             }
         }
 
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
             HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
-            var route = string.Format("https://utas.{0}.fut.ea.com:443", platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2");
+            var route = $"https://utas.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2")}.fut.ea.com:443";
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
-            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, CreateTimestamp()));
+            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
 
-            return await Deserialize<UserAccounts>(accountInfoResponseMessage);
+            return await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
         }
 
         private async Task<Shards> GetShardsAsync(string nucleusId)
@@ -177,9 +178,9 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptHeader("application/json, text/javascript");
             AddAcceptLanguageHeader();
             AddReferrerHeader(Resources.BaseShowoff);
-            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, CreateTimestamp()));
+            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
 
-            return await Deserialize<Shards>(shardsResponseMessage);
+            return await DeserializeAsync<Shards>(shardsResponseMessage);
         }
 
         private async Task<string> GetNucleusIdAsync()
@@ -219,9 +220,12 @@ namespace UltimateTeam.Toolkit.Requests
             //check if twofactorcode is required
             var contentData = await loginResponse.Content.ReadAsStringAsync();
 
-            if (!(contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to") || contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator")))
+            if (!(contentData.Contains("We sent a security code to your") ||
+                  contentData.Contains("Your security code was sent to") ||
+                  contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator")))
+            {
                 return loginResponse;
-
+            }
 
             var tfCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
 
@@ -258,17 +262,14 @@ namespace UltimateTeam.Toolkit.Requests
 
             //check if twofactorcode is required
             var contentData = await mainPageResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("We sent a security code to your") || contentData.Contains("Your security code was sent to") || contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator"))
+            if (contentData.Contains("We sent a security code to your") ||
+                contentData.Contains("Your security code was sent to") ||
+                contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator"))
+            {
                 await SetTwoFactorCodeAsync(mainPageResponseMessage);
+            }
 
             return mainPageResponseMessage;
-        }
-
-        private static long CreateTimestamp()
-        {
-            var duration = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
-
-            return ((long)(1000 * duration.TotalSeconds));
         }
     }
 }

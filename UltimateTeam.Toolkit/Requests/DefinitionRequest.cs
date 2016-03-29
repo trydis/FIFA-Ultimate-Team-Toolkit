@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -16,14 +18,22 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<DefinitionResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var uriString = string.Format(Resources.FutHome + Resources.Definition, _baseId);
-            var definitionResponseMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
-                .ConfigureAwait(false);
+            var uriString = Resources.FutHome + string.Format(Resources.Definition, _baseId);
+            Task<HttpResponseMessage> definitionResponseTask;
 
-            return await Deserialize<DefinitionResponse>(definitionResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+                definitionResponseTask = HttpClient.PostAsync(uriString, new StringContent(" "));
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"&_={DateTime.Now.ToUnixTime()}";
+                definitionResponseTask = HttpClient.GetAsync(uriString);
+            }
+
+            return await DeserializeAsync<DefinitionResponse>(await definitionResponseTask.ConfigureAwait(false));
         }
     }
 }

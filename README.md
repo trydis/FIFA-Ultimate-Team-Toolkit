@@ -46,6 +46,8 @@ FIFA Ultimate Team Toolkit
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
+[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 
 ### Initialization
 
@@ -56,7 +58,7 @@ var client = new FutClient();
 ### Login
 
 ```csharp
-var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */);
+var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */, AppVersion.WebApp /* or AppVersion.CompanionApp */);
 ITwoFactorCodeProvider provider = // initialize an implementation of this interface
 var loginResponse = await client.LoginAsync(loginDetails, provider);
 ```
@@ -344,4 +346,24 @@ foreach (PriceRange priceRange in priceRanges)
     priceRange.MaxPrice = // Maximum BIN
     priceRange.MinPrice = // Minimum Starting BID
 }
+```
+
+### Get & Solve Captcha
+
+Get Captcha as Base64 encoded image
+```csharp
+CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
+```
+
+Solve Captcha
+```csharp
+var CaptchaValidate = await futClient.ValidateCaptchaAsync(/* answer */);
+```
+
+### Remove sold items from trade pile
+
+Removes all sold items from the trade pile.
+
+```csharp
+await client.RemoveSoldItemsFromTradePileAsync();
 ```

@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -18,14 +19,25 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<SendItemToTradePileResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Put);
-            AddCommonHeaders();
-            var content = string.Format("{{\"itemData\":[{{\"id\":\"{0}\",\"pile\":\"trade\"}}]}}", _itemData.Id);
-            var tradepileResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.FutHome + Resources.ListItem), new StringContent(content))
-                .ConfigureAwait(false);
+            var uriString = Resources.FutHome + Resources.ListItem;
+            var content = new StringContent($"{{\"itemData\":[{{\"id\":\"{_itemData.Id}\",\"pile\":\"trade\"}}]}}");
+            Task<HttpResponseMessage> tradepileResponseMessageTask;
 
-            return await Deserialize<SendItemToTradePileResponse>(tradepileResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Put);
+                tradepileResponseMessageTask = HttpClient.PostAsync(uriString, content);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
+                tradepileResponseMessageTask = HttpClient.PutAsync(uriString, content);
+            }
+
+            var tradepileResponseMessage = await tradepileResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<SendItemToTradePileResponse>(tradepileResponseMessage);
         }
     }
 }
