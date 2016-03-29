@@ -182,6 +182,10 @@ namespace UltimateTeam.Toolkit.Factories
                     if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
                         _webResources.FutHome = Resources.FutHomeXbox;
+                        _mobileResources.FutHome = Resources.FutHomeXbox;
+                        _mobileResources.Validate = Resources.ValidateXbox;
+                        _mobileResources.Auth = Resources.AuthXbox;
+                        _mobileResources.AccountInfo = Resources.AccountInfoXbox;
                     }
 
                     if (details.AppVersion == AppVersion.WebApp)
