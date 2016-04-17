@@ -30,6 +30,12 @@ namespace UltimateTeam.Toolkit.Factories
 
         private IHttpClient _httpClient;
 
+        private uint _pinRequestsCount = 0;
+
+        private bool _sendPinRequests = true;
+
+        private PinEventId _lastPinEventId = PinEventId.WebApp_Home;
+
         private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
 
         private Func<SearchParameters, IFutRequest<AuctionResponse>> _searchRequestFactory;
@@ -93,6 +99,8 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IFutRequest<byte>> _removeSoldItemsFromTradepileRequestFactory;
 
         private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
+
+        private Func<PinEventId, IFutRequest<PinResponse>> _sendPinRequestRequestFactory;
 
         public FutRequestFactories()
         {
@@ -171,6 +179,26 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
+        public bool SendPinRequests
+        {
+            get { return _sendPinRequests; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _sendPinRequests = value;
+            }
+        }
+
+        public PinEventId LastPinEventId
+        {
+            get { return _lastPinEventId; }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _lastPinEventId = value;
+            }
+        }
+
         public Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> LoginRequestFactory
         {
             get
@@ -178,6 +206,15 @@ namespace UltimateTeam.Toolkit.Factories
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
                     _appVersion = details.AppVersion;
+
+                    if (details.SendPinRequests == true)
+                    {
+                        _sendPinRequests = true;
+                    }
+                    else if (details.SendPinRequests == false)
+                    {
+                        _sendPinRequests = false;
+                    }
 
                     if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
@@ -197,7 +234,7 @@ namespace UltimateTeam.Toolkit.Factories
                     }
                     else if (details.AppVersion == AppVersion.CompanionApp)
                     {
-                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileResources };
+                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider, _sendPinRequestRequestFactory) { HttpClient = HttpClient, Resources = _mobileResources };
                         _resources = _mobileResources;
                         loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
@@ -659,6 +696,25 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _removeSoldItemsFromTradepileRequestFactory = value;
+            }
+        }
+
+        public Func<PinEventId, IFutRequest<PinResponse>> SendPinRequestFactory
+        {
+            get
+            {
+                return _sendPinRequestRequestFactory ?? (_sendPinRequestRequestFactory = (pinEventId) =>
+                {
+                    _pinRequestsCount++;
+                    var sendPinRequest = SetSharedRequestProperties(new PinEventRequest(_appVersion, _sessionId, _nucleusId, _personaId, pinEventId, _lastPinEventId, _pinRequestsCount));
+                    _lastPinEventId = pinEventId;
+                    return sendPinRequest;
+                });
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _sendPinRequestRequestFactory = value;
             }
         }
     }

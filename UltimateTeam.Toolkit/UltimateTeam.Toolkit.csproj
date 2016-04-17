@@ -58,6 +58,7 @@
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
     <Compile Include="Constants\Pile.cs" />
+    <Compile Include="Constants\PinEventId.cs" />
     <Compile Include="Constants\PosChangeEnum.cs" />
     <Compile Include="Constants\Resources.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Models\PidData.cs" />
     <Compile Include="Models\PileSize.cs" />
     <Compile Include="Models\PileSizeResponse.cs" />
+    <Compile Include="Models\PinResponse.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\PriceRange.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Requests\GiftRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
     <Compile Include="Requests\LoginMobileRequest.cs" />
+    <Compile Include="Requests\PinRequest.cs" />
     <Compile Include="Requests\PriceRangeRequest.cs" />
     <Compile Include="Requests\RemoveSoldItemsFromTradePileRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
