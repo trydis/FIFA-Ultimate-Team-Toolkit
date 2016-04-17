@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
@@ -13,15 +12,24 @@ namespace UltimateTeam.Toolkit.Requests
         {
             if (AppVersion != AppVersion.WebApp)
             {
-                throw new FutException($"Not implemented for {AppVersion}");
+                AddMobileCaptchaHeaders();
+                var captchaResponseImage = await HttpClient
+                    .GetAsync(string.Format(Resources.CaptchaImage, DateTimeExtensions.ToUnixTime(DateTime.Now)))
+                    .ConfigureAwait(false);
+
+                CaptchaResponse companionAppCaptchaResponse = new CaptchaResponse();
+                companionAppCaptchaResponse.EncodedImg = Convert.ToBase64String(captchaResponseImage.Content.ReadAsByteArrayAsync().Result);
+                companionAppCaptchaResponse.SizebeforeEncode = Convert.ToUInt32(captchaResponseImage.Content.ReadAsByteArrayAsync().Result.Length);
+
+                return companionAppCaptchaResponse;
             }
 
-            AddLoginHeaders();
-            var captchaResponse = await HttpClient
-                .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
+            AddCaptchaHeaders();
+            var webAppCaptchaResponse = await HttpClient
+                .GetAsync(string.Format(Resources.CaptchaImage, DateTimeExtensions.ToUnixTime(DateTime.Now)))
                 .ConfigureAwait(false);
 
-            return await DeserializeAsync<CaptchaResponse>(captchaResponse);
+            return await DeserializeAsync<CaptchaResponse>(webAppCaptchaResponse);
         }
     }
 }

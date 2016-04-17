@@ -96,8 +96,9 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        protected void AddLoginHeaders()
+        protected void AddCaptchaHeaders()
         {
+            HttpClient.ClearRequestHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
@@ -130,6 +131,20 @@ namespace UltimateTeam.Toolkit.Requests
         protected void AddMobileLoginHeaders()
         {
             HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            AddAcceptHeader("*/*");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddMobileUserAgent();
+        }
+
+        protected void AddMobileCaptchaHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
             AddAcceptHeader("*/*");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
