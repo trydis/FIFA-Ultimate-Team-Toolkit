@@ -75,7 +75,6 @@
     <Compile Include="Exceptions\PermissionDeniedException.cs" />
     <Compile Include="Exceptions\ServiceUnavailableException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\FutRequestFactories.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Models\AuctionInfo.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\Auth.cs" />
+    <Compile Include="Models\PlayerId.cs" />
     <Compile Include="Models\AuthCode.cs" />
     <Compile Include="Models\AuthToken.cs" />
     <Compile Include="Models\BidTokens.cs" />
