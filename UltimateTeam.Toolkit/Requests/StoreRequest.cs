@@ -15,7 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders(HttpMethod.Post);
+                AddCommonHeaders(HttpMethod.Get);
             }
             else
             {
@@ -24,7 +24,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
 
             var StoreResponseMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(""))
+                .GetAsync(uriString)
                 .ConfigureAwait(false);
 
             return await DeserializeAsync<StoreResponse>(StoreResponseMessage);
