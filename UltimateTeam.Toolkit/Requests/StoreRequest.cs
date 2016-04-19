@@ -24,7 +24,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
 
             var StoreResponseMessage = await HttpClient
-                .GetAsync(uriString)
+                .PostAsync(uriString, new StringContent(" "))
                 .ConfigureAwait(false);
 
             return await DeserializeAsync<StoreResponse>(StoreResponseMessage);
