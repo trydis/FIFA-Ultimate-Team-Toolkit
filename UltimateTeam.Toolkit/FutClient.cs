@@ -68,9 +68,10 @@ namespace UltimateTeam.Toolkit
 
         public Task<Item> GetItemAsync(long PlayerId)
         {
-            PlayerId playerId = new PlayerId(PlayerId);
+            PlayerId.ThrowIfNullArgument();
+            PlayerId _playerId = new PlayerId(PlayerId);
 
-            return RequestFactories.ItemRequestFactory(playerId.AssetId).PerformRequestAsync();
+            return RequestFactories.ItemRequestFactory(_playerId.AssetId).PerformRequestAsync();
         }
 
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
@@ -210,11 +211,12 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.ClubImageRequestFactory(auctionInfo).PerformRequestAsync();
         }
 
-        public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
+        public Task<DefinitionResponse> GetDefinitionsAsync(long PlayerId)
         {
-            baseId.ThrowIfNullArgument();
+            PlayerId.ThrowIfNullArgument();
+            PlayerId _playerId = new PlayerId(PlayerId);
 
-            return RequestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
+            return RequestFactories.DefinitionRequestFactory(_playerId.AssetId).PerformRequestAsync();
         }
 
         public Task<byte[]> GetNationImageAsync(Item item)
