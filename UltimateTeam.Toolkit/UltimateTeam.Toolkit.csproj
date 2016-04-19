@@ -57,6 +57,7 @@
     <Compile Include="Constants\FutErrorCode.cs" />
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
+    <Compile Include="Constants\Currency.cs" />
     <Compile Include="Constants\Pile.cs" />
     <Compile Include="Constants\PosChangeEnum.cs" />
     <Compile Include="Constants\Resources.cs" />
@@ -82,9 +83,14 @@
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\PackDetails.cs" />
+    <Compile Include="Models\PackContentInfo.cs" />
+    <Compile Include="Models\PackDisplayGroup.cs" />
+    <Compile Include="Models\PackDefinitionResponse.cs" />
     <Compile Include="Models\AuctionDetails.cs" />
     <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />
+    <Compile Include="Models\StoreResponse.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\Auth.cs" />
     <Compile Include="Models\AuthCode.cs" />
@@ -118,6 +124,7 @@
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\PriceRange.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
+    <Compile Include="Models\PurchasedPackResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
     <Compile Include="Models\SendItemToClubResponse.cs" />
@@ -172,6 +179,8 @@
     <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\DefinitionRequest.cs" />
     <Compile Include="Requests\GiftRequest.cs" />
+    <Compile Include="Requests\PackRequest.cs" />
+    <Compile Include="Requests\StoreRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
     <Compile Include="Requests\LoginMobileRequest.cs" />
     <Compile Include="Requests\PriceRangeRequest.cs" />
