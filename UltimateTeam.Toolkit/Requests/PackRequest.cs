@@ -20,12 +20,12 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = Resources.FutHome + Resources.PurchasedItems;
 
-            var content = $"{{\"currency\":{_packDetails.Currency},\"packId\":{_packDetails.PackId}," +
-               $"\"useCredits\":{_packDetails.UseCredits},\"useCredits\":{_packDetails.UseCredits}}}";
+            var content = $"{{\"currency\":\"{_packDetails.Currency}\",\"packId\":{_packDetails.PackId}," +
+               $"\"useCredits\":{_packDetails.UseCredits},\"usePreOrder\":{_packDetails.UsePreOrder.ToString().ToLower()}}}";
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders(HttpMethod.Get);
+                AddCommonHeaders(HttpMethod.Post);
             }
             else
             {

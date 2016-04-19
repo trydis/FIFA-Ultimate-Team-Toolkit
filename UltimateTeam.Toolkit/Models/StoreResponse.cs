@@ -6,7 +6,7 @@ namespace UltimateTeam.Toolkit.Models
     {
         public string Id { get; set; }
 
-        public List<PackDefinitonResponse> Purchase { get; set; }
+        public List<Pack> Purchase { get; set; }
 
         public string TimeStamp { get; set; }
     }

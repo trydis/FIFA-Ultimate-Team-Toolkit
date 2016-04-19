@@ -85,8 +85,10 @@
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\PackDetails.cs" />
     <Compile Include="Models\PackContentInfo.cs" />
+    <Compile Include="Models\PackExtPrice.cs" />
+    <Compile Include="Models\PackExt.cs" />
     <Compile Include="Models\PackDisplayGroup.cs" />
-    <Compile Include="Models\PackDefinitionResponse.cs" />
+    <Compile Include="Models\Pack.cs" />
     <Compile Include="Models\AuctionDetails.cs" />
     <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />

@@ -8,12 +8,16 @@ namespace UltimateTeam.Toolkit.Models
 
         public List<DuplicateItem> DuplicateItemIdList { get; set; }
 
+        public List<ItemData> ItemData { get; set; }
+
         public List<ItemData> ItemList { get; set; }
 
-        public List<uint> ItemIdData { get; set; }
+        public List<long> ItemIdList { get; set; }
 
         public byte NumberItems { get; set; }
 
         public uint PurchasedPackId { get; set; }
+
+        public string EntitlementQuantities { get; set; }
     }
 }
