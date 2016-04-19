@@ -61,6 +61,7 @@
     <Compile Include="Constants\Pile.cs" />
     <Compile Include="Constants\PosChangeEnum.cs" />
     <Compile Include="Constants\Resources.cs" />
+    <Compile Include="Exceptions\PurchasedItemsFullException.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\CaptchaTriggeredException.cs" />
     <Compile Include="Exceptions\ConflictException.cs" />
