@@ -94,6 +94,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
 
+        private Func<IFutRequest<StoreResponse>> _getPackDetailsFactory;
+
+        private Func<PackDetails, IFutRequest<PurchasedPackResponse>> _buyPackFactory;
+
         public FutRequestFactories()
         {
             CookieContainer = new CookieContainer();
@@ -659,6 +663,34 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _removeSoldItemsFromTradepileRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<StoreResponse>> GetPackDetailsFactory
+        {
+            get
+            {
+                return _getPackDetailsFactory ??
+                       (_getPackDetailsFactory = () => SetSharedRequestProperties(new StoreRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _getPackDetailsFactory = value;
+            }
+        }
+
+        public Func<PackDetails, IFutRequest<PurchasedPackResponse>> BuyPackRequestFactory
+        {
+            get
+            {
+                return _buyPackFactory ??
+                       (_buyPackFactory = packDetails => SetSharedRequestProperties(new PackRequest(packDetails)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _buyPackFactory = value;
             }
         }
     }
