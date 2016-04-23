@@ -35,7 +35,8 @@ FIFA Ultimate Team Toolkit
 [Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#training-search)  
-[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-trade-pile)  
+[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-trade-pile)
+[Send to club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-club)    
 [Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#quick-sell)  
 [Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-from-watch-list)  
 [Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-from-trade-pile)  
@@ -243,6 +244,14 @@ Sends an item to the trade pile (transfer market)
 
 ```csharp
 var sendToTradePileResponse = await client.SendItemToTradePileAsync(itemData);
+```
+
+### Send to club
+
+Sends an item to your club
+
+```csharp
+var sendToClubResponse = await client.SendItemToClubAsync(itemData);
 ```
 
 ### Quick sell
