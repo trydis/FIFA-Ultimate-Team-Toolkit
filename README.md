@@ -31,10 +31,10 @@ FIFA Ultimate Team Toolkit
 [Credits](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#credits)  
 [List auction](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#list-auction)  
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-trade-pile)  
-[Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#watch-list)
+[Get watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-watch-list)
 [Get Consumables](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-consumables)
 [Add auction Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#add-auction-to-watchlist)  
-[Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#purchased-items)  
+[Get Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#training-search)  
 [Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-trade-pile)
@@ -187,7 +187,7 @@ Gets the items in the trade pile.
 var tradePileResponse = await client.GetTradePileAsync();
 ```
 
-### Watch list
+### Get watch list
 
 Retrieves the the watch list.
 
@@ -210,7 +210,7 @@ var consumablesResponse = await client.GetConsumablesAsync();
 var addAuctionToWatchlistResponse = await client.AddToWatchlistRequestAsync(auctionInfo);
 ```
 
-### Purchased items
+### Get purchased items
 
 Items that have been bought or received in gift packs.
 
@@ -306,7 +306,7 @@ var pileSizeResponse = await client.GetPileSizeAsync();
 
 ### Relist Tradepile
 
-Re-listing all tradepile items listed before.
+Relists all tradepile items as listed before.
 
 ```csharp
 await client.ReListAsync();
@@ -357,14 +357,14 @@ var playerDefinitions = await client.GetDefinitionsAsync(/* AssetId */);
 
 foreach (ItemData itemData in playerDefinitions.ItemData)
 {
-    var definitionId = itemData.ResourceId;
-    // Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
+	// Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
+	var definitionId = itemData.ResourceId;
 }
 ```
 
 ### Get price ranges
 
-Gets the EA price range - **You can only use this method right after you get tradepile / watchlist!**
+Gets the EA price range - **You can only use this method right after you get tradepile / watchlist items!**
 ```csharp
 var priceRanges = await client.GetPriceRangesAsync(/* List of ItemIds */);
 
@@ -391,7 +391,7 @@ if (purchasedItemsResponse.ItemData.Count > 0)
 
 ### Get & Solve Captcha
 
-Get Captcha as Base64 encoded image
+Gets Captcha as Base64 encoded image
 ```csharp
 CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
 ```
