@@ -234,7 +234,7 @@ namespace UltimateTeam.Toolkit.Factories
                     }
                     else if (details.AppVersion == AppVersion.CompanionApp)
                     {
-                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider, _sendPinRequestRequestFactory) { HttpClient = HttpClient, Resources = _mobileResources };
+                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider, SendPinRequestFactory) { HttpClient = HttpClient, Resources = _mobileResources };
                         _resources = _mobileResources;
                         loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
