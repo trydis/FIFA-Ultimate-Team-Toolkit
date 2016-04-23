@@ -31,7 +31,14 @@ namespace UltimateTeam.Toolkit.Requests
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders(HttpMethod.Put);
+                if (_itemData.CardSubTypeId == 231)
+                {
+                    AddCommonHeaders(HttpMethod.Post);
+                }
+                else
+                {
+                    AddCommonHeaders(HttpMethod.Put);
+                }
                 tradepileResponseMessageTask = HttpClient.PostAsync(uriString, content);
             }
             else
