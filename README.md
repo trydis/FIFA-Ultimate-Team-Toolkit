@@ -379,6 +379,13 @@ foreach (PriceRange priceRange in priceRanges)
 
 Gets the daily gift from the WebApp if available - This feature is currently not implemented for the Companion App.
 ```csharp
+
+var giftsListResponse = await futClient.GetGiftsListAsync();
+foreach (var activeMessages in giftsListResponse.ActiveMessage)
+{
+	//HandleMessage
+}
+
 var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
 if (purchasedItemsResponse.ItemData.Count > 0)
 {
