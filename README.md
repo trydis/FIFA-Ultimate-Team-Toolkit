@@ -48,6 +48,7 @@ FIFA Ultimate Team Toolkit
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get daily gift](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-daily-gift)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 
@@ -362,6 +363,20 @@ foreach (PriceRange priceRange in priceRanges)
 {
     priceRange.MaxPrice = // Maximum BIN
     priceRange.MinPrice = // Minimum Starting BID
+}
+```
+
+### Get daily gift
+
+Gets the daily gift from the WebApp if available - This feature is currently not implemented for the Companion App.
+```csharp
+var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
+if (purchasedItemsResponse.ItemData.Count > 0)
+{
+	foreach (ItemData item in purchasedItemsResponse.ItemData)
+	{
+		await client.SendItemToClubAsync(item);
+	}
 }
 ```
 
