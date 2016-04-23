@@ -32,6 +32,7 @@ FIFA Ultimate Team Toolkit
 [List auction](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#list-auction)  
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-trade-pile)  
 [Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#watch-list)
+[Get Consumables](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-consumables)
 [Add auction Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#add-auction-to-watchlist)  
 [Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#development-search)  
@@ -192,6 +193,14 @@ Retrieves the the watch list.
 
 ```csharp
 var watchlistResponse = await client.GetWatchlistAsync();
+```
+
+### Get Consumables
+
+Retrieves the consumables of your club
+
+```csharp
+var consumablesResponse = await client.GetConsumablesAsync();
 ```
 
 ### Add auction to watch list
