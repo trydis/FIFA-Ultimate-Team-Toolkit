@@ -383,7 +383,7 @@ Gets the daily gift from the WebApp if available - This feature is currently not
 var giftsListResponse = await futClient.GetGiftsListAsync();
 foreach (var activeMessages in giftsListResponse.ActiveMessage)
 {
-	//HandleMessage
+	await GetGiftAsync(/* GiftId */);
 }
 
 var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
