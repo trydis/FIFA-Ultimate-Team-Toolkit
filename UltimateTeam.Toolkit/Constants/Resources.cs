@@ -50,6 +50,8 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string BaseShowoff = "http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
 
+        public const string PinRiver = "https://pin-river.data.ea.com/pinEvents";
+
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
         public const string MyClub = "club?level=10";

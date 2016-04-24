@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Factories;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
@@ -82,5 +83,7 @@ namespace UltimateTeam.Toolkit
         Task<byte> ValidateCaptchaAsync(int answer);
 
         Task RemoveSoldItemsFromTradePileAsync();
+
+        Task<PinResponse> SendPinRequestAsync(PinEventId pinEventId);
     }
 }

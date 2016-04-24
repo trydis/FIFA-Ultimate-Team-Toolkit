@@ -27,7 +27,6 @@ namespace UltimateTeam.Toolkit.Requests
         {
             set
             {
-                value.ThrowIfInvalidArgument();
                 _phishingToken = value;
             }
         }
@@ -36,7 +35,6 @@ namespace UltimateTeam.Toolkit.Requests
         {
             set
             {
-                value.ThrowIfInvalidArgument();
                 _sessionId = value;
             }
         }
@@ -45,7 +43,6 @@ namespace UltimateTeam.Toolkit.Requests
         {
             set
             {
-                value.ThrowIfInvalidArgument();
                 _nucleusId = value;
             }
         }
@@ -271,6 +268,22 @@ namespace UltimateTeam.Toolkit.Requests
             }
 
             return deserializedObject;
+        }
+
+        protected static string Serialize<T>(T classContent) where T : class
+        {
+            string serializedObject = string.Empty;
+
+            try
+            {
+                serializedObject = JsonConvert.SerializeObject(classContent);
+            }
+            catch (JsonSerializationException serializationException)
+            {
+                throw serializationException;
+            }
+
+            return serializedObject;
         }
 
         private static void MapAndThrowException(Exception exception, FutError futError)

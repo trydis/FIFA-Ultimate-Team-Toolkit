@@ -18,5 +18,10 @@ namespace UltimateTeam.Toolkit.Extensions
 
             return (long)(1000 * duration.TotalSeconds);
         }
+
+        public static string ToISO8601Time(this DateTime input)
+        {
+            return System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        }
     }
 }

@@ -48,6 +48,7 @@ FIFA Ultimate Team Toolkit
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
+[Send Custom PinRequest](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-custom-pinrequest)  
 
 ### Initialization
 
@@ -59,6 +60,13 @@ var client = new FutClient();
 
 ```csharp
 var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */, AppVersion.WebApp /* or AppVersion.CompanionApp */);
+ITwoFactorCodeProvider provider = // initialize an implementation of this interface
+var loginResponse = await client.LoginAsync(loginDetails, provider);
+```
+
+```csharp
+//Deactivate PinRequests
+var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */, AppVersion.WebApp /* or AppVersion.CompanionApp */, **false**);
 ITwoFactorCodeProvider provider = // initialize an implementation of this interface
 var loginResponse = await client.LoginAsync(loginDetails, provider);
 ```
@@ -366,4 +374,13 @@ Removes all sold items from the trade pile.
 
 ```csharp
 await client.RemoveSoldItemsFromTradePileAsync();
+```
+
+### Send custom pin request
+
+Sends a custom pin request 
+
+```csharp
+//Set a custom pin request somewhere in your code if it's not covered by the toolkit
+await futClient.SendPinRequestAsync(PinEventId.WebApp_TransferList);
 ```
