@@ -1,4 +1,6 @@
-﻿namespace UltimateTeam.Toolkit.Parameters
+﻿using UltimateTeam.Toolkit.Models;
+
+namespace UltimateTeam.Toolkit.Parameters
 {
     public abstract class SearchParameters
     {
@@ -36,7 +38,7 @@
 
         public string StaffType { get; set; }
 
-        public long ResourceId { get; set; }
+        public PlayerId PlayerId { get; set; }
 
         public byte PageSize { get; set; }
 

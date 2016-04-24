@@ -61,15 +61,17 @@ namespace UltimateTeam.Toolkit
         public Task<Item> GetItemAsync(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
+            PlayerId playerId = new PlayerId(auctionInfo.ItemData.AssetId);
 
-            return RequestFactories.ItemRequestFactory(auctionInfo.CalculateBaseId()).PerformRequestAsync();
+            return RequestFactories.ItemRequestFactory(auctionInfo.ItemData.AssetId).PerformRequestAsync();
         }
 
-        public Task<Item> GetItemAsync(long resourceId)
+        public Task<Item> GetItemAsync(long PlayerId)
         {
-            if (resourceId < 1) throw new ArgumentException("Definitely not valid", nameof(resourceId));
+            PlayerId.ThrowIfNullArgument();
+            PlayerId _playerId = new PlayerId(PlayerId);
 
-            return RequestFactories.ItemRequestFactory(resourceId.CalculateBaseId()).PerformRequestAsync();
+            return RequestFactories.ItemRequestFactory(_playerId.AssetId).PerformRequestAsync();
         }
 
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
@@ -185,7 +187,7 @@ namespace UltimateTeam.Toolkit
 
         public Task<QuickSellResponse> QuickSellItemAsync(long itemId)
         {
-            if (itemId < 1) throw new ArgumentException("Definitely not valid", nameof(itemId));
+            if (itemId < 1) throw new ArgumentException("ItemId not valid", nameof(itemId));
 
             return QuickSellItemAsync(new[] { itemId });
         }
@@ -196,7 +198,7 @@ namespace UltimateTeam.Toolkit
 
             foreach (var itemId in itemIds.Where(itemId => itemId < 1))
             {
-                throw new ArgumentException($"ItemId {itemId} is definitely not valid", nameof(itemIds));
+                throw new ArgumentException($"ItemId {itemId} is not valid", nameof(itemIds));
             }
 
             return RequestFactories.QuickSellRequestFactory(itemIds).PerformRequestAsync();
@@ -209,11 +211,12 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.ClubImageRequestFactory(auctionInfo).PerformRequestAsync();
         }
 
-        public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
+        public Task<DefinitionResponse> GetDefinitionsAsync(long PlayerId)
         {
-            baseId.ThrowIfNullArgument();
+            PlayerId.ThrowIfNullArgument();
+            PlayerId _playerId = new PlayerId(PlayerId);
 
-            return RequestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
+            return RequestFactories.DefinitionRequestFactory(_playerId.AssetId).PerformRequestAsync();
         }
 
         public Task<byte[]> GetNationImageAsync(Item item)

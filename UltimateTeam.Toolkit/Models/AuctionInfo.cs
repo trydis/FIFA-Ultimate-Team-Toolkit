@@ -84,10 +84,5 @@ namespace UltimateTeam.Toolkit.Models
 
             return currentBid - 1000;
         }
-
-        public long CalculateBaseId()
-        {
-            return ItemData.ResourceId.CalculateBaseId();
-        }
     }
 }
