@@ -1,0 +1,18 @@
+version: '{build}'
+image: Visual Studio 2015
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: $(VERSION_NUMBER)
+  assembly_file_version: $(VERSION_NUMBER)
+  assembly_informational_version: $(VERSION_NUMBER)-dev{build}
+environment:
+  VERSION_NUMBER: 3.1.0
+before_build:
+- cmd: nuget restore
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal

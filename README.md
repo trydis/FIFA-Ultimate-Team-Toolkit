@@ -11,7 +11,7 @@ FIFA Ultimate Team Toolkit
 - Xamarin.iOS
 
 ## Build status
-[![trydis MyGet Build Status](https://www.myget.org/BuildSource/Badge/trydis?identifier=d1708aa8-b649-41d2-ab05-daf80cec40c7)](https://www.myget.org/)
+[![Build status](https://ci.appveyor.com/api/projects/status/4owj0a485hhx1j7c/branch/master?svg=true)](https://ci.appveyor.com/project/trydis/fifa-ultimate-team-toolkit/branch/master)
 
 ## NuGet package
 
