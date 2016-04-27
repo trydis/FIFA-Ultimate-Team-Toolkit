@@ -10,26 +10,29 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<CaptchaResponse> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCaptchaHeaders();
+            }
+            else
             {
                 AddMobileCaptchaHeaders();
-                var captchaResponseImage = await HttpClient
-                    .GetAsync(string.Format(Resources.CaptchaImage, DateTimeExtensions.ToUnixTime(DateTime.Now)))
-                    .ConfigureAwait(false);
-
-                CaptchaResponse companionAppCaptchaResponse = new CaptchaResponse();
-                companionAppCaptchaResponse.EncodedImg = Convert.ToBase64String(captchaResponseImage.Content.ReadAsByteArrayAsync().Result);
-                companionAppCaptchaResponse.SizebeforeEncode = Convert.ToUInt32(captchaResponseImage.Content.ReadAsByteArrayAsync().Result.Length);
-
-                return companionAppCaptchaResponse;
             }
 
-            AddCaptchaHeaders();
-            var webAppCaptchaResponse = await HttpClient
-                .GetAsync(string.Format(Resources.CaptchaImage, DateTimeExtensions.ToUnixTime(DateTime.Now)))
-                .ConfigureAwait(false);
+            var responseMessage = await HttpClient
+                  .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
+                  .ConfigureAwait(false);
 
-            return await DeserializeAsync<CaptchaResponse>(webAppCaptchaResponse);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                return await DeserializeAsync<CaptchaResponse>(responseMessage);
+            }
+
+            return new CaptchaResponse
+            {
+                EncodedImg = Convert.ToBase64String(await responseMessage.Content.ReadAsByteArrayAsync()),
+                SizebeforeEncode = Convert.ToUInt32((await responseMessage.Content.ReadAsByteArrayAsync()).Length)
+            };
         }
     }
 }
