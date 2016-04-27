@@ -15,25 +15,21 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCaptchaHeaders();
+                AddMethodOverrideHeader(HttpMethod.Post);
+            }
+            else
             {
                 AddCommonMobileHeaders();
-                var companionAppcontent = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
-                var companionAppcaptchaResponseMessage = await HttpClient
-                    .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(companionAppcontent))
-                    .ConfigureAwait(false);
-                companionAppcaptchaResponseMessage.EnsureSuccessStatusCode();
-
-                return 0;
             }
 
-            AddCaptchaHeaders();
-            AddMethodOverrideHeader(HttpMethod.Post);
-            var webAppcontent = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
-            var webAppcaptchaResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(webAppcontent))
-                .ConfigureAwait(false);
-            webAppcaptchaResponseMessage.EnsureSuccessStatusCode();
+            var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
+            var responseMessage = await HttpClient
+               .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(content))
+               .ConfigureAwait(false);
+            responseMessage.EnsureSuccessStatusCode();
 
             return 0;
         }
