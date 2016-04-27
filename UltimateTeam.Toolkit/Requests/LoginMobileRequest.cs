@@ -161,7 +161,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
-            var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
+            var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":20,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, DateTime.Now.ToUnixTime()), new StringContent(content));
             var authResponse = await DeserializeAsync<Auth>(authMessage);
 
