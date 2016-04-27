@@ -11,5 +11,7 @@
         public string ServerTime { get; set; }
 
         public string Sid { get; set; }
+		
+		public string ExpiresOn { get; set; }
     }
 }
