@@ -92,6 +92,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
 
+        public const string Store = "store/purchaseGroup/cardpack?ppInfo=true";
 
         public Resources(AppVersion appVersion)
         {

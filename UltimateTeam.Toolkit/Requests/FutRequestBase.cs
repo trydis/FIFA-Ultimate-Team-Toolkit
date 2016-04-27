@@ -303,6 +303,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new DestinationFullException(futError, exception);
                 case FutErrorCode.CaptchaTriggered:
                     throw new CaptchaTriggeredException(futError, exception);
+                case FutErrorCode.PurchasedItemsFull:
+                    throw new PurchasedItemsFullException(futError, exception);
                 default:
                     var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
