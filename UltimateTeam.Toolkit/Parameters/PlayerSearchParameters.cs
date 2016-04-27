@@ -42,6 +42,9 @@ namespace UltimateTeam.Toolkit.Parameters
                 uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
             else
                 uriString += "&definitionId=" + ResourceId;
+                
+            if (Special == true)
+                uriString += "&rare=SP";
 
             SetPosition(ref uriString);
 
