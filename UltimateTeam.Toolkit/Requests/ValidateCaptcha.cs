@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -18,17 +17,23 @@ namespace UltimateTeam.Toolkit.Requests
         {
             if (AppVersion != AppVersion.WebApp)
             {
-                throw new FutException($"Not implemented for {AppVersion}");
+                AddCommonMobileHeaders();
+                var companionAppcontent = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
+                var companionAppcaptchaResponseMessage = await HttpClient
+                    .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(companionAppcontent))
+                    .ConfigureAwait(false);
+                companionAppcaptchaResponseMessage.EnsureSuccessStatusCode();
+
+                return 0;
             }
 
+            AddCaptchaHeaders();
             AddMethodOverrideHeader(HttpMethod.Post);
-            AddLoginHeaders();
-            var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
-            var captchaResponseMessage = await HttpClient
-                .PostAsync(Resources.CaptchaValidate, new StringContent(content))
+            var webAppcontent = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
+            var webAppcaptchaResponseMessage = await HttpClient
+                .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(webAppcontent))
                 .ConfigureAwait(false);
-
-            captchaResponseMessage.EnsureSuccessStatusCode();
+            webAppcaptchaResponseMessage.EnsureSuccessStatusCode();
 
             return 0;
         }
