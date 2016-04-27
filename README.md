@@ -49,7 +49,6 @@ FIFA Ultimate Team Toolkit
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 [Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
-[Buy pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#buy-pack)
 
 ### Initialization
 
@@ -378,7 +377,7 @@ Get all available Packs
 var storeResponse = await futClient.GetPackDetailsAsync();
 ```
 
-### Buy pack
+Buy pack
 
 ```csharp
 // Identify the pack id
