@@ -42,9 +42,6 @@ namespace UltimateTeam.Toolkit.Parameters
                 uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
             else
                 uriString += "&definitionId=" + ResourceId;
-                
-            if (Special == true)
-                uriString += "&rare=SP";
 
             SetPosition(ref uriString);
 
@@ -63,6 +60,9 @@ namespace UltimateTeam.Toolkit.Parameters
                 case Level.Silver:
                 case Level.Gold:
                     uriString += "&lev=" + Level.ToString().ToLower();
+                    break;
+                case Level.Special:
+                    uriString += "&rare=SP";
                     break;
                 default:
                     throw new ArgumentException("Level");
