@@ -46,9 +46,9 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string BaseShowoff = "http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
 
-        public string CaptchaImage;
+        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
 
-        public string CaptchaValidate;
+        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
 
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
@@ -119,10 +119,6 @@ namespace UltimateTeam.Toolkit.Constants
 
                     ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
 
-                    CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
-
-                    CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
-
                     break;
 
                 case AppVersion.CompanionApp:
@@ -146,10 +142,6 @@ namespace UltimateTeam.Toolkit.Constants
                     FlagsImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
 
                     ClubImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
-
-                    CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
-
-                    CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
 
                     break;
                 default:
