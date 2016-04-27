@@ -39,8 +39,6 @@
         public long ResourceId { get; set; }
 
         public byte PageSize { get; set; }
-        
-        public bool Special { get; set; }
 
         protected SearchParameters(ResourceType resourceType)
         {
