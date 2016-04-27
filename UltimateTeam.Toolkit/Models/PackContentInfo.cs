@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Models
+﻿namespace UltimateTeam.Toolkit.Models
 {
     public class PackContentInfo
     {

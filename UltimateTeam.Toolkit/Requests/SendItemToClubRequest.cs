@@ -19,20 +19,13 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<SendItemToClubResponse> PerformRequestAsync()
         {
-            var content = new StringContent(string.Empty);
             var uriString = Resources.FutHome + Resources.ListItem;
             Task<HttpResponseMessage> clubResponseMessageTask;
 
             //Apply Draft-Token & Credits to club
-            if (_itemData.CardSubTypeId == 231)
-            {
-                content = new StringContent($"{{\"apply\":[]}}");
-            }
-            else
-            {
-                content = new StringContent($"{{\"itemData\":[{{\"pile\":\"club\",\"id\":\"{_itemData.Id}\"}}]}}");
-
-            }
+            var content = _itemData.CardSubTypeId == 231
+                              ? new StringContent("{\"apply\":[]}")
+                              : new StringContent($"{{\"itemData\":[{{\"pile\":\"club\",\"id\":\"{_itemData.Id}\"}}]}}");
 
             if (AppVersion == AppVersion.WebApp)
             {

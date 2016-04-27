@@ -11,9 +11,9 @@ namespace UltimateTeam.Toolkit.Requests
     {
         private readonly PackDetails _packDetails;
 
-        public PackRequest(PackDetails PackDetails)
+        public PackRequest(PackDetails packDetails)
         {
-            _packDetails = PackDetails;
+            _packDetails = packDetails;
         }
 
         public async Task<PurchasedPackResponse> PerformRequestAsync()

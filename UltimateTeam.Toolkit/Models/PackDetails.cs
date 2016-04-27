@@ -19,7 +19,7 @@ namespace UltimateTeam.Toolkit.Models
             Currency = currency;
             PackId = packId;
             UseCredits = useCredits;
-            usePreOrder = UsePreOrder;
+            UsePreOrder = usePreOrder;
         }
     }
 }

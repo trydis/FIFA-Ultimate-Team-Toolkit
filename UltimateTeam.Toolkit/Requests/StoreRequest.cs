@@ -23,11 +23,11 @@ namespace UltimateTeam.Toolkit.Requests
                 uriString += $"?_={DateTime.Now.ToUnixTime()}";
             }
 
-            var StoreResponseMessage = await HttpClient
+            var storeResponseMessage = await HttpClient
                 .PostAsync(uriString, new StringContent(" "))
                 .ConfigureAwait(false);
 
-            return await DeserializeAsync<StoreResponse>(StoreResponseMessage);
+            return await DeserializeAsync<StoreResponse>(storeResponseMessage);
         }
     }
 }
