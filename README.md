@@ -47,8 +47,9 @@ FIFA Ultimate Team Toolkit
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
-[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)
-[Open a Pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)
+[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
+[Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
+[Buy pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#buy-pack)
 
 ### Initialization
 
@@ -369,7 +370,7 @@ Removes all sold items from the trade pile.
 await client.RemoveSoldItemsFromTradePileAsync();
 ```
 
-### Open a Pack
+### Open a pack
 
 Get all available Packs
 
@@ -377,21 +378,21 @@ Get all available Packs
 var storeResponse = await futClient.GetPackDetailsAsync();
 ```
 
-Buy Pack
+### Buy pack
 
 ```csharp
-            //Identify the pack id
-			uint packId = 0;
+// Identify the pack id
+uint packId = 0;
 
-            foreach (Pack packDetail in storeResponse.Purchase)
-            {
-                if (packDetail.Coins == 7500)
-                {
-                    packId = packDetail.Id;
-                }
-            }
+foreach (var packDetail in storeResponse.Purchase)
+{
+    if (packDetail.Coins == 7500)
+    {
+        packId = packDetail.Id;
+    }
+}
 
-            //Buy Pack
-            var buyPackResponse = await futClient.BuyPackAsync(new PackDetails(packId));
+// Buy Pack
+var buyPackResponse = await futClient.BuyPackAsync(new PackDetails(packId));
 ```
 
