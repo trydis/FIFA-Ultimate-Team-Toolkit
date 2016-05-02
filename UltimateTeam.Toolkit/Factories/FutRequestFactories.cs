@@ -94,6 +94,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
 
+        private Func<IFutRequest<SettingsResponse>> _settingsRequestFactory;
+
         public FutRequestFactories()
         {
             CookieContainer = new CookieContainer();
@@ -659,6 +661,19 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _removeSoldItemsFromTradepileRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<SettingsResponse>> GetSettingsRequestFactory
+        {
+            get
+            {
+                return _settingsRequestFactory ?? (_settingsRequestFactory = () => SetSharedRequestProperties(new SettingsRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _settingsRequestFactory = value;
             }
         }
     }

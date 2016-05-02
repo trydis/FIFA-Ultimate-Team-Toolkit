@@ -257,5 +257,10 @@ namespace UltimateTeam.Toolkit
         {
             return RequestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();
         }
+
+        public Task<SettingsResponse> GetSettingsAsync()
+        {
+            return RequestFactories.GetSettingsRequestFactory().PerformRequestAsync();
+        }
     }
 }
