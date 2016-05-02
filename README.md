@@ -48,6 +48,7 @@ FIFA Ultimate Team Toolkit
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
+[Get settings] (https://github.com/trydis/FIFA-Ultimate-Team-2015-Toolkit#get-settings)  
 
 ### Initialization
 
@@ -366,4 +367,14 @@ Removes all sold items from the trade pile.
 
 ```csharp
 await client.RemoveSoldItemsFromTradePileAsync();
+```
+
+### Get settings
+
+```csharp
+var settingsResponse = await client.GetSettingsAsync();
+foreach (var setting in settingsResponse.Configs)
+{
+	//Handle settings
+}
 ```
