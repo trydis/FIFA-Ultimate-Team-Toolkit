@@ -92,6 +92,8 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
 
+        public const string Settings = "settings";
+
 
         public Resources(AppVersion appVersion)
         {
