@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
@@ -19,13 +20,18 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<SendItemToTradePileResponse> PerformRequestAsync()
         {
+            if (_itemData.CardSubTypeId == 231)
+            {
+                throw new FutException("CardSubTypeId 231 (Draft-Token or Credits) cannot be send to tradepile");
+            }
+
             var uriString = Resources.FutHome + Resources.ListItem;
             var content = new StringContent($"{{\"itemData\":[{{\"id\":\"{_itemData.Id}\",\"pile\":\"trade\"}}]}}");
             Task<HttpResponseMessage> tradepileResponseMessageTask;
 
             if (AppVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders(HttpMethod.Put);
+                AddCommonHeaders(_itemData.CardSubTypeId == 231 ? HttpMethod.Post : HttpMethod.Put);
                 tradepileResponseMessageTask = HttpClient.PostAsync(uriString, content);
             }
             else

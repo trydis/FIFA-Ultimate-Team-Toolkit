@@ -96,8 +96,9 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        protected void AddLoginHeaders()
+        protected void AddCaptchaHeaders()
         {
+            HttpClient.ClearRequestHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
@@ -130,6 +131,20 @@ namespace UltimateTeam.Toolkit.Requests
         protected void AddMobileLoginHeaders()
         {
             HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            AddAcceptHeader("*/*");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddMobileUserAgent();
+        }
+
+        protected void AddMobileCaptchaHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
             AddAcceptHeader("*/*");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
@@ -303,6 +318,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new DestinationFullException(futError, exception);
                 case FutErrorCode.CaptchaTriggered:
                     throw new CaptchaTriggeredException(futError, exception);
+                case FutErrorCode.PurchasedItemsFull:
+                    throw new PurchasedItemsFullException(futError, exception);
                 default:
                     var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);

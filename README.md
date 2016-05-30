@@ -48,6 +48,7 @@ FIFA Ultimate Team Toolkit
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
+[Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
 
 ### Initialization
 
@@ -367,3 +368,30 @@ Removes all sold items from the trade pile.
 ```csharp
 await client.RemoveSoldItemsFromTradePileAsync();
 ```
+
+### Open a pack
+
+Get all available Packs
+
+```csharp
+var storeResponse = await futClient.GetPackDetailsAsync();
+```
+
+Buy pack
+
+```csharp
+// Identify the pack id
+uint packId = 0;
+
+foreach (var packDetail in storeResponse.Purchase)
+{
+    if (packDetail.Coins == 7500)
+    {
+        packId = packDetail.Id;
+    }
+}
+
+// Buy Pack
+var buyPackResponse = await futClient.BuyPackAsync(new PackDetails(packId));
+```
+

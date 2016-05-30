@@ -38,10 +38,6 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string AuthCode = "https://accounts.ea.com/connect/auth";
 
-        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
-
-        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
-
         public const string Token = "https://accounts.ea.com/connect/token";
 
         public const string Pid = "https://gateway.ea.com/proxy/identity/pids/me";
@@ -49,6 +45,10 @@ namespace UltimateTeam.Toolkit.Constants
         public const string LoggedIn = "https://www.easports.com/fifa/api/isUserLoggedIn";
 
         public const string BaseShowoff = "http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
+
+        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
+
+        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
 
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
@@ -92,6 +92,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
 
+        public const string Store = "store/purchaseGroup/cardpack?ppInfo=true";
 
         public Resources(AppVersion appVersion)
         {

@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -16,19 +15,21 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
-                throw new FutException($"Not implemented for {AppVersion}");
+                AddCaptchaHeaders();
+                AddMethodOverrideHeader(HttpMethod.Post);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
             }
 
-            AddMethodOverrideHeader(HttpMethod.Post);
-            AddLoginHeaders();
             var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";
-            var captchaResponseMessage = await HttpClient
-                .PostAsync(Resources.CaptchaValidate, new StringContent(content))
-                .ConfigureAwait(false);
-
-            captchaResponseMessage.EnsureSuccessStatusCode();
+            var responseMessage = await HttpClient
+               .PostAsync(string.Format(Resources.CaptchaValidate), new StringContent(content))
+               .ConfigureAwait(false);
+            responseMessage.EnsureSuccessStatusCode();
 
             return 0;
         }

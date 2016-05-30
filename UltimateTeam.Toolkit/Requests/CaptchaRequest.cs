@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
@@ -11,17 +10,29 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<CaptchaResponse> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
+            if (AppVersion == AppVersion.WebApp)
             {
-                throw new FutException($"Not implemented for {AppVersion}");
+                AddCaptchaHeaders();
+            }
+            else
+            {
+                AddMobileCaptchaHeaders();
             }
 
-            AddLoginHeaders();
-            var captchaResponse = await HttpClient
-                .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
-                .ConfigureAwait(false);
+            var responseMessage = await HttpClient
+                  .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
+                  .ConfigureAwait(false);
 
-            return await DeserializeAsync<CaptchaResponse>(captchaResponse);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                return await DeserializeAsync<CaptchaResponse>(responseMessage);
+            }
+
+            return new CaptchaResponse
+            {
+                EncodedImg = Convert.ToBase64String(await responseMessage.Content.ReadAsByteArrayAsync()),
+                SizebeforeEncode = Convert.ToUInt32((await responseMessage.Content.ReadAsByteArrayAsync()).Length)
+            };
         }
     }
 }
