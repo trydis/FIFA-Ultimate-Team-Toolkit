@@ -1,4 +1,4 @@
-﻿using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Extensions;
 
 namespace UltimateTeam.Toolkit.Models
 {
