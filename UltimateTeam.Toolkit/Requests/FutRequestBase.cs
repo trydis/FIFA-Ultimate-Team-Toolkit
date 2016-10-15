@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -107,7 +107,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
             AddAcceptHeader("application/json");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
+            AddReferrerHeader("http://www.easports.com/iframe/fut17/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
             AddUserAgent();
         }
 
@@ -148,9 +148,9 @@ namespace UltimateTeam.Toolkit.Requests
             AddUserAgent();
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/20.0.0.286");
-            HttpClient.AddRequestHeader("x-ea-game-id", "fifa16");
+            HttpClient.AddRequestHeader("x-ea-game-id", "fifa17");
             AddAcceptHeader("*/*");
-            AddReferrerHeader("https://www.easports.com/iframe/fut16/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
+            AddReferrerHeader("https://www.easports.com/iframe/fut17/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
         }
