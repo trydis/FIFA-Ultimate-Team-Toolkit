@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -85,7 +85,7 @@ namespace UltimateTeam.Toolkit.Requests
                                                                                            {
                                                                                                new KeyValuePair<string, string>("grant_type", "authorization_code"),
                                                                                                new KeyValuePair<string, string>("code", code),
-                                                                                               new KeyValuePair<string, string>("client_id", "FIFA-16-MOBILE-COMPANION"),
+                                                                                               new KeyValuePair<string, string>("client_id", "FIFA-17-MOBILE-COMPANION"),
                                                                                                new KeyValuePair<string, string>("client_secret", "KrEoFK9ssvXKRWnTMgAu1OAMn7Y37ueUh1Vy7dIk2earFDUDABCvZuNIidYxxNbhwbj3y8pq6pSf8zBW"),
                                                                                            }));
             return await DeserializeAsync<AuthToken>(authTokenResponseMessage);
@@ -120,7 +120,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-            var content = $@"{{ ""isReadOnly"":true,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}} }}";
+            var content = $@"{{ ""isReadOnly"":true,""sku"":""FUT17AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}} }}";
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.POWAuth, DateTime.Now.ToUnixTime()), new StringContent(content));
             var authResponse = await DeserializeAsync<Auth>(authMessage);
 
@@ -161,7 +161,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
-            var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT16AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
+            var content = $@"{{ ""isReadOnly"":false,""sku"":""FUT17AND"",""clientVersion"":18,""locale"":""en-GB"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{authCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{personaId}"",""gameSku"":""{sku}"" }}";
             var authMessage = await HttpClient.PostAsync(string.Format(Resources.Auth, DateTime.Now.ToUnixTime()), new StringContent(content));
             var authResponse = await DeserializeAsync<Auth>(authMessage);
 
@@ -188,15 +188,15 @@ namespace UltimateTeam.Toolkit.Requests
             switch (platform)
             {
                 case Platform.Ps3:
-                    return "FFA16PS3";
+                    return "FFA17PS3";
                 case Platform.Ps4:
-                    return "FFA16PS4";
+                    return "FFA17PS4";
                 case Platform.Xbox360:
-                    return "FFA16XBX";
+                    return "FFA17XBX";
                 case Platform.XboxOne:
-                    return "FFA16XBO";
+                    return "FFA17XBO";
                 case Platform.Pc:
-                    return "FFA16PCC";
+                    return "FFA17PCC";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
             }
