@@ -15,6 +15,8 @@ namespace UltimateTeam.Toolkit.Models
 
         public byte Contract { get; set; }
 
+        public bool Dream { get; set; }
+
         public ushort? DiscardValue { get; set; }
 
         public byte Fitness { get; set; }
@@ -72,5 +74,45 @@ namespace UltimateTeam.Toolkit.Models
         public int Pile { get; set; }
 
         public int Nation { get; set; }
+
+        public long cardassetid { get; set; }
+
+        public long value { get; set; }
+
+        public string name { get; set; }
+
+        public string category { get; set; }
+
+        public int marketDataMaxPrice { get; set; }
+
+        public int marketDataMinPrice { get; set; }
+
+        public int weightrare { get; set; }
+
+        public int bronze { get; set; }
+
+        public int silver { get; set; }
+
+        public int gold { get; set; }
+
+        public int Amount { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Negotiation { get; set; }
+
+        public string biodescription { get; set; }
+
+        public long stadiumid { get; set; }
+
+        public int capacity { get; set; }
+
+        public string header { get; set; }
+
+        public int year { get; set; }
+
+
     }
 }
