@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace UltimateTeam.Toolkit.Constants
 {
@@ -24,23 +24,23 @@ namespace UltimateTeam.Toolkit.Constants
 
         public string ClubImage;
 
-        public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa16/";
+        public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa17/";
 
-        public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/";
+        public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/";
 
-        public const string ValidateXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/phishing/validate";
+        public const string ValidateXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/phishing/validate";
 
         public const string AuthXbox = "https://utas.s3.fut.ea.com/ut/auth?timestamp={0}";
 
-        public const string AccountInfoXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/user/accountinfo?sku=FUT16AND&_={0}";
+        public const string AccountInfoXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
 
         public const string POWAuth = "https://pas.mob.v3.easfc.ea.com:8095/pow/auth?timestamp={0}";
 
         public const string AuthCode = "https://accounts.ea.com/connect/auth";
 
-        public const string CaptchaImage = "https://www.easports.com/iframe/fut16/p/ut/captcha/img?token=AAAA&_={0}";
+        public const string CaptchaImage = "https://www.easports.com/iframe/fut17/p/ut/captcha/img?token=AAAA&_={0}";
 
-        public const string CaptchaValidate = "https://www.easports.com/iframe/fut16/p/ut/captcha/validate";
+        public const string CaptchaValidate = "https://www.easports.com/iframe/fut17/p/ut/captcha/validate";
 
         public const string Token = "https://accounts.ea.com/connect/token";
 
@@ -48,7 +48,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string LoggedIn = "https://www.easports.com/fifa/api/isUserLoggedIn";
 
-        public const string BaseShowoff = "http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
+        public const string BaseShowoff = "http://www.easports.com/iframe/fut17/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
 
         public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
 
@@ -99,49 +99,49 @@ namespace UltimateTeam.Toolkit.Constants
             {
                 case AppVersion.WebApp:
 
-                    Validate = "https://www.easports.com/iframe/fut16/p/ut/game/fifa16/phishing/validate";
+                    Validate = "https://www.easports.com/iframe/fut17/p/ut/game/fifa17/phishing/validate";
 
-                    Auth = "https://www.easports.com/iframe/fut16/p/ut/auth";
+                    Auth = "https://www.easports.com/iframe/fut17/p/ut/auth";
 
                     Home = "https://www.easports.com/fifa/ultimate-team/web-app";
 
-                    NucleusId = "https://www.easports.com/iframe/fut16/?locale=en_US&baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app";
+                    NucleusId = "https://www.easports.com/iframe/fut17/?locale=en_US&baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app";
 
-                    Shards = "https://www.easports.com/iframe/fut16/p/ut/shards/v2?_={0}";
+                    Shards = "https://www.easports.com/iframe/fut17/p/ut/shards/v2?_={0}";
 
-                    AccountInfo = "https://www.easports.com/iframe/fut16/p/ut/game/fifa16/user/accountinfo?sku=FUT16WEB&_={0}";
+                    AccountInfo = "https://www.easports.com/iframe/fut17/p/ut/game/fifa17/user/accountinfo?sku=FUT17WEB&_={0}";
 
-                    Item = "https://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
+                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/web/{0}.json";
 
-                    PlayerImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/players/web/{0}.png";
 
-                    FlagsImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
+                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/cardflagssmall/web/{0}.png";
 
-                    ClubImage = "http://fifa15.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
 
                 case AppVersion.CompanionApp:
 
-                    Validate = "https://utas.s2.fut.ea.com/ut/game/fifa16/phishing/validate";
+                    Validate = "https://utas.s2.fut.ea.com/ut/game/fifa17/phishing/validate";
 
                     Auth = "https://utas.s2.fut.ea.com/ut/auth?timestamp={0}";
 
-                    Home = "https://accounts.ea.com/connect/auth?client_id=FIFA-16-MOBILE-COMPANION&response_type=code&display=web2/login&scope=basic.identity+offline+signin&locale=en_GB&prompt=login&machineProfileKey={0}";
+                    Home = "https://accounts.ea.com/connect/auth?client_id=FIFA-17-MOBILE-COMPANION&response_type=code&display=web2/login&scope=basic.identity+offline+signin&locale=en_GB&prompt=login&machineProfileKey={0}";
 
                     NucleusId = "https://pas.mob.v3.easfc.ea.com:8095/pow/user/self/tiergp/NucleusId/tiertp/{0}?offset=0&count=50&_={1}";
 
                     Shards = "https://utas.mob.v3.fut.ea.com/ut/shards/v2?_={0}";
 
-                    AccountInfo = "https://utas.s2.fut.ea.com/ut/game/fifa16/user/accountinfo?sku=FUT16AND&_={0}";
+                    AccountInfo = "https://utas.s2.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
 
-                    Item = "https://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/web/{0}.json";
+                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/web/{0}.json";
 
-                    PlayerImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/players/web/{0}.png";
+                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/players/web/{0}.png";
 
-                    FlagsImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/cardflagssmall/web/{0}.png";
+                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/cardflagssmall/web/{0}.png";
 
-                    ClubImage = "http://fifa16.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2016/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
                 default:
