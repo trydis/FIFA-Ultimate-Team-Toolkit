@@ -12,9 +12,9 @@
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
     <releaseNotes>
-- Login via companion app
-- Get and solve captcha
-- Remove all sold items from trade pile
+- Initial support for FIFA 17
+- Captcha handling for companion app
+- Open packs
     </releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.5" />
