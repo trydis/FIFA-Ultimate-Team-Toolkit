@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UltimateTeam.Toolkit.Parameters;
 
 namespace UltimateTeam.Toolkit.Models
@@ -75,25 +75,25 @@ namespace UltimateTeam.Toolkit.Models
 
         public int Nation { get; set; }
 
-        public long cardassetid { get; set; }
+        public long CardAssetId { get; set; }
 
-        public long value { get; set; }
+        public long Value { get; set; }
 
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public string category { get; set; }
+        public string Category { get; set; }
 
-        public int marketDataMaxPrice { get; set; }
+        public int MarketDataMaxPrice { get; set; }
 
-        public int marketDataMinPrice { get; set; }
+        public int MarketDataMinPrice { get; set; }
 
-        public int weightrare { get; set; }
+        public int WeightRare { get; set; }
 
-        public int bronze { get; set; }
+        public int Bronze { get; set; }
 
-        public int silver { get; set; }
+        public int Silver { get; set; }
 
-        public int gold { get; set; }
+        public int Gold { get; set; }
 
         public int Amount { get; set; }
 
@@ -103,16 +103,14 @@ namespace UltimateTeam.Toolkit.Models
 
         public string Negotiation { get; set; }
 
-        public string biodescription { get; set; }
+        public string BioDescription { get; set; }
 
-        public long stadiumid { get; set; }
+        public long StadiumId { get; set; }
 
-        public int capacity { get; set; }
+        public int Capacity { get; set; }
 
-        public string header { get; set; }
+        public string Header { get; set; }
 
-        public int year { get; set; }
-
-
+        public int Year { get; set; }
     }
 }
