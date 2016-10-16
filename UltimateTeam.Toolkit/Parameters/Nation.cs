@@ -27,8 +27,6 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint Brazil = 54;
         public const uint Bulgaria = 9;
         public const uint BurkinaFaso = 101;
-        //public const uint Burundi = 102; not in FIFA 17
-        //public const uint Cambodia = 154; not in FIFA 17
         public const uint Cameroon = 103;
         public const uint Canada = 70;
         public const uint CapeVerdeIslands = 104;
@@ -43,7 +41,6 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint CostaRica = 72;
         public const uint Croatia = 10;
         public const uint Cuba = 73;
-        //public const uint Curacao = 85; not in FIFA 17 - 85 now Netherlands Antilles
         public const uint Cyprus = 11;
         public const uint CzechRepublic = 12;
         public const uint Denmark = 13;
@@ -61,7 +58,6 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint Fiji = 197;
         public const uint Finland = 17;
         public const uint France = 18;
-        //public const uint FrenchGuiana = 79; not in FIFA 17 - 79 now Guyana
         public const uint FyrMacedonia = 19;
         public const uint Gabon = 115;
         public const uint Gambia = 116;
@@ -88,7 +84,6 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint IvoryCoast = 108;
         public const uint Jamaica = 82;
         public const uint Japan = 163;
-        //public const uint Jordan = 164; not in FIFA 17
         public const uint Kazakhstan = 165;
         public const uint Kenya = 120;
         public const uint KoreaDpr = 166;
@@ -206,8 +201,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Brazil", Brazil);
             yield return new Nation("Bulgaria", Bulgaria);
             yield return new Nation("Burkina Faso", BurkinaFaso);
-            //yield return new Nation("Burundi", Burundi);
-            //yield return new Nation("Cambodia", Cambodia);
             yield return new Nation("Cameroon", Cameroon);
             yield return new Nation("Canada", Canada);
             yield return new Nation("Cape Verde Islands", CapeVerdeIslands);
@@ -222,7 +215,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Costa Rica", CostaRica);
             yield return new Nation("Croatia", Croatia);
             yield return new Nation("Cuba", Cuba);
-            //yield return new Nation("Curacao", Curacao);
             yield return new Nation("Cyprus", Cyprus);
             yield return new Nation("Czech Republic", CzechRepublic);
             yield return new Nation("Denmark", Denmark);
@@ -240,7 +232,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Fiji", Fiji);
             yield return new Nation("Finland", Finland);
             yield return new Nation("France", France);
-            //yield return new Nation("French Guiana", FrenchGuiana); 
             yield return new Nation("FYR Macedonia", FyrMacedonia);
             yield return new Nation("Gabon", Gabon);
             yield return new Nation("Gambia", Gambia);
@@ -267,7 +258,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Ivory Coast", IvoryCoast);
             yield return new Nation("Jamaica", Jamaica);
             yield return new Nation("Japan", Japan);
-            //yield return new Nation("Jordan", Jordan);
             yield return new Nation("Kazakhstan", Kazakhstan);
             yield return new Nation("Kenya", Kenya);
             yield return new Nation("Korea DPR", KoreaDpr);
@@ -342,7 +332,6 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new Nation("Trinidad & Tobago", TrinidadAndTobago);
             yield return new Nation("Tunisia", Tunisia);
             yield return new Nation("Turkey", Turkey);
-            //yield return new Nation("Turkmenistan", Turkmenistan); not in FIFA 17
             yield return new Nation("Uganda", Uganda);
             yield return new Nation("Ukraine", Ukraine);
             yield return new Nation("United States", UnitedStates);
