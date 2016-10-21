@@ -112,13 +112,13 @@ namespace UltimateTeam.Toolkit.Constants
 
                     AccountInfo = "https://www.easports.com/iframe/fut17/p/ut/game/fifa17/user/accountinfo?sku=FUT17WEB&_={0}";
 
-                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/web/{0}.json";
+                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/web/{0}.json";
 
-                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/players/web/{0}.png";
+                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/players/web/{0}.png";
 
-                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/cardflagssmall/web/{0}.png";
+                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/cardflagssmall/web/{0}.png";
 
-                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
 
@@ -136,13 +136,13 @@ namespace UltimateTeam.Toolkit.Constants
 
                     AccountInfo = "https://utas.s2.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
 
-                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/web/{0}.json";
+                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/web/{0}.json";
 
-                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/players/web/{0}.png";
+                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/players/web/{0}.png";
 
-                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/cardflagssmall/web/{0}.png";
+                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/cardflagssmall/web/{0}.png";
 
-                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/B488919F-23B5-497F-9FC0-CACFB38863D0/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
 
                     break;
                 default:
