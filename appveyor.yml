@@ -1,18 +1,24 @@
 version: '{build}'
+
 image: Visual Studio 2015
+
 configuration: Release
-platform: Any CPU
+
+install:
+  - choco install gitversion.portable -pre -y
+
 assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: $(VERSION_NUMBER)
-  assembly_file_version: $(VERSION_NUMBER)
-  assembly_informational_version: $(VERSION_NUMBER)-dev{build}
-environment:
-  VERSION_NUMBER: 4.0.0
+  patch: false
+
 before_build:
 - cmd: nuget restore
+- ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
 build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  verbosity: minimal
+  project: UltimateTeam.Toolkit.sln
+
+after_build:
+  - cmd: ECHO nuget pack UltimateTeam.Toolkit\UltimateTeam.Toolkit.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%" -symbols
+  - cmd: nuget pack UltimateTeam.Toolkit\UltimateTeam.Toolkit.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%" -symbols
+  - cmd: appveyor PushArtifact "UltimateTeam.Toolkit.%GitVersion_NuGetVersion%.nupkg"
+  - cmd: appveyor PushArtifact "UltimateTeam.Toolkit.%GitVersion_NuGetVersion%.symbols.nupkg"
