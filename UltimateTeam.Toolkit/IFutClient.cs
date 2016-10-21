@@ -19,7 +19,7 @@ namespace UltimateTeam.Toolkit
 
         Task<Item> GetItemAsync(AuctionInfo auctionInfo);
 
-        Task<Item> GetItemAsync(long resourceId);
+        Task<Item> GetItemAsync(long assetId);
 
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
 
@@ -74,7 +74,7 @@ namespace UltimateTeam.Toolkit
         Task GetGiftAsync(int idGift);
 
         Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
-        
+
         Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds);
 
         Task<CaptchaResponse> GetCaptchaAsync();

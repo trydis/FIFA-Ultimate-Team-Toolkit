@@ -269,7 +269,7 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _itemRequestFactory ??
-                       (_itemRequestFactory = baseId => SetSharedRequestProperties(new ItemRequest(baseId)));
+                       (_itemRequestFactory = assetId => SetSharedRequestProperties(new ItemRequest(assetId)));
             }
             set
             {
