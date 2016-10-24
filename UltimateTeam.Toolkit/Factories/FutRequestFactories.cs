@@ -26,8 +26,6 @@ namespace UltimateTeam.Toolkit.Factories
 
         private string _personaId;
 
-        private AppVersion _appVersion;
-
         private IHttpClient _httpClient;
 
         private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
@@ -150,15 +148,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public AppVersion AppVersion
-        {
-            get { return _appVersion; }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _appVersion = value;
-            }
-        }
+        public AppVersion AppVersion { get; set; }
 
         internal IHttpClient HttpClient
         {
@@ -181,7 +171,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
-                    _appVersion = details.AppVersion;
+                    AppVersion = details.AppVersion;
 
                     if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
@@ -230,7 +220,7 @@ namespace UltimateTeam.Toolkit.Factories
             request.HttpClient = HttpClient;
             request.Resources = _resources;
             request.NucleusId = _nucleusId;
-            request.AppVersion = _appVersion;
+            request.AppVersion = AppVersion;
 
             return request;
         }

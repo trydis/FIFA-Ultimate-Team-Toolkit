@@ -19,8 +19,6 @@ namespace UltimateTeam.Toolkit.Requests
 
         private string _nucleusId;
 
-        private AppVersion _appVersion;
-
         private IHttpClient _httpClient;
 
         public string PhishingToken
@@ -50,18 +48,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        public AppVersion AppVersion
-        {
-            get
-            {
-                return _appVersion;
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _appVersion = value;
-            }
-        }
+        public AppVersion AppVersion { get; set; }
 
         internal Resources Resources { get; set; }
 

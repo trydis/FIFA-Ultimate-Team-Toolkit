@@ -2,9 +2,9 @@
 
 namespace UltimateTeam.Toolkit.Extensions
 {
-    internal static class ObjectExtensions
+    internal static class ReferenceTypeExtensions
     {
-        public static void ThrowIfNullArgument(this object input)
+        public static void ThrowIfNullArgument<T>(this T input) where T : class
         {
             if (input == null)
             {
