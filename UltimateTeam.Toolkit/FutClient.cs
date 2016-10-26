@@ -62,14 +62,14 @@ namespace UltimateTeam.Toolkit
         {
             auctionInfo.ThrowIfNullArgument();
 
-            return RequestFactories.ItemRequestFactory(auctionInfo.ItemData.AssetId).PerformRequestAsync();
+            return RequestFactories.ItemRequestFactory(auctionInfo.CalculateBaseId()).PerformRequestAsync();
         }
 
-        public Task<Item> GetItemAsync(long assetId)
+        public Task<Item> GetItemAsync(long resourceId)
         {
-            if (assetId < 1) throw new ArgumentException("Definitely not valid", nameof(assetId));
+            if (resourceId < 1) throw new ArgumentException("Definitely not valid", nameof(resourceId));
 
-            return RequestFactories.ItemRequestFactory(assetId).PerformRequestAsync();
+            return RequestFactories.ItemRequestFactory(resourceId.CalculateBaseId()).PerformRequestAsync();
         }
 
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
@@ -211,6 +211,8 @@ namespace UltimateTeam.Toolkit
 
         public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
         {
+            baseId.ThrowIfNullArgument();
+
             return RequestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
         }
 
@@ -221,7 +223,7 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
 
-        public Task ReListAsync()
+        public Task<RelistResponse> ReListAsync()
         {
             return RequestFactories.ReListRequestFactory().PerformRequestAsync();
         }
