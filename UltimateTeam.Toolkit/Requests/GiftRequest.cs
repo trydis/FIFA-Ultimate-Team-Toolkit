@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Exceptions;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -15,12 +16,18 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Delete);
-            AddCommonHeaders();
+            if (AppVersion != AppVersion.WebApp)
+            {
+                throw new FutException($"Not implemented for {AppVersion}");
+            }
+
+            AddCommonHeaders(HttpMethod.Delete);
             var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
                 string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
                 new StringContent(" ")).ConfigureAwait(false);
+
             activeMessageRedeemResponseMessage.EnsureSuccessStatusCode();
+
             return 0;
         }
     }

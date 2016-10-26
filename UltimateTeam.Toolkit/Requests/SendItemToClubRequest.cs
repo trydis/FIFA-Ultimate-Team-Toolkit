@@ -1,12 +1,13 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-   internal class SendItemToClubRequest : FutRequestBase, IFutRequest<SendItemToClubResponse>
+    internal class SendItemToClubRequest : FutRequestBase, IFutRequest<SendItemToClubResponse>
     {
         private readonly ItemData _itemData;
 
@@ -18,16 +19,29 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<SendItemToClubResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Put);
-            AddCommonHeaders();
-            //{"itemData":[{"pile":"club","id":"01010101010101"}]}
-            var content = string.Format("{{\"itemData\":[{{\"pile\":\"club\",\"id\":\"{0}\"}}]}}", _itemData.Id);
-            var clubResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.FutHome + Resources.ListItem), new StringContent(content))
-                .ConfigureAwait(false);
+            var uriString = Resources.FutHome + Resources.ListItem;
+            Task<HttpResponseMessage> clubResponseMessageTask;
 
-            return await Deserialize<SendItemToClubResponse>(clubResponseMessage);
+            //Apply Draft-Token & Credits to club
+            var content = _itemData.CardSubTypeId == 231
+                              ? new StringContent("{\"apply\":[]}")
+                              : new StringContent($"{{\"itemData\":[{{\"pile\":\"club\",\"id\":\"{_itemData.Id}\"}}]}}");
+
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Put);
+                clubResponseMessageTask = HttpClient.PostAsync(uriString, content);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
+                clubResponseMessageTask = HttpClient.PutAsync(uriString, content);
+            }
+
+            var clubResponseMessage = await clubResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<SendItemToClubResponse>(clubResponseMessage);
         }
     }
-  }
-
+}

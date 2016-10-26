@@ -6,24 +6,28 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class ItemRequest : FutRequestBase, IFutRequest<Item>
     {
-        private readonly long _baseId;
+        private readonly long _assetId;
 
-        public ItemRequest(long baseId)
+        public ItemRequest(long assetId)
         {
-            _baseId = baseId;
+            _assetId = assetId;
         }
 
         public async Task<Item> PerformRequestAsync()
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+            }
+            else
+            {
+                AddAnonymousMobileHeader();
+            }
+
             var itemResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.Item, _baseId))
-                .ConfigureAwait(false);
-            var itemWrapper = await Deserialize<ItemWrapper>(itemResponseMessage);
+                                                .GetAsync(string.Format(Resources.Item, _assetId))
+                                                .ConfigureAwait(false);
+            var itemWrapper = await DeserializeAsync<ItemWrapper>(itemResponseMessage);
 
             return itemWrapper.Item;
         }

@@ -15,7 +15,7 @@ namespace UltimateTeam.Toolkit.Tests
     public class FutClientTests
     {
         private IFutClient _futClient;
-        private readonly Resources _resources = new Resources();
+        private readonly Resources _resources = new Resources(AppVersion.WebApp);
 
         [SetUp]
         public void Setup()
@@ -33,7 +33,7 @@ namespace UltimateTeam.Toolkit.Tests
         public async void LoginAsync_WhenCalled_ShouldPerformRequest()
         {
             const string dummyValue = "dummyValue";
-            var loginResponse = new LoginResponse(dummyValue, new Shards(), new UserAccounts(), dummyValue, dummyValue);
+            var loginResponse = new LoginResponse(dummyValue, new Shards(), new UserAccounts(), dummyValue, dummyValue, dummyValue);
             var mockRequest = TestHelpers.CreateMockFutRequestReturning(loginResponse);
             _futClient.RequestFactories.LoginRequestFactory = (details, provider) => mockRequest.Object;
 
@@ -170,7 +170,7 @@ namespace UltimateTeam.Toolkit.Tests
             const string json = "{\"Item\":{\"FirstName\":\"Mario\",\"LastName\":\"Balotelli\",\"CommonName\":null,\"Height\":\"189\",\"DateOfBirth\":{\"Year\":\"1990\",\"Month\":\"8\",\"Day\":\"12\"},\"PreferredFoot\":\"Right\",\"ClubId\":\"47\",\"LeagueId\":\"31\",\"NationId\":\"27\",\"Rating\":\"84\",\"Attribute1\":\"84\",\"Attribute2\":\"82\",\"Attribute3\":\"67\",\"Attribute4\":\"85\",\"Attribute5\":\"48\",\"Attribute6\":\"75\",\"Rare\":\"1\",\"ItemType\":\"PlayerA\"}}";
             #endregion
             var mock = TestHelpers.CreateMockHttpClientReturningJson(HttpMethod.Get, json);
-            _futClient.RequestFactories.ItemRequestFactory = auctionInfo => new ItemRequest(auctionInfo) { HttpClient = mock.Object };
+            _futClient.RequestFactories.ItemRequestFactory = auctionInfo => new ItemRequest(auctionInfo) { HttpClient = mock.Object, Resources = _resources };
 
             AssertEx.TaskDoesNotThrow(async () => await _futClient.GetItemAsync(new AuctionInfo { ItemData = new ItemData() }));
         }

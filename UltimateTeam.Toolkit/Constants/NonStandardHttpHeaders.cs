@@ -15,5 +15,11 @@
         public const string Route = "X-UT-Route";
 
         public const string SessionId = "X-UT-SID";
+
+        public const string PowSessionId = "X-POW-SID";
+
+        public const string CSP = "CSP";
+
+        public const string Origin = "Origin";
     }
 }

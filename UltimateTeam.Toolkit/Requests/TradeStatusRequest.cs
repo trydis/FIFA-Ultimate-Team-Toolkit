@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -20,15 +20,23 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<AuctionResponse> PerformRequestAsync()
         {
-            AddCommonHeaders();
-            AddMethodOverrideHeader(HttpMethod.Get);
-            var tradeStatusResponseMessage = await HttpClient
-                .PostAsync(
-                string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds)),
-                new StringContent(" ", Encoding.UTF8, "application/json"))
-                .ConfigureAwait(false);
+            var uriString = string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds));
+            Task<HttpResponseMessage> tradeStatusResponseMessageTask;
 
-            return await Deserialize<AuctionResponse>(tradeStatusResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+                tradeStatusResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                tradeStatusResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
+            }
+
+            var tradeStatusResponseMessage = await tradeStatusResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<AuctionResponse>(tradeStatusResponseMessage);
         }
     }
 }

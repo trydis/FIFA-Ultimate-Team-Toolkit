@@ -1,30 +1,43 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class SquadDetailsRequest : FutRequestBase, IFutRequest<SquadDetailsResponse>
     {
         private readonly ushort _squadId;
+        private readonly string _personaId;
 
-        public SquadDetailsRequest(ushort squadId)
+        public SquadDetailsRequest(ushort squadId, string personaId)
         {
-            squadId.ThrowIfNullArgument();
+            personaId.ThrowIfInvalidArgument();
             _squadId = squadId;
+            _personaId = personaId;
         }
 
         public async Task<SquadDetailsResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var squadResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.SquadDetails, _squadId))
-                .ConfigureAwait(false);
+            var uriString = string.Format(Resources.FutHome + Resources.SquadDetails, _squadId);
 
-            return await Deserialize<SquadDetailsResponse>(squadResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"/user/{_personaId}?_={DateTime.Now.ToUnixTime()}";
+            }
+
+            var squadResponseMessage = await HttpClient
+                    .GetAsync(uriString)
+                    .ConfigureAwait(false);
+
+            return await DeserializeAsync<SquadDetailsResponse>(squadResponseMessage);
         }
     }
 }

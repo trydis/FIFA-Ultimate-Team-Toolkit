@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Moq;
+using System;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Moq;
+using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Requests;
 
@@ -14,7 +15,7 @@ namespace UltimateTeam.Toolkit.Tests
 
         public static LoginDetails CreateValidLoginDetails()
         {
-            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps4);
+            return new LoginDetails(IgnoredParameter, IgnoredParameter, IgnoredParameter, Platform.Ps4, AppVersion.WebApp);
         }
 
         public static Mock<IFutRequest<T>> CreateMockFutRequestReturning<T>(T result) where T : class
@@ -43,7 +44,7 @@ namespace UltimateTeam.Toolkit.Tests
 
             return mock;
         }
-        
+
         public static Mock<IHttpClient> CreateMockHttpClientReturningJson(HttpMethod method, string json)
         {
             var mock = new Mock<IHttpClient>();

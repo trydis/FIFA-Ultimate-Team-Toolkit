@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -9,13 +11,23 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<WatchlistResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var watchlistResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.Watchlist))
-                .ConfigureAwait(false);
+            var uriString = Resources.FutHome + Resources.Watchlist;
+            Task<HttpResponseMessage> watchlistResponseMessageTask;
 
-            return await Deserialize<WatchlistResponse>(watchlistResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+                watchlistResponseMessageTask = HttpClient.GetAsync(uriString);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                watchlistResponseMessageTask = HttpClient.GetAsync(uriString + $"?_={ DateTime.Now.ToUnixTime()}");
+            }
+
+            var watchlistResponseMessage = await watchlistResponseMessageTask.ConfigureAwait(false);
+
+            return await DeserializeAsync<WatchlistResponse>(watchlistResponseMessage);
         }
     }
 }

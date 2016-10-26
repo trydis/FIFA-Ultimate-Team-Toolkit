@@ -11,7 +11,11 @@
     <projectUrl>https://github.com/trydis/FIFA-Ultimate-Team-Toolkit</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
-    <releaseNotes>Added CoinsProcessed to AuctionInfo</releaseNotes>
+    <releaseNotes>
+- Initial support for FIFA 17
+- Captcha handling for companion app
+- Open packs
+    </releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.5" />
     </dependencies>

@@ -11,7 +11,7 @@ FIFA Ultimate Team Toolkit
 - Xamarin.iOS
 
 ## Build status
-[![trydis MyGet Build Status](https://www.myget.org/BuildSource/Badge/trydis?identifier=d1708aa8-b649-41d2-ab05-daf80cec40c7)](https://www.myget.org/)
+[![Build status](https://ci.appveyor.com/api/projects/status/4owj0a485hhx1j7c/branch/master?svg=true)](https://ci.appveyor.com/project/trydis/fifa-ultimate-team-toolkit/branch/master)
 
 ## NuGet package
 
@@ -44,6 +44,11 @@ FIFA Ultimate Team Toolkit
 [Get players from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-players-from-club)  
 [Get squads from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squads-from-club)  
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
+[Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
+[Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
+[Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
+[Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
 
 ### Initialization
 
@@ -54,7 +59,7 @@ var client = new FutClient();
 ### Login
 
 ```csharp
-var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */);
+var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */, AppVersion.WebApp /* or AppVersion.CompanionApp */);
 ITwoFactorCodeProvider provider = // initialize an implementation of this interface
 var loginResponse = await client.LoginAsync(loginDetails, provider);
 ```
@@ -317,3 +322,76 @@ foreach (var squadPlayer in squadDetailsResponse.players)
 	//Positions seem to be set by index number and depend on formation
 }
 ```
+
+### Get definitions
+
+Gets all player cards (Standard, IF, SIF, TOTW,...) based on their Asset ID
+```csharp
+var playerDefinitions = await client.GetDefinitionsAsync(/* AssetId */);
+
+foreach (ItemData itemData in playerDefinitions.ItemData)
+{
+    var definitionId = itemData.ResourceId;
+    // Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
+}
+```
+
+### Get price ranges
+
+Gets the EA price range - **You can only use this method right after you get tradepile / watchlist!**
+```csharp
+var priceRanges = await client.GetPriceRangesAsync(/* List of ItemIds */);
+
+foreach (PriceRange priceRange in priceRanges)
+{
+    priceRange.MaxPrice = // Maximum BIN
+    priceRange.MinPrice = // Minimum Starting BID
+}
+```
+
+### Get & Solve Captcha
+
+Get Captcha as Base64 encoded image
+```csharp
+CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
+```
+
+Solve Captcha
+```csharp
+var CaptchaValidate = await futClient.ValidateCaptchaAsync(/* answer */);
+```
+
+### Remove sold items from trade pile
+
+Removes all sold items from the trade pile.
+
+```csharp
+await client.RemoveSoldItemsFromTradePileAsync();
+```
+
+### Open a pack
+
+Get all available Packs
+
+```csharp
+var storeResponse = await futClient.GetPackDetailsAsync();
+```
+
+Buy pack
+
+```csharp
+// Identify the pack id
+uint packId = 0;
+
+foreach (var packDetail in storeResponse.Purchase)
+{
+    if (packDetail.Coins == 7500)
+    {
+        packId = packDetail.Id;
+    }
+}
+
+// Buy Pack
+var buyPackResponse = await futClient.BuyPackAsync(new PackDetails(packId));
+```
+

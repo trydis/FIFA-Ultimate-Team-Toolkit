@@ -32,6 +32,8 @@ namespace UltimateTeam.Toolkit.Models
 
         public long TradeId { get; set; }
 
+        public string TradeIdStr { get; set; }
+
         public string TradeState { get; set; }
 
         public bool? Watched { get; set; }

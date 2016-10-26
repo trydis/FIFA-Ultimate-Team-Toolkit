@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -13,6 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
         // 100 = Staff
         // 142 = ClubItems
         // Consumables are different
+
         public ClubItemRequest()
         {
             _listType = 1;
@@ -20,14 +23,23 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<ClubItemResponse> PerformRequestAsync()
         {
-            var uriString = string.Format(Resources.FutHome + Resources.MyClub + "&type={0}",_listType);
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
-            var clubItemResponseMessage = await HttpClient
-                .GetAsync(uriString)
-                .ConfigureAwait(false);
+            var uriString = Resources.FutHome + Resources.MyClub + $"&type={_listType}";
 
-            return await Deserialize<ClubItemResponse>(clubItemResponseMessage);
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+            }
+            else
+            {
+                uriString += "&_=" + DateTime.Now.ToUnixTime();
+                AddCommonMobileHeaders();
+            }
+
+            var clubItemResponseMessage = await HttpClient
+                    .GetAsync(uriString)
+                    .ConfigureAwait(false);
+
+            return await DeserializeAsync<ClubItemResponse>(clubItemResponseMessage);
         }
     }
 }

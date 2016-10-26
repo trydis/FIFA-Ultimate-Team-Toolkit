@@ -1,41 +1,54 @@
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
-using UltimateTeam.Toolkit.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-     internal class AddToWatchlistRequest : FutRequestBase, IFutRequest<byte>
+    internal class AddToWatchlistRequest : FutRequestBase, IFutRequest<byte>
     {
+        private readonly IEnumerable<AuctionInfo> _auctioninfo;
 
-         private readonly IEnumerable<AuctionInfo> _auctioninfo;
-
-         public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
+        public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
         {
             auctioninfo.ThrowIfNullArgument();
             _auctioninfo = auctioninfo;
         }
 
-         // Request	POST ut/game/fifa14/watchlist?tradeId=140174434046
-         // {"auctionInfo":[{"id":140196790669}]}
+        public async Task<byte> PerformRequestAsync()
+        {
+            var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
+            var content = $"{{\"auctionInfo\":[{{\"id\":{tradeIds}}}]}}";
+            var uriString = Resources.FutHome + Resources.Watchlist + $"?tradeId={tradeIds}";
+            ConfiguredTaskAwaitable<HttpResponseMessage> addToWatchlistTask;
 
-         public async Task<byte> PerformRequestAsync()
-         {
-             var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
-             var uriString = string.Format(Resources.FutHome + Resources.Watchlist + "?tradeId={0}", tradeIds);
-             var content = string.Format("{{\"auctionInfo\":[{{\"id\":{0}}}]}}", tradeIds);
-             AddMethodOverrideHeader(HttpMethod.Put);
-             AddCommonHeaders();
-             var addToWatchlistResponseMessage = await HttpClient
-                 .PostAsync(uriString, new StringContent(content))
-                 .ConfigureAwait(false);
-             addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Put);
+                addToWatchlistTask = HttpClient
+                    .PostAsync(uriString, new StringContent(content))
+                    .ConfigureAwait(false);
 
-             return 0;
-         }
+            }
+            if (AppVersion == AppVersion.CompanionApp)
+            {
+                AddCommonMobileHeaders();
+                uriString += $"&_={DateTime.Now.ToUnixTime()}";
 
+                addToWatchlistTask = HttpClient
+                    .PutAsync(uriString, new StringContent(content))
+                    .ConfigureAwait(false);
+            }
+
+            var addToWatchlistResponseMessage = await addToWatchlistTask;
+            addToWatchlistResponseMessage.EnsureSuccessStatusCode();
+
+            return 0;
+        }
     }
 }

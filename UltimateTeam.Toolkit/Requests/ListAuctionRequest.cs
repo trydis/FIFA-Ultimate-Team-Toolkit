@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
@@ -18,15 +19,25 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<ListAuctionResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Post);
-            AddCommonHeaders();
-            var content = string.Format("{{\"buyNowPrice\":{0},\"startingBid\":{1},\"duration\":{2},\"itemData\":{{\"id\":{3}}}}}",
-                _auctionDetails.BuyNowPrice, _auctionDetails.StartingBid, (uint)_auctionDetails.AuctionDuration, _auctionDetails.ItemDataId);
+            var uriString = string.Format(Resources.FutHome + Resources.Auctionhouse);
+            var content = $"{{\"buyNowPrice\":{_auctionDetails.BuyNowPrice},\"startingBid\":{_auctionDetails.StartingBid}," +
+                          $"\"duration\":{(uint)_auctionDetails.AuctionDuration},\"itemData\":{{\"id\":{_auctionDetails.ItemDataId}}}}}";
+
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Post);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            }
+
             var tradepileResponseMessage = await HttpClient
-                .PostAsync(string.Format(Resources.FutHome + Resources.Auctionhouse), new StringContent(content))
+                .PostAsync(uriString, new StringContent(content))
                 .ConfigureAwait(false);
 
-            return await Deserialize<ListAuctionResponse>(tradepileResponseMessage);
+            return await DeserializeAsync<ListAuctionResponse>(tradepileResponseMessage);
         }
     }
 }

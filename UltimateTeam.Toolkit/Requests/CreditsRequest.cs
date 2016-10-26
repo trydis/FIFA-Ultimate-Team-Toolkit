@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
@@ -9,13 +11,23 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<CreditsResponse> PerformRequestAsync()
         {
-            AddMethodOverrideHeader(HttpMethod.Get);
-            AddCommonHeaders();
+            var uriString = Resources.FutHome + Resources.Credits;
+
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddCommonHeaders(HttpMethod.Get);
+            }
+            else
+            {
+                AddCommonMobileHeaders();
+                uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            }
+
             var creditsResponseMessage = await HttpClient
-                .GetAsync(string.Format(Resources.FutHome + Resources.Credits))
+                .GetAsync(uriString)
                 .ConfigureAwait(false);
 
-            return await Deserialize<CreditsResponse>(creditsResponseMessage);
+            return await DeserializeAsync<CreditsResponse>(creditsResponseMessage);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -13,16 +13,18 @@ namespace UltimateTeam.Toolkit.Requests
         {
             auctionInfo.ThrowIfNullArgument();
             _auctionInfo = auctionInfo;
-            
         }
 
         public async Task<byte[]> PerformRequestAsync()
         {
-            AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            if (AppVersion == AppVersion.WebApp)
+            {
+                AddAnonymousHeader();
+            }
+            else
+            {
+                AddAnonymousMobileHeader();
+            }
 
             return await HttpClient
                 .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.NationId))
