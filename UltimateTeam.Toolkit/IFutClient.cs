@@ -19,7 +19,7 @@ namespace UltimateTeam.Toolkit
 
         Task<Item> GetItemAsync(AuctionInfo auctionInfo);
 
-        Task<Item> GetItemAsync(long assetId);
+        Task<Item> GetItemAsync(long resourceId);
 
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
 
@@ -67,7 +67,7 @@ namespace UltimateTeam.Toolkit
 
         Task<byte[]> GetNationImageAsync(Item item);
 
-        Task ReListAsync();
+        Task<RelistResponse> ReListAsync();
 
         Task<ListGiftsResponse> GetGiftsListAsync();
 

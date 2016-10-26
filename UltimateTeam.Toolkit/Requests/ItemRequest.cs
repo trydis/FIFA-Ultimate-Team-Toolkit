@@ -6,11 +6,11 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class ItemRequest : FutRequestBase, IFutRequest<Item>
     {
-        private readonly long _assetId;
+        private readonly long _baseId;
 
-        public ItemRequest(long assetId)
+        public ItemRequest(long baseId)
         {
-            _assetId = assetId;
+            _baseId = baseId;
         }
 
         public async Task<Item> PerformRequestAsync()
@@ -25,7 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
 
             var itemResponseMessage = await HttpClient
-                                                .GetAsync(string.Format(Resources.Item, _assetId))
+                                                .GetAsync(string.Format(Resources.Item, _baseId))
                                                 .ConfigureAwait(false);
             var itemWrapper = await DeserializeAsync<ItemWrapper>(itemResponseMessage);
 

@@ -95,6 +95,7 @@
     <Compile Include="Models\AuctionDetails.cs" />
     <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />
+    <Compile Include="Models\RelistResponse.cs" />
     <Compile Include="Models\StoreResponse.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\Auth.cs" />

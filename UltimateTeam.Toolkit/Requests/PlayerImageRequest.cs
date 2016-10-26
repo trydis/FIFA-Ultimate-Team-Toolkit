@@ -27,7 +27,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
 
             return await HttpClient
-                             .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.ItemData.AssetId))
+                             .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
                              .ConfigureAwait(false);
         }
     }

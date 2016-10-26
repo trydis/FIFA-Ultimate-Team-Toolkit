@@ -76,7 +76,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<ConsumablesResponse>> _consumablesRequestFactory;
 
-        private Func<IFutRequest<byte>> _reListRequestFactory;
+        private Func<IFutRequest<RelistResponse>> _reListRequestFactory;
 
         private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
 
@@ -259,7 +259,7 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _itemRequestFactory ??
-                       (_itemRequestFactory = assetId => SetSharedRequestProperties(new ItemRequest(assetId)));
+                       (_itemRequestFactory = baseId => SetSharedRequestProperties(new ItemRequest(baseId)));
             }
             set
             {
@@ -566,7 +566,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<IFutRequest<byte>> ReListRequestFactory
+        public Func<IFutRequest<RelistResponse>> ReListRequestFactory
         {
             get
             {
