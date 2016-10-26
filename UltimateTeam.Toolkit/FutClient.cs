@@ -211,8 +211,6 @@ namespace UltimateTeam.Toolkit
 
         public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
         {
-            baseId.ThrowIfNullArgument();
-
             return RequestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
         }
 
