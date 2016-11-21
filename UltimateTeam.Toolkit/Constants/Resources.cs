@@ -34,6 +34,12 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string AccountInfoXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
 
+        public const string ValidateXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/phishing/validate";
+
+        public const string AuthXbox = "https://utas.s3.fut.ea.com/ut/auth?timestamp={0}";
+
+        public const string AccountInfoXbox = "https://utas.s3.fut.ea.com/ut/game/fifa16/user/accountinfo?sku=FUT16AND&_={0}";
+
         public const string POWAuth = "https://pas.mob.v3.easfc.ea.com:8095/pow/auth?timestamp={0}";
 
         public const string AuthCode = "https://accounts.ea.com/connect/auth";
