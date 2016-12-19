@@ -162,7 +162,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
             HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
-            var route = $"https://utas.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2")}.fut.ea.com:443";
+            var route = $"https://utas.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "external.s3" : "s2")}.fut.ea.com:443";
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
 
