@@ -26,7 +26,7 @@ namespace UltimateTeam.Toolkit.Constants
 
         public string FutHome = "https://utas.s2.fut.ea.com/ut/game/fifa17/";
 
-        public const string FutHomeXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/";
+        public const string FutHomeXbox = "https://utas.external.s3.fut.ea.com/ut/game/fifa17/";
 
         public const string ValidateXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/phishing/validate";
 
