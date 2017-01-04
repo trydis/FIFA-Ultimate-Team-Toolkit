@@ -12,7 +12,7 @@
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
     <releaseNotes>
-- Xbox Login Fix (@CoverJ)
+- Host name changes (artielange)
     </releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.5" />
