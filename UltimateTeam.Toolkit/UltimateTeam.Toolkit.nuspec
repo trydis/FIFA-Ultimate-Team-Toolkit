@@ -12,9 +12,7 @@
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
     <releaseNotes>
-- Initial support for FIFA 17
-- Captcha handling for companion app
-- Open packs
+- Host name changes (artielange)
     </releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.5" />
