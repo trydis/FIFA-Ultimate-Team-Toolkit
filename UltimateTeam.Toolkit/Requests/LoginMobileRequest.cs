@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
@@ -24,13 +23,14 @@ namespace UltimateTeam.Toolkit.Requests
         private string _route;
 
         private MobileToken _token;
-        private readonly string _nucPersonaId;
 
         private IHasher Hasher
         {
             get { return _hasher ?? (_hasher = new Hasher()); }
             set { _hasher = value; }
         }
+
+        private string NucPersonaId { get; set; }
 
         public LoginRequestMobile(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
