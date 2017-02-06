@@ -112,5 +112,14 @@ namespace UltimateTeam.Toolkit.Models
         public string Header { get; set; }
 
         public int Year { get; set; }
+
+        public string Manufacturer { get; set; }
+        public string Description { get; set; }
+        public string InternationalRep { get; set; }
+        public string Attribute { get; set; }
+        public string Fieldpos { get; set; }
+        public string PosBonus { get; set; }
+        public ItemData TrainingItem { get; set; }
+        public int ResourceGameYear { get; set; }
     }
 }
