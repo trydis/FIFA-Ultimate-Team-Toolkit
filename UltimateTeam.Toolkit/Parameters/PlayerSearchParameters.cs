@@ -38,10 +38,13 @@ namespace UltimateTeam.Toolkit.Parameters
             if (MaxBid > 0)
                 uriString += "&macr=" + MaxBid;
 
+            if (ResourceId != 0)
+            {
             if (ResourceId <= 16777216)
                 uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
             else
                 uriString += "&definitionId=" + ResourceId;
+            }
 
             SetPosition(ref uriString);
 

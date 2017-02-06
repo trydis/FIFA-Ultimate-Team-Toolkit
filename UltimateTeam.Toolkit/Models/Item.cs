@@ -70,5 +70,34 @@
         }
 
         public string Desc { get; set; }
+
+        public uint Bronze { get; set; }
+        public uint Silver { get; set; }
+        public uint Gold { get; set; }
+
+        public uint Value { get; set; }
+
+        public uint Weight { get; set; }
+        public uint FormationId { get; set; }
+        public uint TalkRating { get; set; }
+        public uint Negotiation { get; set; }
+        public uint AssetId { get; set; }
+        public uint Attr { get; set; }
+        public uint Amount { get; set; }
+
+        public uint AssetYear { get; set; }
+        public uint Category { get; set; }
+        public string BioDesc { get; set; }
+
+        public string Manufacturer { get; set; }
+        public string Name { get; set; }
+
+        public uint StadiumId { get; set; }
+        public uint Cap { get; set; } //Capacity
+        public uint Boost { get; set; }
+
+        public uint Pos { get; set; }
+        public uint PosBonus { get; set; }
+        public string InternationalRep { get; set; }
     }
 }
