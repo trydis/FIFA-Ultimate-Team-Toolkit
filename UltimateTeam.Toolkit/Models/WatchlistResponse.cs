@@ -2,13 +2,13 @@
 
 namespace UltimateTeam.Toolkit.Models
 {
-    public class WatchlistResponse : IListResponse
+    public class WatchlistResponse
     {
-        public virtual List<AuctionInfo> AuctionInfo { get; set; }
+        public List<AuctionInfo> AuctionInfo { get; set; }
 
-        public virtual uint Credits { get; set; }
+        public uint Credits { get; set; }
 
-        public virtual List<DuplicateItem> DuplicateItemIdList { get; set; }
+        public List<DuplicateItem> DuplicateItemIdList { get; set; }
 
         public ushort Total { get; set; }
     }

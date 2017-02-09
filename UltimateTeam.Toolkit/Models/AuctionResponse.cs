@@ -2,13 +2,13 @@
 
 namespace UltimateTeam.Toolkit.Models
 {
-    public class AuctionResponse : IListResponse
+    public class AuctionResponse
     {
-        public virtual List<AuctionInfo> AuctionInfo { get; set; }
+        public List<AuctionInfo> AuctionInfo { get; set; }
 
         public BidTokens BidTokens { get; set; }
 
-        public virtual uint Credits { get; set; }
+        public uint Credits { get; set; }
 
         public List<Currency> Currencies { get; set; }
 

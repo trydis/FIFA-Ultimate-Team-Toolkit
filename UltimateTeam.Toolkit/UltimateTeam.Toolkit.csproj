@@ -86,7 +86,6 @@
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />
-    <Compile Include="Models\IListResponse.cs" />
     <Compile Include="Models\MobileToken.cs" />
     <Compile Include="Models\PackDetails.cs" />
     <Compile Include="Models\PackContentInfo.cs" />
