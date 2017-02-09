@@ -24,13 +24,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         private MobileToken _token;
 
-        private IHasher Hasher
-        {
-            get { return _hasher ?? (_hasher = new Hasher()); }
-            set { _hasher = value; }
-        }
-
-        private string NucPersonaId { get; set; }
+        private IHasher Hasher => _hasher ?? (_hasher = new Hasher());
 
         public LoginRequestMobile(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
@@ -57,13 +51,13 @@ namespace UltimateTeam.Toolkit.Requests
                 }
                 httpResponseMessage = await HandleAccountUpdate(httpResponseMessage);
                 httpResponseMessage = await SetTwoFactorCodeAsync(httpResponseMessage);
-                httpResponseMessage = await this.CancelUpdateAuthenticationModeAsync(httpResponseMessage);
+                httpResponseMessage = await CancelUpdateAuthenticationModeAsync(httpResponseMessage);
                 _token = await GetToken(httpResponseMessage);
                 var nucleusId = await GetMobileNucleusIdAsync();
                 var shards = await GetMobileShardsAsync(nucleusId);
                 var userAccounts = await GetMobileUserAccountsAsync(_loginDetails.Platform);
-                _sessionId = await this.GetSessionIdAsync(userAccounts, this._loginDetails.Platform);
-                var phishingToken = await this.ValidateAsync(this._loginDetails, _sessionId);
+                _sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
+                var phishingToken = await ValidateAsync(_loginDetails, _sessionId);
 
                 return new LoginResponse(nucleusId, shards, userAccounts, _sessionId, phishingToken, nucleusId);
             }
@@ -105,13 +99,13 @@ namespace UltimateTeam.Toolkit.Requests
                 case Platform.Pc:
                     return "FFA17PCC";
                 default:
-                    throw new ArgumentOutOfRangeException("platform");
+                    throw new ArgumentOutOfRangeException(nameof(platform));
             }
         }
 
         private async Task<string> GetSessionIdAsync(UserAccounts userAccounts, Platform platform)
         {
-            HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(string.Format("https://accounts.ea.com/connect/auth?client_id=FOS-SERVER&redirect_uri=nucleus:rest&response_type=code&access_token={0}", _token.AccessToken));
+            HttpResponseMessage httpResponse = await HttpClient.GetAsync(string.Format("https://accounts.ea.com/connect/auth?client_id=FOS-SERVER&redirect_uri=nucleus:rest&response_type=code&access_token={0}", _token.AccessToken));
             httpResponse.EnsureSuccessStatusCode();
             string code = (await DeserializeAsync<MobileToken>(httpResponse)).Code;
             var persona = userAccounts
@@ -123,19 +117,18 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 throw new FutException("Couldn't find a persona matching the selected platform");
             }
-            NucPersonaId = persona.PersonaId.ToString();
-            var httpResponseMessage = await this.HttpClient.PostAsync(string.Format("{0}/ut/auth?timestamp={1}", _route, CreateTimestamp()), new StringContent(string.Format("{{ \"isReadOnly\": false, \"sku\": \"FUT17AND\", \"clientVersion\": 22, \"locale\": \"en-US\", \"method\": \"authcode\", \"priorityLevel\":4, \"identification\": {{ \"authCode\": \"{1}\",\"redirectUrl\":\"nucleus:rest\" }}, \"nucleusPersonaId\": {0},\"gameSku\": \"{2}\" }}", persona.PersonaId, code, GetgameSkuPlatform(platform))));
+            var httpResponseMessage = await HttpClient.PostAsync(string.Format("{0}/ut/auth?timestamp={1}", _route, CreateTimestamp()), new StringContent(string.Format("{{ \"isReadOnly\": false, \"sku\": \"FUT17AND\", \"clientVersion\": 22, \"locale\": \"en-US\", \"method\": \"authcode\", \"priorityLevel\":4, \"identification\": {{ \"authCode\": \"{1}\",\"redirectUrl\":\"nucleus:rest\" }}, \"nucleusPersonaId\": {0},\"gameSku\": \"{2}\" }}", persona.PersonaId, code, GetgameSkuPlatform(platform))));
             httpResponseMessage.EnsureSuccessStatusCode();
             await httpResponseMessage.Content.ReadAsStringAsync();
             var sessionAuthResponse = await DeserializeAsync<SessionAuthResponse>(httpResponseMessage);
-            var result = sessionAuthResponse.sid;
+            var result = sessionAuthResponse.Sid;
             return result;
         }
 
         private async Task<MobileToken> GetToken(HttpResponseMessage response)
         {
             var str = response.RequestMessage.RequestUri.Query.Replace("?code=", "");
-            var httpResponseMessage = await this.HttpClient.PostAsync("https://accounts.ea.com/connect/token?grant_type=authorization_code&code=" + str + "&client_id=FIFA-17-MOBILE-COMPANION&client_secret=qIdl15XHu4VWrcolro37Um0JiuRjnbIspnYtXmv3zr6pPL9S0N9H1IutSFJvnCORH3isebmeVdCtHaFC", new FormUrlEncodedContent(new KeyValuePair<string, string>[]
+            var httpResponseMessage = await HttpClient.PostAsync("https://accounts.ea.com/connect/token?grant_type=authorization_code&code=" + str + "&client_id=FIFA-17-MOBILE-COMPANION&client_secret=qIdl15XHu4VWrcolro37Um0JiuRjnbIspnYtXmv3zr6pPL9S0N9H1IutSFJvnCORH3isebmeVdCtHaFC", new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("", "")
             }));
@@ -146,21 +139,21 @@ namespace UltimateTeam.Toolkit.Requests
 
         private async Task<string> GetMobileNucleusIdAsync()
         {
-            this.AddAuthorizeHeader(_token.TokenType, _token.AccessToken);
-            var response = await this.HttpClient.GetAsync("https://gateway.ea.com/proxy/identity/pids/me");
+            AddAuthorizeHeader(_token.TokenType, _token.AccessToken);
+            var response = await HttpClient.GetAsync("https://gateway.ea.com/proxy/identity/pids/me");
             response.EnsureSuccessStatusCode();
-            var pidId = (await FutRequestBase.DeserializeAsync<MobileToken>(response)).Pid.PidId;
-            this.RemoveAuthorizeHeader();
+            var pidId = (await DeserializeAsync<MobileToken>(response)).Pid.PidId;
+            RemoveAuthorizeHeader();
             return pidId;
         }
 
         private async Task<Shards> GetMobileShardsAsync(string nucleusId)
         {
-            this.HttpClient.AddRequestHeader("Easw-Session-Data-Nucleus-Id", nucleusId);
-            this.HttpClient.AddRequestHeader("X-UT-Embed-Error", "true");
-            this.HttpClient.AddRequestHeader("X-Requested-With", "XMLHttpRequest");
-            this.AddAcceptHeader("application/json, text/javascript");
-            this.AddAcceptLanguageHeader();
+            HttpClient.AddRequestHeader("Easw-Session-Data-Nucleus-Id", nucleusId);
+            HttpClient.AddRequestHeader("X-UT-Embed-Error", "true");
+            HttpClient.AddRequestHeader("X-Requested-With", "XMLHttpRequest");
+            AddAcceptHeader("application/json, text/javascript");
+            AddAcceptLanguageHeader();
             var httpResponseMessage = await HttpClient.GetAsync(string.Format("https://utas.mob.v1.fut.ea.com/ut/shards/v2?_={0}", CreateTimestamp()));
             var httpResponseMessage2 = httpResponseMessage;
             await httpResponseMessage2.Content.ReadAsStringAsync();
@@ -176,7 +169,7 @@ namespace UltimateTeam.Toolkit.Requests
         {
             HttpClient.RemoveRequestHeader("X-UT-Route");
             _route = string.Format("https://utas.external.{0}fut.ea.com:443", (platform == Platform.Xbox360) ? "s3." : ((platform == Platform.XboxOne) ? "s3." : ((platform == Platform.Ps3) ? "s2." : ((platform == Platform.Ps4) ? "s2." : ((platform == Platform.Pc) ? "s2." : string.Empty)))));
-            return await FutRequestBase.DeserializeAsync<UserAccounts>(await HttpClient.GetAsync(string.Format("{1}/ut/game/fifa17/user/accountinfo?filterConsoleLogin=true&sku=FUT17AND_={0}", CreateTimestamp(), _route)));
+            return await DeserializeAsync<UserAccounts>(await HttpClient.GetAsync(string.Format("{1}/ut/game/fifa17/user/accountinfo?filterConsoleLogin=true&sku=FUT17AND_={0}", CreateTimestamp(), _route)));
         }
 
         private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
@@ -220,14 +213,14 @@ namespace UltimateTeam.Toolkit.Requests
             }
             else
             {
-                response = await this.HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
+                response = await HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("_eventId", "submit")
                 }));
                 response.EnsureSuccessStatusCode();
                 if (response.Content.ReadAsStringAsync().Result.Contains("Email my code"))
                 {
-                    response = await this.HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
+                    response = await HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>("twofactorType", "EMAIL"),
                         new KeyValuePair<string, string>("_eventId", "submit")
@@ -248,7 +241,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
             else
             {
-                response = await this.HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
+                response = await HttpClient.PostAsync(response.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("_eventId", "cancel"),
                     new KeyValuePair<string, string>("appDevice", "IPHONE")
@@ -279,7 +272,7 @@ namespace UltimateTeam.Toolkit.Requests
                     var twoFactorCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
                     var loginResponseContent = await loginResponse.Content.ReadAsStringAsync();
                     AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
-                    HttpResponseMessage httpResponseMessage = await this.HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
+                    HttpResponseMessage httpResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>(loginResponseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", twoFactorCode),
                         new KeyValuePair<string, string>("_eventId", "submit"),
@@ -327,14 +320,14 @@ namespace UltimateTeam.Toolkit.Requests
 
         private void AddAuthorizeHeader(string type, string token)
         {
-            this.HttpClient.AddRequestHeader("Authorization", type + " " + token);
-            this.HttpClient.AddRequestHeader("Proxy-Connection", "keep-alive");
+            HttpClient.AddRequestHeader("Authorization", type + " " + token);
+            HttpClient.AddRequestHeader("Proxy-Connection", "keep-alive");
         }
 
         private void RemoveAuthorizeHeader()
         {
-            this.HttpClient.RemoveRequestHeader("Authorization");
-            this.HttpClient.RemoveRequestHeader("Proxy-Connection");
+            HttpClient.RemoveRequestHeader("Authorization");
+            HttpClient.RemoveRequestHeader("Proxy-Connection");
         }
     }
 }

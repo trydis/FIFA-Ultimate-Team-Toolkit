@@ -1,29 +1,26 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Models
+﻿namespace UltimateTeam.Toolkit.Models
 {
-    // Token: 0x02000067 RID: 103
     internal class SessionAuthResponse
     {
         
-        public string code;
+        public string Code;
 
         
-        public string expiresOn;
+        public string ExpiresOn;
 
         
-        public string ipPort;
+        public string IpPort;
 
         
-        public string lastOnlineTime;
+        public string LastOnlineTime;
 
         
-        public string protocol;
+        public string Protocol;
 
         
-        public string serverTime;
+        public string ServerTime;
 
         
-        public string sid;
+        public string Sid;
     }
 }
