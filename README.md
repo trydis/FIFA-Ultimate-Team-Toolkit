@@ -1,7 +1,7 @@
 FIFA Ultimate Team Toolkit
 ===============================
 
-[![Join the chat at https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NuGet package](https://img.shields.io/nuget/vpre/UltimateTeam.Toolkit.svg)](https://www.nuget.org/packages/UltimateTeam.Toolkit/) [![Build status](https://ci.appveyor.com/api/projects/status/4owj0a485hhx1j7c/branch/master?svg=true)](https://ci.appveyor.com/project/trydis/fifa-ultimate-team-toolkit/branch/master) [![Join the chat at https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Supported platforms
 - .NET 4.5
@@ -9,13 +9,6 @@ FIFA Ultimate Team Toolkit
 - Windows Phone 8.1
 - Xamarin.Android
 - Xamarin.iOS
-
-## Build status
-[![Build status](https://ci.appveyor.com/api/projects/status/4owj0a485hhx1j7c/branch/master?svg=true)](https://ci.appveyor.com/project/trydis/fifa-ultimate-team-toolkit/branch/master)
-
-## NuGet package
-
-[Install-Package UltimateTeam.Toolkit](https://www.nuget.org/packages/UltimateTeam.Toolkit/)
 
 ## Sample usage
 
