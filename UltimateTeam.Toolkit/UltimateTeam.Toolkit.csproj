@@ -86,6 +86,8 @@
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\ConsumablesDetails.cs" />
+    <Compile Include="Models\ConsumablesDetailsResponse.cs" />
     <Compile Include="Models\PackDetails.cs" />
     <Compile Include="Models\PackContentInfo.cs" />
     <Compile Include="Models\PackExtPrice.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
     <Compile Include="Requests\CaptchaRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
+    <Compile Include="Requests\ConsumablesDetailsRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\DefinitionRequest.cs" />

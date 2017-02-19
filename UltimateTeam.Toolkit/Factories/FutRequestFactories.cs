@@ -76,6 +76,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<ConsumablesResponse>> _consumablesRequestFactory;
 
+        private Func<IFutRequest<ConsumablesDetailsResponse>> _consumablesDetailsRequestFactory;
+
         private Func<IFutRequest<RelistResponse>> _reListRequestFactory;
 
         private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
@@ -552,6 +554,21 @@ namespace UltimateTeam.Toolkit.Factories
                 _consumablesRequestFactory = value;
             }
         }
+
+        public Func<IFutRequest<ConsumablesDetailsResponse>> ConsumablesDetailsRequestFactory
+        {
+            get
+            {
+                return _consumablesDetailsRequestFactory ??
+                       (_consumablesDetailsRequestFactory = () => SetSharedRequestProperties(new ConsumablesDetailsRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _consumablesDetailsRequestFactory = value;
+            }
+        }
+
         public Func<long, IFutRequest<DefinitionResponse>> DefinitionRequestFactory
         {
             get
