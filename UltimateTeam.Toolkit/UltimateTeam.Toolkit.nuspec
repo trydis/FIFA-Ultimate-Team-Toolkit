@@ -12,8 +12,9 @@
     <licenseUrl>https://raw.githubusercontent.com/trydis/FIFA-Ultimate-Team-Toolkit/master/LICENSE</licenseUrl>
     <copyright></copyright>
     <releaseNotes>
-- Refactored mobile login (thanks @kauefelipe and @Lululuz)
+- Refactored mobile login (thanks kauefelipe and Lululuz)
 - Added missing attribute in Persona class
+- Retrieve consumable details (thanks ZardoZ70)
     </releaseNotes>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0.1" />
