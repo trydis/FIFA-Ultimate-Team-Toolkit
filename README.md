@@ -49,6 +49,7 @@ FIFA Ultimate Team Toolkit
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 [Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
+[Get club consumables details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-club-consumables-details)
 
 ### Initialization
 
@@ -395,3 +396,15 @@ foreach (var packDetail in storeResponse.Purchase)
 var buyPackResponse = await futClient.BuyPackAsync(new PackDetails(packId));
 ```
 
+### Get club consumables details
+
+Get details about the consumables you have in your club, especially the counts.
+
+```csharp
+var consumablesDetailsResponse = await futClient.GetConsumablesDetailsAsync();
+foreach (var consumablesDetail in consumablesDetailsResponse.ItemData)
+{
+    consumablesDetail.ResourceId // resource id of the consumable
+    consumablesDetail.Count; // count
+}
+```

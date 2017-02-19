@@ -63,6 +63,8 @@ namespace UltimateTeam.Toolkit
 
         Task<ConsumablesResponse> GetConsumablesAsync();
 
+        Task<ConsumablesDetailsResponse> GetConsumablesDetailsAsync();
+
         Task<byte[]> GetClubImageAsync(AuctionInfo auctionInfo);
 
         Task<byte[]> GetNationImageAsync(Item item);

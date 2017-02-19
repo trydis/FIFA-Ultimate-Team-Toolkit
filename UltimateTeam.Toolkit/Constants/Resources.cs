@@ -80,6 +80,8 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Consumables = "club/stats/consumables";
 
+        public const string ConsumablesDetails = "club/consumables/development";
+
         public const string SquadList = "squad/list";
 
         public const string SquadDetails = "squad/{0}";

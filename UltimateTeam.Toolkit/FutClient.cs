@@ -101,6 +101,11 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.ConsumablesRequestFactory().PerformRequestAsync();
         }
 
+        public Task<ConsumablesDetailsResponse> GetConsumablesDetailsAsync()
+        {
+            return RequestFactories.ConsumablesDetailsRequestFactory().PerformRequestAsync();
+        }
+
         public Task<AuctionResponse> GetTradePileAsync()
         {
             return RequestFactories.TradePileRequestFactory().PerformRequestAsync();
