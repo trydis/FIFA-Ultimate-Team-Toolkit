@@ -211,8 +211,6 @@ namespace UltimateTeam.Toolkit
 
         public Task<DefinitionResponse> GetDefinitionsAsync(long baseId)
         {
-            baseId.ThrowIfNullArgument();
-
             return RequestFactories.DefinitionRequestFactory(baseId).PerformRequestAsync();
         }
 
@@ -223,7 +221,7 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.NationImageRequestFactory(item).PerformRequestAsync();
         }
 
-        public Task ReListAsync()
+        public Task<RelistResponse> ReListAsync()
         {
             return RequestFactories.ReListRequestFactory().PerformRequestAsync();
         }
@@ -256,6 +254,16 @@ namespace UltimateTeam.Toolkit
         public Task RemoveSoldItemsFromTradePileAsync()
         {
             return RequestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();
+        }
+
+        public Task<StoreResponse> GetPackDetailsAsync()
+        {
+            return RequestFactories.GetPackDetailsFactory().PerformRequestAsync();
+        }
+
+        public Task<PurchasedPackResponse> BuyPackAsync(PackDetails packDetails)
+        {
+            return RequestFactories.BuyPackRequestFactory(packDetails).PerformRequestAsync();
         }
     }
 }

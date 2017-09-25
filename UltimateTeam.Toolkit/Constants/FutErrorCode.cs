@@ -13,6 +13,7 @@
         InvalidDeck = 477,
         NoSuchTradeExists = 478,
         InternalServerError = 500,
-        ServiceUnavailable = 503
+        ServiceUnavailable = 503,
+        PurchasedItemsFull = 471
     }
 }

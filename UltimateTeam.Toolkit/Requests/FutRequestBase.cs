@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,8 +18,6 @@ namespace UltimateTeam.Toolkit.Requests
         private string _sessionId;
 
         private string _nucleusId;
-
-        private AppVersion _appVersion;
 
         private IHttpClient _httpClient;
 
@@ -50,18 +48,7 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        public AppVersion AppVersion
-        {
-            get
-            {
-                return _appVersion;
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _appVersion = value;
-            }
-        }
+        public AppVersion AppVersion { get; set; }
 
         internal Resources Resources { get; set; }
 
@@ -96,8 +83,9 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        protected void AddLoginHeaders()
+        protected void AddCaptchaHeaders()
         {
+            HttpClient.ClearRequestHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
@@ -107,7 +95,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
             AddAcceptHeader("application/json");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddReferrerHeader("http://www.easports.com/iframe/fut16/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
+            AddReferrerHeader("http://www.easports.com/iframe/fut17/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
             AddUserAgent();
         }
 
@@ -138,6 +126,20 @@ namespace UltimateTeam.Toolkit.Requests
             AddMobileUserAgent();
         }
 
+        protected void AddMobileCaptchaHeaders()
+        {
+            HttpClient.ClearRequestHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
+            AddAcceptHeader("*/*");
+            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
+            AddAcceptEncodingHeader();
+            AddAcceptMobileLanguageHeader();
+            AddMobileUserAgent();
+        }
+
         protected void AddPinHeaders()
         {
             HttpClient.ClearRequestHeaders();
@@ -148,9 +150,9 @@ namespace UltimateTeam.Toolkit.Requests
             AddUserAgent();
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/20.0.0.286");
-            HttpClient.AddRequestHeader("x-ea-game-id", "fifa16");
+            HttpClient.AddRequestHeader("x-ea-game-id", "fifa17");
             AddAcceptHeader("*/*");
-            AddReferrerHeader("https://www.easports.com/iframe/fut16/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
+            AddReferrerHeader("https://www.easports.com/iframe/fut17/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
         }
@@ -303,6 +305,8 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new DestinationFullException(futError, exception);
                 case FutErrorCode.CaptchaTriggered:
                     throw new CaptchaTriggeredException(futError, exception);
+                case FutErrorCode.PurchasedItemsFull:
+                    throw new PurchasedItemsFullException(futError, exception);
                 default:
                     var newException = new FutErrorException(futError, exception);
                     throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);

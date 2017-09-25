@@ -3,12 +3,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models;
 
 namespace UltimateTeam.Toolkit.Requests
 {
-    internal class ReListRequest : FutRequestBase, IFutRequest<byte>
+    internal class ReListRequest : FutRequestBase, IFutRequest<RelistResponse>
     {
-        public async Task<byte> PerformRequestAsync()
+        public async Task<RelistResponse> PerformRequestAsync()
         {
             var uriString = Resources.FutHome + Resources.Auctionhouse + Resources.ReList;
             var content = new StringContent(" ");
@@ -29,7 +30,7 @@ namespace UltimateTeam.Toolkit.Requests
             var reListMessage = await reListMessageTask.ConfigureAwait(false);
             reListMessage.EnsureSuccessStatusCode();
 
-            return 0;
+            return await DeserializeAsync<RelistResponse>(reListMessage);
         }
     }
 }

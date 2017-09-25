@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -112,7 +112,7 @@ namespace UltimateTeam.Toolkit.Requests
             _personaId = persona.PersonaId.ToString();
 
             var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
-               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT16WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
+               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT17WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
                     persona.PersonaId, persona.PersonaName, GetGameSku(platform), GetNucleusPersonaPlatform(platform))));
             authResponseMessage.EnsureSuccessStatusCode();
             var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
@@ -128,15 +128,15 @@ namespace UltimateTeam.Toolkit.Requests
             switch (platform)
             {
                 case Platform.Ps3:
-                    return "FFA16PS3";
+                    return "FFA17PS3";
                 case Platform.Ps4:
-                    return "FFA16PS4";
+                    return "FFA17PS4";
                 case Platform.Xbox360:
-                    return "FFA16XBX";
+                    return "FFA17XBX";
                 case Platform.XboxOne:
-                    return "FFA16XBO";
+                    return "FFA17XBO";
                 case Platform.Pc:
-                    return "FFA16PCC";
+                    return "FFA17PCC";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
             }
@@ -162,7 +162,7 @@ namespace UltimateTeam.Toolkit.Requests
         private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
         {
             HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
-            var route = $"https://utas.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2")}.fut.ea.com:443";
+            var route = $"https://utas.external.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2")}.fut.ea.com:443";
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
             var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
 
@@ -173,7 +173,7 @@ namespace UltimateTeam.Toolkit.Requests
         {
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, nucleusId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.fut.ea.com");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.external.fut.ea.com");
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
             AddAcceptHeader("application/json, text/javascript");
             AddAcceptLanguageHeader();

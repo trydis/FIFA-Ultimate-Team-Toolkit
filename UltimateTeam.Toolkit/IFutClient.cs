@@ -67,14 +67,14 @@ namespace UltimateTeam.Toolkit
 
         Task<byte[]> GetNationImageAsync(Item item);
 
-        Task ReListAsync();
+        Task<RelistResponse> ReListAsync();
 
         Task<ListGiftsResponse> GetGiftsListAsync();
 
         Task GetGiftAsync(int idGift);
 
         Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
-        
+
         Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds);
 
         Task<CaptchaResponse> GetCaptchaAsync();
@@ -82,5 +82,9 @@ namespace UltimateTeam.Toolkit
         Task<byte> ValidateCaptchaAsync(int answer);
 
         Task RemoveSoldItemsFromTradePileAsync();
+
+        Task<StoreResponse> GetPackDetailsAsync();
+
+        Task<PurchasedPackResponse> BuyPackAsync(PackDetails packDetails);
     }
 }

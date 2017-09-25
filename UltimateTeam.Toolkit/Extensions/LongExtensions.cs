@@ -4,7 +4,7 @@
     {
         public static long CalculateBaseId(this long resourceId)
         {
-            var baseId = resourceId;
+            var baseId = resourceId + 3288334336;
             var version = 0;
 
             while (baseId > 16777216)

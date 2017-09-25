@@ -26,8 +26,6 @@ namespace UltimateTeam.Toolkit.Factories
 
         private string _personaId;
 
-        private AppVersion _appVersion;
-
         private IHttpClient _httpClient;
 
         private Func<LoginDetails, ITwoFactorCodeProvider, IFutRequest<LoginResponse>> _loginRequestFactory;
@@ -78,7 +76,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<ConsumablesResponse>> _consumablesRequestFactory;
 
-        private Func<IFutRequest<byte>> _reListRequestFactory;
+        private Func<IFutRequest<RelistResponse>> _reListRequestFactory;
 
         private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
 
@@ -93,6 +91,10 @@ namespace UltimateTeam.Toolkit.Factories
         private Func<IFutRequest<byte>> _removeSoldItemsFromTradepileRequestFactory;
 
         private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
+
+        private Func<IFutRequest<StoreResponse>> _getPackDetailsFactory;
+
+        private Func<PackDetails, IFutRequest<PurchasedPackResponse>> _buyPackFactory;
 
         public FutRequestFactories()
         {
@@ -146,15 +148,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public AppVersion AppVersion
-        {
-            get { return _appVersion; }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _appVersion = value;
-            }
-        }
+        public AppVersion AppVersion { get; set; }
 
         internal IHttpClient HttpClient
         {
@@ -177,7 +171,7 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
-                    _appVersion = details.AppVersion;
+                    AppVersion = details.AppVersion;
 
                     if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
                     {
@@ -226,7 +220,7 @@ namespace UltimateTeam.Toolkit.Factories
             request.HttpClient = HttpClient;
             request.Resources = _resources;
             request.NucleusId = _nucleusId;
-            request.AppVersion = _appVersion;
+            request.AppVersion = AppVersion;
 
             return request;
         }
@@ -572,7 +566,7 @@ namespace UltimateTeam.Toolkit.Factories
             }
         }
 
-        public Func<IFutRequest<byte>> ReListRequestFactory
+        public Func<IFutRequest<RelistResponse>> ReListRequestFactory
         {
             get
             {
@@ -659,6 +653,34 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _removeSoldItemsFromTradepileRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<StoreResponse>> GetPackDetailsFactory
+        {
+            get
+            {
+                return _getPackDetailsFactory ??
+                       (_getPackDetailsFactory = () => SetSharedRequestProperties(new StoreRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _getPackDetailsFactory = value;
+            }
+        }
+
+        public Func<PackDetails, IFutRequest<PurchasedPackResponse>> BuyPackRequestFactory
+        {
+            get
+            {
+                return _buyPackFactory ??
+                       (_buyPackFactory = packDetails => SetSharedRequestProperties(new PackRequest(packDetails)));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _buyPackFactory = value;
             }
         }
     }
