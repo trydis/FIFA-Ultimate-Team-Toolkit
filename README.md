@@ -24,11 +24,14 @@ FIFA Ultimate Team Toolkit
 [Credits](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#credits)  
 [List auction](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#list-auction)  
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-trade-pile)  
-[Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#watch-list)  
-[Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#purchased-items)  
+[Get watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-watch-list)
+[Get Consumables](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-consumables)
+[Add auction Watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#add-auction-to-watchlist)  
+[Get Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#training-search)  
-[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-trade-pile)  
+[Send to trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-trade-pile)
+[Send to club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#send-to-club)    
 [Quick sell](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#quick-sell)  
 [Remove from watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-from-watch-list)  
 [Remove from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-from-trade-pile)  
@@ -39,6 +42,7 @@ FIFA Ultimate Team Toolkit
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
 [Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get daily gift](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-daily-gift)  
 [Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 [Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
@@ -177,7 +181,7 @@ Gets the items in the trade pile.
 var tradePileResponse = await client.GetTradePileAsync();
 ```
 
-### Watch list
+### Get watch list
 
 Retrieves the the watch list.
 
@@ -185,7 +189,22 @@ Retrieves the the watch list.
 var watchlistResponse = await client.GetWatchlistAsync();
 ```
 
-### Purchased items
+### Get Consumables
+
+Retrieves the consumables of your club
+
+```csharp
+var consumablesResponse = await client.GetConsumablesAsync();
+```
+
+### Add auction to watch list
+
+
+```csharp
+var addAuctionToWatchlistResponse = await client.AddToWatchlistRequestAsync(auctionInfo);
+```
+
+### Get purchased items
 
 Items that have been bought or received in gift packs.
 
@@ -239,6 +258,14 @@ Sends an item to the trade pile (transfer market)
 var sendToTradePileResponse = await client.SendItemToTradePileAsync(itemData);
 ```
 
+### Send to club
+
+Sends an item to your club
+
+```csharp
+var sendToClubResponse = await client.SendItemToClubAsync(itemData);
+```
+
 ### Quick sell
 
 Quick sell an item at discard value.
@@ -273,7 +300,7 @@ var pileSizeResponse = await client.GetPileSizeAsync();
 
 ### Relist Tradepile
 
-Re-listing all tradepile items listed before.
+Relists all tradepile items as listed before.
 
 ```csharp
 await client.ReListAsync();
@@ -324,14 +351,14 @@ var playerDefinitions = await client.GetDefinitionsAsync(/* AssetId */);
 
 foreach (ItemData itemData in playerDefinitions.ItemData)
 {
-    var definitionId = itemData.ResourceId;
-    // Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
+	// Contains the Definition ID for i.e. a TOTW card, which you can use to search for this specific card
+	var definitionId = itemData.ResourceId;
 }
 ```
 
 ### Get price ranges
 
-Gets the EA price range - **You can only use this method right after you get tradepile / watchlist!**
+Gets the EA price range - **You can only use this method right after you get tradepile / watchlist items!**
 ```csharp
 var priceRanges = await client.GetPriceRangesAsync(/* List of ItemIds */);
 
@@ -342,9 +369,30 @@ foreach (PriceRange priceRange in priceRanges)
 }
 ```
 
+### Get daily gift
+
+Gets the daily gift from the WebApp if available - This feature is currently not implemented for the Companion App.
+```csharp
+
+var giftsListResponse = await futClient.GetGiftsListAsync();
+foreach (var activeMessages in giftsListResponse.ActiveMessage)
+{
+	await GetGiftAsync(/* GiftId */);
+}
+
+var purchasedItemsResponse = await client.GetPurchasedItemsAsync();
+if (purchasedItemsResponse.ItemData.Count > 0)
+{
+	foreach (ItemData item in purchasedItemsResponse.ItemData)
+	{
+		await client.SendItemToClubAsync(item);
+	}
+}
+```
+
 ### Get & Solve Captcha
 
-Get Captcha as Base64 encoded image
+Gets Captcha as Base64 encoded image
 ```csharp
 CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
 ```
