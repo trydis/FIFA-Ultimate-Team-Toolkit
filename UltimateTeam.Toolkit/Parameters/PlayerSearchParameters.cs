@@ -61,6 +61,9 @@ namespace UltimateTeam.Toolkit.Parameters
                 case Level.Gold:
                     uriString += "&lev=" + Level.ToString().ToLower();
                     break;
+                case Level.Special:
+                    uriString += "&rare=SP";
+                    break;
                 default:
                     throw new ArgumentException("Level");
             }
