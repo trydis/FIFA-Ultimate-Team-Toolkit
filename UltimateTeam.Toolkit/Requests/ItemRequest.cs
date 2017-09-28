@@ -15,14 +15,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<Item> PerformRequestAsync()
         {
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddAnonymousHeader();
-            }
-            else
-            {
-                AddAnonymousMobileHeader();
-            }
+            AddAnonymousHeader("image/webp,image/apng,image/*,*/*;q=0.8");
 
             var itemResponseMessage = await HttpClient
                                                 .GetAsync(string.Format(Resources.Item, _baseId))

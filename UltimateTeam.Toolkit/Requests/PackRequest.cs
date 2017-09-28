@@ -23,15 +23,8 @@ namespace UltimateTeam.Toolkit.Requests
             var content = $"{{\"currency\":\"{_packDetails.Currency}\",\"packId\":{_packDetails.PackId}," +
                $"\"useCredits\":{_packDetails.UseCredits},\"usePreOrder\":{_packDetails.UsePreOrder.ToString().ToLower()}}}";
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Post);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var purchasedItemsMessage = await HttpClient
                 .PostAsync(uriString, new StringContent(content))

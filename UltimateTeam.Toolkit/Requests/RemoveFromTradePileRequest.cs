@@ -22,18 +22,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.RemoveFromTradePile, _auctioninfo.TradeId);
             Task<HttpResponseMessage> removeFromTradePileMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Delete);
-                removeFromTradePileMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-                removeFromTradePileMessageTask = HttpClient.DeleteAsync(uriString);
-
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            removeFromTradePileMessageTask = HttpClient.DeleteAsync(uriString);
 
             var removeFromTradePileMessage = await removeFromTradePileMessageTask.ConfigureAwait(false);
             removeFromTradePileMessage.EnsureSuccessStatusCode();

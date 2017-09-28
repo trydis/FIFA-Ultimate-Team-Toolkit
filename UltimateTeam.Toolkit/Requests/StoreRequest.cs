@@ -13,15 +13,8 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = string.Format(Resources.FutHome + Resources.Store);
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var storeResponseMessage = await HttpClient
                 .PostAsync(uriString, new StringContent(" "))

@@ -29,17 +29,9 @@ namespace UltimateTeam.Toolkit.Requests
             var content = new StringContent($"{{\"itemData\":[{{\"id\":\"{_itemData.Id}\",\"pile\":\"trade\"}}]}}");
             Task<HttpResponseMessage> tradepileResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(_itemData.CardSubTypeId == 231 ? HttpMethod.Post : HttpMethod.Put);
-                tradepileResponseMessageTask = HttpClient.PostAsync(uriString, content);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-                tradepileResponseMessageTask = HttpClient.PutAsync(uriString, content);
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            tradepileResponseMessageTask = HttpClient.PutAsync(uriString, content);
 
             var tradepileResponseMessage = await tradepileResponseMessageTask.ConfigureAwait(false);
 

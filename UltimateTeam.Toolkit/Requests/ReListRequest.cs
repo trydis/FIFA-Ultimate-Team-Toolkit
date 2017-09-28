@@ -15,17 +15,9 @@ namespace UltimateTeam.Toolkit.Requests
             var content = new StringContent(" ");
             Task<HttpResponseMessage> reListMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Put);
-                reListMessageTask = HttpClient.PostAsync(uriString, content);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-                reListMessageTask = HttpClient.PutAsync(uriString, content);
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            reListMessageTask = HttpClient.PutAsync(uriString, content);
 
             var reListMessage = await reListMessageTask.ConfigureAwait(false);
             reListMessage.EnsureSuccessStatusCode();

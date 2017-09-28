@@ -25,17 +25,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = Resources.FutHome + Resources.Watchlist + $"?tradeId={tradeIds}";
             Task<HttpResponseMessage> removeFromWatchlistResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Delete);
-                removeFromWatchlistResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"&_={DateTime.Now.ToUnixTime()}";
-                removeFromWatchlistResponseMessageTask = HttpClient.DeleteAsync(uriString);
-            }
+            AddCommonHeaders();
+            uriString += $"&_={DateTime.Now.ToUnixTime()}";
+            removeFromWatchlistResponseMessageTask = HttpClient.DeleteAsync(uriString);
 
             var removeFromWatchlistResponseMessage = await removeFromWatchlistResponseMessageTask.ConfigureAwait(false);
             removeFromWatchlistResponseMessage.EnsureSuccessStatusCode();

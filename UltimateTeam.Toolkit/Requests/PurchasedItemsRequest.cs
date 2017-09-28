@@ -13,15 +13,8 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = Resources.FutHome + Resources.PurchasedItems;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var purchasedItemsMessage = await HttpClient
                 .GetAsync(uriString)

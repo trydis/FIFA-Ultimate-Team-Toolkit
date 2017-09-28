@@ -17,14 +17,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte[]> PerformRequestAsync()
         {
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddAnonymousHeader();
-            }
-            else
-            {
-                AddAnonymousMobileHeader();
-            }
+            AddAnonymousHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
 
             return await HttpClient
                              .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))

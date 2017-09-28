@@ -27,23 +27,12 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = Resources.FutHome + Resources.Watchlist + $"?tradeId={tradeIds}";
             ConfiguredTaskAwaitable<HttpResponseMessage> addToWatchlistTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Put);
-                addToWatchlistTask = HttpClient
-                    .PostAsync(uriString, new StringContent(content))
-                    .ConfigureAwait(false);
+            AddCommonHeaders();
+            uriString += $"&_={DateTime.Now.ToUnixTime()}";
 
-            }
-            if (AppVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                uriString += $"&_={DateTime.Now.ToUnixTime()}";
-
-                addToWatchlistTask = HttpClient
-                    .PutAsync(uriString, new StringContent(content))
-                    .ConfigureAwait(false);
-            }
+            addToWatchlistTask = HttpClient
+                .PutAsync(uriString, new StringContent(content))
+                .ConfigureAwait(false);
 
             var addToWatchlistResponseMessage = await addToWatchlistTask;
             addToWatchlistResponseMessage.EnsureSuccessStatusCode();

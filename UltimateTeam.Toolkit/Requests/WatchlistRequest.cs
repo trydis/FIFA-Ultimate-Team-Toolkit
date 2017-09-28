@@ -14,17 +14,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = Resources.FutHome + Resources.Watchlist;
             Task<HttpResponseMessage> watchlistResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-                watchlistResponseMessageTask = HttpClient.GetAsync(uriString);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                watchlistResponseMessageTask = HttpClient.GetAsync(uriString + $"?_={ DateTime.Now.ToUnixTime()}");
-            }
-
+            AddCommonHeaders();
+            watchlistResponseMessageTask = HttpClient.GetAsync(uriString + $"?_={ DateTime.Now.ToUnixTime()}");
+            
             var watchlistResponseMessage = await watchlistResponseMessageTask.ConfigureAwait(false);
 
             return await DeserializeAsync<WatchlistResponse>(watchlistResponseMessage);

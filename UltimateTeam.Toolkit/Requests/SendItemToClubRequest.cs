@@ -27,17 +27,9 @@ namespace UltimateTeam.Toolkit.Requests
                               ? new StringContent("{\"apply\":[]}")
                               : new StringContent($"{{\"itemData\":[{{\"pile\":\"club\",\"id\":\"{_itemData.Id}\"}}]}}");
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Put);
-                clubResponseMessageTask = HttpClient.PostAsync(uriString, content);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-                clubResponseMessageTask = HttpClient.PutAsync(uriString, content);
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
+            clubResponseMessageTask = HttpClient.PutAsync(uriString, content);
 
             var clubResponseMessage = await clubResponseMessageTask.ConfigureAwait(false);
 

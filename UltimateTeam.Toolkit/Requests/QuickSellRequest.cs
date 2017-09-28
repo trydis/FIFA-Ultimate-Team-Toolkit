@@ -22,17 +22,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.QuickSell, string.Join("%2C", _itemIds));
             Task<HttpResponseMessage> quickSellResponseTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Delete);
-                quickSellResponseTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"&_={DateTime.Now.ToUnixTime()}";
-                quickSellResponseTask = HttpClient.DeleteAsync(uriString);
-            }
+            AddCommonHeaders();
+            uriString += $"&_={DateTime.Now.ToUnixTime()}";
+            quickSellResponseTask = HttpClient.DeleteAsync(uriString);
 
             var quickSellResponse = await quickSellResponseTask.ConfigureAwait(false);
 

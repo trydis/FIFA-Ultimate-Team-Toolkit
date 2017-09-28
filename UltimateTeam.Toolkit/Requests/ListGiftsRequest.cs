@@ -10,12 +10,7 @@ namespace UltimateTeam.Toolkit.Requests
     {
         public async Task<ListGiftsResponse> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
-            {
-                throw new FutException($"Not implemented for {AppVersion}");
-            }
-
-            AddCommonHeaders(HttpMethod.Get);
+            AddCommonHeaders();
             var responseMessage = await HttpClient
                 .GetAsync(Resources.FutHome + Resources.ActiveMessageList)
                 .ConfigureAwait(false);

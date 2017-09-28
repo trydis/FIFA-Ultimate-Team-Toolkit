@@ -25,16 +25,8 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.Bid, _auctionInfo.TradeId);
             var content = new StringContent($"{{\"bid\":{_bidAmount}}}");
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Put);
-                bidResponseMessageTask = HttpClient.PostAsync(uriString, content);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                bidResponseMessageTask = HttpClient.PutAsync(uriString + $"?_={DateTime.Now.ToUnixTime()}", content);
-            }
+            AddCommonHeaders();
+            bidResponseMessageTask = HttpClient.PutAsync(uriString + $"?_={DateTime.Now.ToUnixTime()}", content);
 
             var bidResponseMessage = await bidResponseMessageTask.ConfigureAwait(false);
 
