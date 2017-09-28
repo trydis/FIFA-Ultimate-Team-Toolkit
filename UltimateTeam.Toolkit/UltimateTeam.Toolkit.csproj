@@ -56,6 +56,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Constants\AppVersion.cs" />
+    <Compile Include="Constants\AuthenticationType.cs" />
     <Compile Include="Constants\FutErrorCode.cs" />
     <Compile Include="Constants\HttpHeaders.cs" />
     <Compile Include="Constants\NonStandardHttpHeaders.cs" />
@@ -63,9 +64,13 @@
     <Compile Include="Constants\Pile.cs" />
     <Compile Include="Constants\PosChangeEnum.cs" />
     <Compile Include="Constants\Resources.cs" />
+    <Compile Include="Exceptions\AccountLockedException.cs" />
+    <Compile Include="Exceptions\BadGatewayException.cs" />
+    <Compile Include="Exceptions\HttpException.cs" />
+    <Compile Include="Exceptions\InvalidCookieException.cs" />
+    <Compile Include="Exceptions\InvalidTransactionException.cs" />
     <Compile Include="Exceptions\PurchasedItemsFullException.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
-    <Compile Include="Exceptions\CaptchaTriggeredException.cs" />
     <Compile Include="Exceptions\ConflictException.cs" />
     <Compile Include="Exceptions\DestinationFullException.cs" />
     <Compile Include="Exceptions\FutErrorException.cs" />
@@ -77,7 +82,11 @@
     <Compile Include="Exceptions\NotEnoughCreditException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Exceptions\PermissionDeniedException.cs" />
+    <Compile Include="Exceptions\ServiceDisabledException.cs" />
     <Compile Include="Exceptions\ServiceUnavailableException.cs" />
+    <Compile Include="Exceptions\TemporaryBanException.cs" />
+    <Compile Include="Exceptions\TransfermarketBlockedException.cs" />
+    <Compile Include="Exceptions\WrongPriceRangeException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ReferenceTypeExtensions.cs" />
@@ -102,7 +111,6 @@
     <Compile Include="Models\AuthCode.cs" />
     <Compile Include="Models\AuthToken.cs" />
     <Compile Include="Models\BidTokens.cs" />
-    <Compile Include="Models\CaptchaResponse.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Consumables.cs" />
     <Compile Include="Models\ConsumablesCategory.cs" />
@@ -128,7 +136,6 @@
     <Compile Include="Models\PileSize.cs" />
     <Compile Include="Models\PileSizeResponse.cs" />
     <Compile Include="Models\Platform.cs" />
-    <Compile Include="Models\PriceRange.cs" />
     <Compile Include="Models\PurchasedItemsResponse.cs" />
     <Compile Include="Models\PurchasedPackResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
@@ -139,6 +146,7 @@
     <Compile Include="Models\SquadPlayer.cs" />
     <Compile Include="Models\SquadListResponse.cs" />
     <Compile Include="Models\TradePileItem.cs" />
+    <Compile Include="Models\TrainingItem.cs" />
     <Compile Include="Models\UnopenedPacks.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserAccountInfo.cs" />
@@ -179,7 +187,6 @@
     <Compile Include="Parameters\TrainingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
-    <Compile Include="Requests\CaptchaRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
@@ -188,8 +195,7 @@
     <Compile Include="Requests\PackRequest.cs" />
     <Compile Include="Requests\StoreRequest.cs" />
     <Compile Include="Requests\ListGiftsRequest.cs" />
-    <Compile Include="Requests\LoginMobileRequest.cs" />
-    <Compile Include="Requests\PriceRangeRequest.cs" />
+    <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\RemoveSoldItemsFromTradePileRequest.cs" />
     <Compile Include="Requests\SquadDetailsRequest.cs" />
     <Compile Include="Requests\SquadListRequest.cs" />
@@ -202,7 +208,6 @@
     <Compile Include="Requests\IFutRequest.cs" />
     <Compile Include="Requests\ItemRequest.cs" />
     <Compile Include="Requests\ListAuctionRequest.cs" />
-    <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\PileSizeRequest.cs" />
     <Compile Include="Requests\PlaceBidRequest.cs" />
     <Compile Include="Requests\PlayerImageRequest.cs" />
@@ -214,7 +219,6 @@
     <Compile Include="Requests\TradePileRequest.cs" />
     <Compile Include="Requests\TradeStatusRequest.cs" />
     <Compile Include="Requests\RemoveFromWatchlistRequest.cs" />
-    <Compile Include="Requests\ValidateCaptcha.cs" />
     <Compile Include="Requests\WatchlistRequest.cs" />
     <Compile Include="Requests\ReListRequest.cs" />
     <Compile Include="Services\Hasher.cs" />
