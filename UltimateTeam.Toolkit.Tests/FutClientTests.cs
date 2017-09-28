@@ -32,8 +32,7 @@ namespace UltimateTeam.Toolkit.Tests
         [Test]
         public async void LoginAsync_WhenCalled_ShouldPerformRequest()
         {
-            const string dummyValue = "dummyValue";
-            var loginResponse = new LoginResponse(dummyValue, new Shards(), new UserAccounts(), dummyValue, dummyValue, dummyValue);
+            var loginResponse = new LoginResponse();
             var mockRequest = TestHelpers.CreateMockFutRequestReturning(loginResponse);
             _futClient.RequestFactories.LoginRequestFactory = (details, provider) => mockRequest.Object;
 
