@@ -9,6 +9,8 @@ FIFA Ultimate Team Toolkit
 - Windows Phone 8.1
 - Xamarin.Android
 - Xamarin.iOS
+- Xamarin.Mac
+- ASP.NET Core 1.0
 
 ## Sample usage
 
@@ -40,10 +42,8 @@ FIFA Ultimate Team Toolkit
 [Get players from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-players-from-club)  
 [Get squads from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squads-from-club)  
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
-[Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)  
-[Get price ranges](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-price-ranges)  
+[Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)    
 [Get daily gift](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-daily-gift)  
-[Get & Solve Captcha](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-solve-captcha)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 [Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
 
@@ -59,6 +59,25 @@ var client = new FutClient();
 var loginDetails = new LoginDetails("e-mail", "password", "secret answer", Platform.Ps4 /* or any of the other platforms */, AppVersion.WebApp /* or AppVersion.CompanionApp */);
 ITwoFactorCodeProvider provider = // initialize an implementation of this interface
 var loginResponse = await client.LoginAsync(loginDetails, provider);
+```
+
+Example implementation of ITwoFactorCodeProvider interface
+```csharp
+
+    ...
+	ITwoFactorCodeProvider provider = new FutAuth();
+    ...
+	
+    public class FutAuth : ITwoFactorCodeProvider
+    {
+        public TaskCompletionSource<string> taskResult = new TaskCompletionSource<string>();
+        public Task<string> GetTwoFactorCodeAsync(AuthenticationType authType)
+        {
+            Console.WriteLine($"{ DateTime.Now } Enter OTP ({ authType }):");
+            taskResult.SetResult(Console.ReadLine());
+            return taskResult.Task;
+        }
+    }
 ```
 
 ### Player search
@@ -356,19 +375,6 @@ foreach (ItemData itemData in playerDefinitions.ItemData)
 }
 ```
 
-### Get price ranges
-
-Gets the EA price range - **You can only use this method right after you get tradepile / watchlist items!**
-```csharp
-var priceRanges = await client.GetPriceRangesAsync(/* List of ItemIds */);
-
-foreach (PriceRange priceRange in priceRanges)
-{
-    priceRange.MaxPrice = // Maximum BIN
-    priceRange.MinPrice = // Minimum Starting BID
-}
-```
-
 ### Get daily gift
 
 Gets the daily gift from the WebApp if available - This feature is currently not implemented for the Companion App.
@@ -388,18 +394,6 @@ if (purchasedItemsResponse.ItemData.Count > 0)
 		await client.SendItemToClubAsync(item);
 	}
 }
-```
-
-### Get & Solve Captcha
-
-Gets Captcha as Base64 encoded image
-```csharp
-CaptchaResponse captchaImg = await futClient.GetCaptchaAsync();
-```
-
-Solve Captcha
-```csharp
-var CaptchaValidate = await futClient.ValidateCaptchaAsync(/* answer */);
 ```
 
 ### Remove sold items from trade pile
