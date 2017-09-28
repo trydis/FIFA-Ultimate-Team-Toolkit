@@ -4,13 +4,27 @@ namespace UltimateTeam.Toolkit.Constants
 {
     internal class Resources
     {
-        public string Validate;
+        private const int CurrentYearShort = 18;
 
-        public string Auth;
+        private const int CurrentYearLong = 2018;
+
+        private const int PreviousYearShort = CurrentYearShort - 1;
+
+        private const int PreviousYearLong = CurrentYearLong - 1;
+
+        public int ClientVersion;
 
         public string Home;
 
-        public string NucleusId;
+        public string Logout;
+
+        public string FutHome;
+
+        public string ValidateQuestion;
+
+        public string ValidateAnswer;
+
+        public string Auth;
 
         public string Shards;
 
@@ -24,33 +38,13 @@ namespace UltimateTeam.Toolkit.Constants
 
         public string ClubImage;
 
-        public string FutHome = "https://utas.external.s2.fut.ea.com/ut/game/fifa17/";
+        public string AuthCode;
 
-        public const string FutHomeXbox = "https://utas.external.s3.fut.ea.com/ut/game/fifa17/";
+        public string Token;
 
-        public const string ValidateXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/phishing/validate";
+        public string Pid;
 
-        public const string AuthXbox = "https://utas.s3.fut.ea.com/ut/auth?timestamp={0}";
-
-        public const string AccountInfoXbox = "https://utas.s3.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
-
-        public const string POWAuth = "https://pas.mob.v3.easfc.ea.com:8095/pow/auth?timestamp={0}";
-
-        public const string AuthCode = "https://accounts.ea.com/connect/auth";
-
-        public const string CaptchaImage = "https://www.easports.com/iframe/fut17/p/ut/captcha/img?token=AAAA&_={0}";
-
-        public const string CaptchaValidate = "https://www.easports.com/iframe/fut17/p/ut/captcha/validate";
-
-        public const string Token = "https://accounts.ea.com/connect/token";
-
-        public const string Pid = "https://gateway.ea.com/proxy/identity/pids/me";
-
-        public const string LoggedIn = "https://www.easports.com/fifa/api/isUserLoggedIn";
-
-        public const string BaseShowoff = "http://www.easports.com/iframe/fut17/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB";
-
-        public const string PriceRange = "marketdata/item/pricelimits?itemIdList={0}";
+        public const string Store = "store/purchaseGroup/cardpack?ppInfo=true";
 
         public const string MyClub = "club?level=10";
 
@@ -92,57 +86,71 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Definition = "defid?type=player&count=35&start=0&defId={0}";
 
-        public const string Store = "store/purchaseGroup/cardpack?ppInfo=true";
+        public const string Settings = "settings";
+
+        public const string ReturningUser = "user";
+
+        public string Sku = "";
+
+        public string Client = "";
+
+        public string GameSku = $"FFA{CurrentYearShort}";
+
 
         public Resources(AppVersion appVersion)
         {
+            FutHome = $"https://utas.external.s2.fut.ea.com/ut/game/fifa{CurrentYearShort}/";
+
+            ValidateQuestion = $"https://utas.external.s2.fut.ea.com/ut/game/fifa{CurrentYearShort}/phishing/question?_=" + "{0}";
+
+            ValidateAnswer = $"https://utas.external.s2.fut.ea.com/ut/game/fifa{CurrentYearShort}/phishing/validate?answer=" + "{0}";
+
+            Auth = "https://utas.external.s2.fut.ea.com/ut/auth?" + "{0}";
+
+            Shards = "https://utas.mob.v4.fut.ea.com/ut/shards/v2?_=" + "{0}";
+
+            AccountInfo = $"https://utas.external.s2.fut.ea.com/ut/game/fifa{CurrentYearShort}/user/accountinfo?filterConsoleLogin=true&sku={Sku}&returningUserGameYear={PreviousYearLong}&_=" + "{0}";
+
+            AuthCode = "https://accounts.ea.com/connect/auth?client_id=FOS-SERVER&redirect_uri=nucleus:rest&response_type=code&access_token=" + "{0}";
+
+            Token = "https://accounts.ea.com/connect/token";
+
+            Pid = "https://gateway.ea.com/proxy/identity/pids/me";
+
+            Item = "http://fifa.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/web/{0}.json";
+
+            PlayerImage = "http://fifa.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/players/web/{0}.png";
+
+            FlagsImage = "http://fifa.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/cardflagssmall/web/{0}.png";
+
+            ClubImage = "http://fifa.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
+
             switch (appVersion)
             {
                 case AppVersion.WebApp:
 
-                    Validate = "https://www.easports.com/iframe/fut17/p/ut/game/fifa17/phishing/validate";
+                    Sku = $"FUT{CurrentYearShort}WEB";
+                    Client = $"FIFA-{CurrentYearShort}-WEBCLIENT";
 
-                    Auth = "https://www.easports.com/iframe/fut17/p/ut/auth";
+                    ClientVersion = 1;
 
-                    Home = "https://www.easports.com/fifa/ultimate-team/web-app";
+                    Home = $"https://accounts.ea.com/connect/auth?prompt=login&accessToken=null&client_id={Client}&response_type=token&display=web2/login&locale=en_GB&redirect_uri=https://www.easports.com/de/fifa/ultimate-team/web-app/auth.html&scope=basic.identity+offline+signin";
 
-                    NucleusId = "https://www.easports.com/iframe/fut17/?locale=en_US&baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Ffifa%2Fultimate-team%2Fweb-app";
-
-                    Shards = "https://www.easports.com/iframe/fut17/p/ut/shards/v2?_={0}";
-
-                    AccountInfo = "https://www.easports.com/iframe/fut17/p/ut/game/fifa17/user/accountinfo?sku=FUT17WEB&_={0}";
-
-                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/web/{0}.json";
-
-                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/players/web/{0}.png";
-
-                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/cardflagssmall/web/{0}.png";
-
-                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    Logout = $"https://accounts.ea.com/connect/logout?client_id={Client}&redirect_uri=nucleus:rest";
 
                     break;
 
                 case AppVersion.CompanionApp:
 
-                    Validate = "https://utas.s2.fut.ea.com/ut/game/fifa17/phishing/validate";
+                    Sku = $"FUT{CurrentYearShort}AND";
+                    Client = $"FIFA-{CurrentYearShort}-MOBILE-COMPANION";
 
-                    Auth = "https://utas.s2.fut.ea.com/ut/auth?timestamp={0}";
+                    ClientVersion = 21;
 
-                    Home = "https://accounts.ea.com/connect/auth?client_id=FIFA-17-MOBILE-COMPANION&response_type=code&display=web2/login&scope=basic.identity+offline+signin&locale=en_GB&prompt=login&machineProfileKey={0}";
+  
+                    Home = $"https://accounts.ea.com/connect/auth?client_id={Client}&response_type=token&display=web2/login&locale=en_GB&redirect_uri=nucleus:rest&prompt=none&scope=basic.identity+offline+signin";
 
-                    NucleusId = "https://pas.mob.v3.easfc.ea.com:8095/pow/user/self/tiergp/NucleusId/tiertp/{0}?offset=0&count=50&_={1}";
-
-                    Shards = "https://utas.mob.v3.fut.ea.com/ut/shards/v2?_={0}";
-
-                    AccountInfo = "https://utas.s2.fut.ea.com/ut/game/fifa17/user/accountinfo?sku=FUT17AND&_={0}";
-
-                    Item = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/web/{0}.json";
-
-                    PlayerImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/players/web/{0}.png";
-
-                    FlagsImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/cardflagssmall/web/{0}.png";
-
-                    ClubImage = "http://fifa17.content.easports.com/fifa/fltOnlineAssets/CC8267B6-0817-4842-BB6A-A20F88B05418/2017/fut/items/images/clubbadges/web/dark/s{0}.png";
+                    Logout = $"https://accounts.ea.com/connect/logout?client_id={Client}&redirect_uri=nucleus:rest";
 
                     break;
                 default:
