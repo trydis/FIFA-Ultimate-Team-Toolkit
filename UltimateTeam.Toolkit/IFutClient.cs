@@ -75,12 +75,6 @@ namespace UltimateTeam.Toolkit
 
         Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
 
-        Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds);
-
-        Task<CaptchaResponse> GetCaptchaAsync();
-
-        Task<byte> ValidateCaptchaAsync(int answer);
-
         Task RemoveSoldItemsFromTradePileAsync();
 
         Task<StoreResponse> GetPackDetailsAsync();

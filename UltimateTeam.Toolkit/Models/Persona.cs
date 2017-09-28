@@ -4,7 +4,7 @@ namespace UltimateTeam.Toolkit.Models
 {
     public class Persona
     {
-        public long PersonaId { get; set; }
+        public string PersonaId { get; set; }
 
         public string PersonaName { get; set; }
 
@@ -15,5 +15,7 @@ namespace UltimateTeam.Toolkit.Models
         public bool Trial { get; set; }
 
         public string UserState { get; set; }
+
+        public string TrialFree { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using FUT.UltimateTeam.Toolkit.Requests;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -18,13 +19,9 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Resources _resources;
 
-        private string _phishingToken;
+        private LoginDetails _loginDetails;
 
-        private string _sessionId;
-
-        private string _nucleusId;
-
-        private string _personaId;
+        private LoginResponse _loginResponse;
 
         private IHttpClient _httpClient;
 
@@ -84,13 +81,7 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<long, IFutRequest<DefinitionResponse>> _definitionRequestFactory;
 
-        private Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> _getpriceRangesFactory;
-
-        private Func<IFutRequest<CaptchaResponse>> _getCaptchaFactory;
-
         private Func<IFutRequest<byte>> _removeSoldItemsFromTradepileRequestFactory;
-
-        private Func<int, IFutRequest<byte>> _validateCaptchaFactory;
 
         private Func<IFutRequest<StoreResponse>> _getPackDetailsFactory;
 
@@ -108,47 +99,32 @@ namespace UltimateTeam.Toolkit.Factories
 
         public CookieContainer CookieContainer { get; }
 
-        public string PhishingToken
+        public LoginDetails LoginDetails
         {
-            get { return _phishingToken; }
+            get { return _loginDetails; }
             set
             {
-                value.ThrowIfInvalidArgument();
-                _phishingToken = value;
+                _loginDetails = value;
             }
         }
 
-        public string SessionId
+        public LoginResponse LoginResponse
         {
-            get { return _sessionId; }
+            get { return _loginResponse; }
             set
             {
-                value.ThrowIfInvalidArgument();
-                _sessionId = value;
+                _loginResponse = value;
             }
         }
 
-        public string NucleusId
+        public AppVersion AppVersion
         {
-            get { return _nucleusId; }
+            get { return _loginDetails.AppVersion; }
             set
             {
-                value.ThrowIfInvalidArgument();
-                _nucleusId = value;
+                _loginDetails.AppVersion = value;
             }
         }
-
-        public string PersonaId
-        {
-            get { return _personaId; }
-            set
-            {
-                value.ThrowIfInvalidArgument();
-                _personaId = value;
-            }
-        }
-
-        public AppVersion AppVersion { get; set; }
 
         internal IHttpClient HttpClient
         {
@@ -171,39 +147,29 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 return _loginRequestFactory ?? (_loginRequestFactory = (details, twoFactorCodeProvider) =>
                 {
-                    AppVersion = details.AppVersion;
-
-                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
+                    _loginDetails = details;
+                    
+                    if (_loginDetails.AppVersion == AppVersion.WebApp)
                     {
-                        _webResources.FutHome = Resources.FutHomeXbox;
-                        _mobileResources.FutHome = Resources.FutHomeXbox;
-                        _mobileResources.Validate = Resources.ValidateXbox;
-                        _mobileResources.Auth = Resources.AuthXbox;
-                        _mobileResources.AccountInfo = Resources.AccountInfoXbox;
-                    }
-
-                    if (details.AppVersion == AppVersion.WebApp)
-                    {
-                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
                         _resources = _webResources;
-                        loginRequest.SetCookieContainer(CookieContainer);
-                        return loginRequest;
-                    }
-                    else if (details.AppVersion == AppVersion.CompanionApp)
-                    {
-                        var loginRequest = new LoginRequestMobile(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _mobileResources };
-                        _resources = _mobileResources;
-                        loginRequest.SetCookieContainer(CookieContainer);
-                        return loginRequest;
                     }
                     else
                     {
-                        var loginRequest = new LoginRequest(details, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _webResources };
-                        _resources = _webResources;
+                        _resources = _mobileResources;
+                    }
+                    if (details.Platform == Platform.Xbox360 || details.Platform == Platform.XboxOne)
+                    {
+                        Resources xboxResources = new Resources(details.AppVersion);
+
+                        _resources.FutHome = _resources.FutHome.Replace(".s2.", ".s3.");
+                        _resources.ValidateQuestion = _resources.ValidateQuestion.Replace(".s2.", ".s3.");
+                        _resources.ValidateAnswer = _resources.ValidateAnswer.Replace(".s2.", ".s3.");
+                        _resources.Auth = _resources.Auth.Replace(".s2.", ".s3.");
+                        _resources.AccountInfo = _resources.AccountInfo.Replace(".s2.", ".s3.");
+                    }
+                        var loginRequest = new LoginRequest(_loginDetails, twoFactorCodeProvider) { HttpClient = HttpClient, Resources = _resources };
                         loginRequest.SetCookieContainer(CookieContainer);
                         return loginRequest;
-                    }
-
                 });
             }
             set
@@ -215,12 +181,10 @@ namespace UltimateTeam.Toolkit.Factories
 
         private T SetSharedRequestProperties<T>(T request) where T : FutRequestBase
         {
-            request.PhishingToken = PhishingToken;
-            request.SessionId = SessionId;
-            request.HttpClient = HttpClient;
+            request.LoginResponse = _loginResponse;
+            request.LoginDetails = _loginDetails;
+            request.HttpClient = _httpClient;
             request.Resources = _resources;
-            request.NucleusId = _nucleusId;
-            request.AppVersion = AppVersion;
 
             return request;
         }
@@ -472,7 +436,7 @@ namespace UltimateTeam.Toolkit.Factories
             get
             {
                 return _squadDetailsRequestFactory ??
-                       (_squadDetailsRequestFactory = squadId => SetSharedRequestProperties(new SquadDetailsRequest(squadId, _personaId)));
+                       (_squadDetailsRequestFactory = squadId => SetSharedRequestProperties(new SquadDetailsRequest(squadId, _loginResponse.Persona.NucPersId)));
             }
             set
             {
@@ -600,45 +564,6 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _giftRequestFactory = value;
-            }
-        }
-
-        public Func<IEnumerable<long>, IFutRequest<List<PriceRange>>> GetPriceRangesFactory
-        {
-            get
-            {
-                return _getpriceRangesFactory ?? (_getpriceRangesFactory = itemIds => SetSharedRequestProperties(new PriceRangesRequest(itemIds)));
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _getpriceRangesFactory = value;
-            }
-        }
-
-        public Func<int, IFutRequest<byte>> ValidateCaptchaFactory
-        {
-            get
-            {
-                return _validateCaptchaFactory ?? (_validateCaptchaFactory = answer => SetSharedRequestProperties(new ValidateCaptcha(answer)));
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _validateCaptchaFactory = value;
-            }
-        }
-
-        public Func<IFutRequest<CaptchaResponse>> GetCaptchaFactory
-        {
-            get
-            {
-                return _getCaptchaFactory ?? (_getCaptchaFactory = () => SetSharedRequestProperties(new CaptchaRequest()));
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _getCaptchaFactory = value;
             }
         }
 

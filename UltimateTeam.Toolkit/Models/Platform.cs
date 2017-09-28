@@ -6,6 +6,7 @@
         Ps4,
         Xbox360,
         XboxOne,
-        Pc
+        Pc,
+        Switch
     }
 }
