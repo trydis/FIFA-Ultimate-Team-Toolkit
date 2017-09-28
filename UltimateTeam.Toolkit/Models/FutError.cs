@@ -8,7 +8,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public FutErrorCode Code { get; set; }
 
-        public string Message { get; set; }
+        public string ErrorMessage { get; set; }
 
         public string Debug { get; set; }
 

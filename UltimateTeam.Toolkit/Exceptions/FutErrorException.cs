@@ -28,8 +28,8 @@ namespace UltimateTeam.Toolkit.Exceptions
             string result = "Code: " + futError.Code;
             if (!string.IsNullOrEmpty(futError.Reason))
                 result += ", Reason: " + futError.Reason;
-            if (!string.IsNullOrEmpty(futError.Message))
-                result += ", Message: " + futError.Message;
+            if (!string.IsNullOrEmpty(futError.ErrorMessage))
+                result += ", Message: " + futError.ErrorMessage;
             if (!string.IsNullOrEmpty(futError.Debug))
                 result += ", Debug: " + futError.Debug;
             if (!string.IsNullOrEmpty(futError.String))
