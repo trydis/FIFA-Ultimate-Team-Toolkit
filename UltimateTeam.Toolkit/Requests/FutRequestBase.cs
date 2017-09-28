@@ -1,7 +1,8 @@
-using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
@@ -12,43 +13,33 @@ namespace UltimateTeam.Toolkit.Requests
     public abstract class FutRequestBase
     {
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error };
-
-        private string _phishingToken;
-
-        private string _sessionId;
-
-        private string _nucleusId;
-
         private IHttpClient _httpClient;
+        private LoginDetails _loginDetails = new LoginDetails();
+        private LoginResponse _loginResponse = new LoginResponse();
 
-        public string PhishingToken
+        public LoginResponse LoginResponse
         {
             set
             {
-                value.ThrowIfInvalidArgument();
-                _phishingToken = value;
+                _loginResponse = value;
+            }
+            get
+            {
+                return _loginResponse;
             }
         }
 
-        public string SessionId
+        public LoginDetails LoginDetails
         {
             set
             {
-                value.ThrowIfInvalidArgument();
-                _sessionId = value;
+                _loginDetails = value;
             }
-        }
-
-        public string NucleusId
-        {
-            set
+            get
             {
-                value.ThrowIfInvalidArgument();
-                _nucleusId = value;
+                return _loginDetails;
             }
         }
-
-        public AppVersion AppVersion { get; set; }
 
         internal Resources Resources { get; set; }
 
@@ -62,136 +53,47 @@ namespace UltimateTeam.Toolkit.Requests
             }
         }
 
-        protected void AddCommonHeaders(HttpMethod methodOverrideHeader = null)
+        protected void AddCommonHeaders()
         {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "ShockwaveFlash/21.0.0.182");
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
-            AddAcceptHeader("application/json");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");
-            AddReferrerHeader("http://www.easports.com/iframe/fut/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
-            AddUserAgent();
-            HttpClient.AddConnectionKeepAliveHeader();
-            if (methodOverrideHeader != null)
+            if (LoginResponse?.Persona?.NucUserId == null || LoginResponse?.AuthData?.Sid == null || LoginResponse?.PhishingToken?.Token == null)
             {
-                AddMethodOverrideHeader(methodOverrideHeader);
+                throw new Exception($"Got no Nucleus Data and Auth Data during the Loginprocess {LoginDetails?.AppVersion}.");
             }
-        }
 
-        protected void AddCaptchaHeaders()
-        {
             HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.s2.fut.ea.com");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _loginResponse.PhishingToken.Token);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _loginResponse.Persona.NucUserId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _loginResponse.AuthData.Sid);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
-            AddAcceptHeader("application/json");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddReferrerHeader("http://www.easports.com/iframe/fut17/?baseShowoffUrl=https%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app%2Fshow-off&guest_app_uri=http%3A%2F%2Fwww.easports.com%2Fuk%2Ffifa%2Fultimate-team%2Fweb-app&locale=en_GB");
-            AddUserAgent();
-        }
-
-        protected void AddCommonMobileHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"file://");
-            AddAcceptEncodingHeader();
-            AddAcceptMobileLanguageHeader();
             AddAcceptHeader("text/plain, */*; q=0.01");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddMobileUserAgent();
-            HttpClient.AddConnectionKeepAliveHeader();
-        }
-
-        protected void AddMobileLoginHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
-            AddAcceptHeader("*/*");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddAcceptEncodingHeader();
-            AddAcceptMobileLanguageHeader();
-            AddMobileUserAgent();
-        }
-
-        protected void AddMobileCaptchaHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _nucleusId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _phishingToken);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _sessionId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.CSP, "active");
-            AddAcceptHeader("*/*");
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddAcceptEncodingHeader();
-            AddAcceptMobileLanguageHeader();
-            AddMobileUserAgent();
-        }
-
-        protected void AddPinHeaders()
-        {
-            HttpClient.ClearRequestHeaders();
-            HttpClient.AddConnectionKeepAliveHeader();
-            HttpClient.AddRequestHeader("Origin", "https://www.easports.com");
-            HttpClient.AddRequestHeader("x-ea-taxv", "1.1");
-            HttpClient.AddRequestHeader("x-ea-game-type", "sku");
             AddUserAgent();
-            HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/20.0.0.286");
-            HttpClient.AddRequestHeader("x-ea-game-id", "fifa17");
-            AddAcceptHeader("*/*");
-            AddReferrerHeader("https://www.easports.com/iframe/fut17/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=155438");
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
+            AddRefererHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
+            HttpClient.AddConnectionKeepAliveHeader();
         }
 
-        protected void AddPinHeadersMobile()
+        protected void AddAnonymousHeader(string acceptHeader)
+        {
+            HttpClient.ClearRequestHeaders();
+            AddAcceptEncodingHeader();
+            AddAcceptLanguageHeader();
+            AddAcceptHeader(acceptHeader);
+            AddUserAgent();
+            AddRefererHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
+            HttpClient.AddConnectionKeepAliveHeader();
+        }
+
+        protected void AddLoginHeaders()
         {
             HttpClient.ClearRequestHeaders();
             HttpClient.AddConnectionKeepAliveHeader();
-            HttpClient.AddRequestHeader("Origin", "file://");
-            HttpClient.AddRequestHeader("x-ea-taxv", "1");
-            HttpClient.AddRequestHeader("CSP", "active");
-            AddMobileUserAgent();
+            AddAcceptHeader("*/*");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
-            AddAcceptHeader("text/plain, */*; q=0.01");
-            HttpClient.AddRequestHeader("x-ea-game-id-type", "sellid");
-            HttpClient.AddRequestHeader("x-ea-game-id", "859051");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
-        }
-
-        protected void AddAnonymousHeader()
-        {
             AddUserAgent();
-            AddAcceptHeader("*/*");
-            AddReferrerHeader(Resources.BaseShowoff);
-            HttpClient.AddRequestHeader("X-Requested-With", "ShockwaveFlash/21.0.0.182");
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
-            HttpClient.AddConnectionKeepAliveHeader();
-        }
-
-        protected void AddAnonymousMobileHeader()
-        {
-            AddMobileUserAgent();
-            AddAcceptHeader("*/*");
-            HttpClient.AddRequestHeader("CSP", "active");
-            AddAcceptEncodingHeader();
-            AddAcceptLanguageHeader();
-            HttpClient.AddConnectionKeepAliveHeader();
         }
 
         protected void AddContentHeader(string contentType)
@@ -206,12 +108,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected void AddUserAgent()
         {
-            HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36");
-        }
-
-        protected void AddMobileUserAgent()
-        {
-            HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "User-Agent: Mozilla/5.0 (Linux; Android 4.2.2; AndyWin Build/JDQ39E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Crosswalk/14.43.343.25 Safari/537.36");
+            HttpClient.AddRequestHeader(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
         }
 
         protected void AddAcceptHeader(string value)
@@ -219,14 +116,14 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.Accept, value);
         }
 
-        protected void AddReferrerHeader(string value)
+        protected void AddRefererHeader(string value)
         {
             HttpClient.SetReferrerUri(value);
         }
 
         protected void AddAcceptEncodingHeader()
         {
-            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip,deflate");
+            HttpClient.AddRequestHeader(HttpHeaders.AcceptEncoding, "gzip, deflate, br");
         }
 
         protected void AddAcceptLanguageHeader()
@@ -234,19 +131,14 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en;q=0.8,en-US;q=0.6,en;q=0.4");
         }
 
-        protected void AddAcceptMobileLanguageHeader()
-        {
-            HttpClient.AddRequestHeader(HttpHeaders.AcceptLanguage, "en-US,en");
-        }
-
-        protected void AddMethodOverrideHeader(HttpMethod httpMethod)
-        {
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.MethodOverride, httpMethod.Method);
-        }
-
         protected void AddAuthorizationHeader(string authCode)
         {
             HttpClient.AddRequestHeader("Authorization", "Bearer " + authCode);
+        }
+
+        public void SetCookieContainer(CookieContainer cookieContainer)
+        {
+            HttpClient.MessageHandler.CookieContainer = cookieContainer;
         }
 
         protected static async Task<T> DeserializeAsync<T>(HttpResponseMessage message) where T : class
@@ -264,7 +156,7 @@ namespace UltimateTeam.Toolkit.Requests
                 try
                 {
                     var futError = JsonConvert.DeserializeObject<FutError>(messageContent, JsonSerializerSettings);
-                    MapAndThrowException(serializationException, futError);
+                    MapAndThrowException<FutError>(serializationException, futError);
                 }
                 catch (JsonSerializationException)
                 {
@@ -275,41 +167,117 @@ namespace UltimateTeam.Toolkit.Requests
             return deserializedObject;
         }
 
-        private static void MapAndThrowException(Exception exception, FutError futError)
+        private static void MapAndThrowException<T>(Exception exception, FutError futError) where T : class
         {
-            // TODO: Should extract this to a separate class and keep them in a Dictionary<FutErrorCode, Func<FutError, Exception, FutErrorException>>
-
             switch (futError.Code)
             {
                 case FutErrorCode.ExpiredSession:
+                    futError.Reason = $"Session expired - You need to relogin";
                     throw new ExpiredSessionException(futError, exception);
+
                 case FutErrorCode.NotFound:
+                    futError.Reason = $"Destination not found (404)";
                     throw new NotFoundException(futError, exception);
+
                 case FutErrorCode.Conflict:
-                    throw new ConflictException(futError, exception);
+                    if (Activator.CreateInstance(typeof(T)) is ListAuctionResponse)
+                    {
+                        futError.Reason = $"Conflict - Please check the EA pricerange";
+                        throw new WrongPriceRangeException(futError, exception);
+                    }
+                    else
+                    {
+                        futError.Reason = $"Conflict";
+                        throw new ConflictException(futError, exception);
+                    }
+
                 case FutErrorCode.BadRequest:
+                    futError.Reason = $"Bad Request";
                     throw new BadRequestException(futError, exception);
+
                 case FutErrorCode.PermissionDenied:
+                    futError.Reason = $"Permission Denied - You need to find the auction before bidding / Auction not existing";
                     throw new PermissionDeniedException(futError, exception);
+
                 case FutErrorCode.NotEnoughCredit:
+                    futError.Reason = $"Not enough coins";
                     throw new NotEnoughCreditException(futError, exception);
+
                 case FutErrorCode.NoSuchTradeExists:
+                    futError.Reason = $"Trade not found";
                     throw new NoSuchTradeExistsException(futError, exception);
+
                 case FutErrorCode.InternalServerError:
-                    throw new InternalServerException(futError, exception);
+                    if (Activator.CreateInstance(typeof(T)) is AuctionResponse)
+                    {
+                        futError.Reason = $"Temporary Transfermarket BAN detected";
+                        throw new TemporaryBanException(futError, exception);
+                    }
+                    else
+                    {
+                        futError.Reason = $"Internal Server Error - FUT unavailable";
+                        throw new InternalServerException(futError, exception);
+                    }
+
                 case FutErrorCode.ServiceUnavailable:
+                    futError.Reason = $"Service Unavailable";
                     throw new ServiceUnavailableException(futError, exception);
+
                 case FutErrorCode.InvalidDeck:
+                    futError.Reason = $"Invalid Deck";
                     throw new InvalidDeckException(futError, exception);
+
                 case FutErrorCode.DestinationFull:
+                    futError.Reason = $"Destination Pile (Watchlist / Transferlist) is full";
                     throw new DestinationFullException(futError, exception);
-                case FutErrorCode.CaptchaTriggered:
-                    throw new CaptchaTriggeredException(futError, exception);
+
+                case FutErrorCode.BadGateway:
+                    futError.Reason = $"Bad Gateway - Please try to relogin";
+                    throw new BadGatewayException(futError, exception);
+
+                case FutErrorCode.InvalidCookie:
+                    futError.Reason = $"Invalid Cookie - Please try to relogin";
+                    throw new InvalidCookieException(futError, exception);
+
+                case FutErrorCode.InvalidTransaction:
+                    futError.Reason = $"Invalid Transaction (i.e. if you try to list an aution which is still active)";
+                    throw new InvalidTransactionException(futError, exception);
+
                 case FutErrorCode.PurchasedItemsFull:
+                    futError.Reason = $"Purchased Items Pile is full - You need to assign them to club or transferlist";
                     throw new PurchasedItemsFullException(futError, exception);
+
+                case FutErrorCode.NoRemainingAuthenticationAttemptsAccountLocked:
+                    futError.Reason = $"Account locked - You need to set the security question in a validated console";
+                    throw new AccountLockedException(futError, exception);
+
+                case FutErrorCode.TooManyRequests:
+                    futError.Reason = $"Temporary BAN detected";
+                    throw new TemporaryBanException(futError, exception);
+
+                case FutErrorCode.Unknown_HTTP_512:
+                    futError.Reason = $"Temporary BAN detected";
+                    throw new TemporaryBanException(futError, exception);
+
+                case FutErrorCode.Unknown_HTTP_521:
+                    futError.Reason = $"Temporary BAN detected";
+                    throw new TemporaryBanException(futError, exception);
+
+                case FutErrorCode.UpgradeRequired:
+                    futError.Reason = $"Temporary BAN detected";
+                    throw new TemporaryBanException(futError, exception);
+
+                case FutErrorCode.ServiceDisabled:
+                    futError.Reason = $"FUT WebApp / CompanionApp disabled by EA";
+                    throw new ServiceDisabledException(futError, exception);
+
+                case FutErrorCode.TransfermarketBlocked:
+                    futError.Reason = $"Transfermarket blocked by EA";
+                    throw new TransfermarketBlockedException(futError, exception);
+
                 default:
                     var newException = new FutErrorException(futError, exception);
-                    throw new FutException(string.Format("Unknown EA error, please report on GitHub - {0}", newException.Message), newException);
+                    throw new FutException(string.Format("Unknown EA error, please report it on GitHub - {0}", newException.Message), newException);
             }
         }
     }
