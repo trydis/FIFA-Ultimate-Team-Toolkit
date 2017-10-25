@@ -23,7 +23,7 @@ namespace UltimateTeam.Toolkit.Tests
         /// <summary>
         /// Tests how many searches can be done per second, excluding any server communication.
         /// </summary>
-        [Test]
+        [Test, Ignore]
         public async void SearchAsync_PerformanceTest()
         {
             const int numberOfAuctions = 50;
