@@ -21,17 +21,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = Resources.FutHome + string.Format(Resources.Definition, _baseId);
             Task<HttpResponseMessage> definitionResponseTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-                definitionResponseTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"&_={DateTime.Now.ToUnixTime()}";
-                definitionResponseTask = HttpClient.GetAsync(uriString);
-            }
+            AddCommonHeaders();
+            uriString += $"&_={DateTime.Now.ToUnixTime()}";
+            definitionResponseTask = HttpClient.GetAsync(uriString);
 
             return await DeserializeAsync<DefinitionResponse>(await definitionResponseTask.ConfigureAwait(false));
         }

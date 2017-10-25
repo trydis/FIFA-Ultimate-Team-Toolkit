@@ -13,15 +13,8 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = Resources.FutHome + Resources.PileSize;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var creditsResponseMessage = await HttpClient
                                                    .GetAsync(uriString)

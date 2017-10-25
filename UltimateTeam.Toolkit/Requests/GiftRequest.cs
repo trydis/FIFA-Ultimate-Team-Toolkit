@@ -16,18 +16,10 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            if (AppVersion != AppVersion.WebApp)
-            {
-                throw new FutException($"Not implemented for {AppVersion}");
-            }
-
-            AddCommonHeaders(HttpMethod.Delete);
-            var activeMessageRedeemResponseMessage = await HttpClient.PostAsync(
-                string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift),
-                new StringContent(" ")).ConfigureAwait(false);
-
+            AddCommonHeaders();
+            var activeMessageRedeemResponseMessage = await HttpClient.DeleteAsync(string.Format(Resources.FutHome + Resources.ActiveMessageGet, _idGift)).ConfigureAwait(false);
             activeMessageRedeemResponseMessage.EnsureSuccessStatusCode();
-
+            
             return 0;
         }
     }

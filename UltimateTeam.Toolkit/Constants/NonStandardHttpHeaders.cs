@@ -10,16 +10,10 @@
 
         public const string NucleusId = "Easw-Session-Data-Nucleus-Id";
 
-        public const string EmbedError = "X-UT-Embed-Error";
-        
-        public const string Route = "X-UT-Route";
-
         public const string SessionId = "X-UT-SID";
 
         public const string PowSessionId = "X-POW-SID";
 
-        public const string CSP = "CSP";
-
-        public const string Origin = "Origin";
+        public const string Origin = "https://www.easports.com";
     }
 }

@@ -25,16 +25,8 @@ namespace UltimateTeam.Toolkit.Requests
             _searchParameters.BuildUriString(ref uriString);
             Task<HttpResponseMessage> searchResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-                searchResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                searchResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
-            }
+            AddCommonHeaders();
+            searchResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
 
             var searchResponseMessage = await searchResponseMessageTask.ConfigureAwait(false);
 

@@ -23,15 +23,8 @@ namespace UltimateTeam.Toolkit.Requests
             var content = $"{{\"buyNowPrice\":{_auctionDetails.BuyNowPrice},\"startingBid\":{_auctionDetails.StartingBid}," +
                           $"\"duration\":{(uint)_auctionDetails.AuctionDuration},\"itemData\":{{\"id\":{_auctionDetails.ItemDataId}}}}}";
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Post);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var tradepileResponseMessage = await HttpClient
                 .PostAsync(uriString, new StringContent(content))

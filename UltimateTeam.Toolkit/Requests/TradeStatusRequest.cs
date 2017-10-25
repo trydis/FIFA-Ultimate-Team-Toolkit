@@ -23,16 +23,8 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.TradeStatus, string.Join("%2C", _tradeIds));
             Task<HttpResponseMessage> tradeStatusResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-                tradeStatusResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                tradeStatusResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
-            }
+            AddCommonHeaders();
+            tradeStatusResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
 
             var tradeStatusResponseMessage = await tradeStatusResponseMessageTask.ConfigureAwait(false);
 

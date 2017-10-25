@@ -13,15 +13,8 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = Resources.FutHome + Resources.SquadList;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var squadListResponseMessage = await HttpClient
                 .GetAsync(uriString)

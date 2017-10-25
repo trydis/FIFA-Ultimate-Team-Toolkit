@@ -6,8 +6,14 @@
         Shiny = 1,
         InForm = 3,
         TeamOfTheYear = 5,
-        TeamOfTheYear2 = 6,
+        TeamOfTheSeason = 11,
         ManOfTheMatch = 8,
-        TeamOfTheSeason = 11
+        RecordBreaker = 6,
+        Legend = 12,
+        Futtie = 9,
+        FuttieWinner = 16,
+        Green = 7,
+        Hero = 4,
+        InternationalManOfTheMatch = 15
     }
 }

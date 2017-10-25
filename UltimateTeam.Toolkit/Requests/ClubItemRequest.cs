@@ -24,16 +24,8 @@ namespace UltimateTeam.Toolkit.Requests
         public async Task<ClubItemResponse> PerformRequestAsync()
         {
             var uriString = Resources.FutHome + Resources.MyClub + $"&type={_listType}";
-
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
                 uriString += "&_=" + DateTime.Now.ToUnixTime();
-                AddCommonMobileHeaders();
-            }
+                AddCommonHeaders();
 
             var clubItemResponseMessage = await HttpClient
                     .GetAsync(uriString)

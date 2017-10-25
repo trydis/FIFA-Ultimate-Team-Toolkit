@@ -30,13 +30,10 @@ namespace UltimateTeam.Toolkit
             loginDetails.ThrowIfNullArgument();
 
             var loginRequest = RequestFactories.LoginRequestFactory(loginDetails, twoFactorCodeProvider);
-            var loginResponse = await loginRequest.PerformRequestAsync();
-            RequestFactories.PhishingToken = loginResponse.PhishingToken;
-            RequestFactories.SessionId = loginResponse.SessionId;
-            RequestFactories.NucleusId = loginResponse.NucleusId;
-            RequestFactories.PersonaId = loginResponse.PersonaId;
+            RequestFactories.LoginResponse = await loginRequest.PerformRequestAsync();
+            RequestFactories.LoginDetails = loginDetails;
 
-            return loginResponse;
+            return RequestFactories.LoginResponse;
         }
 
         public Task<AuctionResponse> SearchAsync(SearchParameters searchParameters)
@@ -234,21 +231,6 @@ namespace UltimateTeam.Toolkit
         public Task GetGiftAsync(int idGift)
         {
             return RequestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
-        }
-
-        public Task<List<PriceRange>> GetPriceRangesAsync(IEnumerable<long> itemIds)
-        {
-            return RequestFactories.GetPriceRangesFactory(itemIds).PerformRequestAsync();
-        }
-
-        public Task<CaptchaResponse> GetCaptchaAsync()
-        {
-            return RequestFactories.GetCaptchaFactory().PerformRequestAsync();
-        }
-
-        public Task<byte> ValidateCaptchaAsync(int answer)
-        {
-            return RequestFactories.ValidateCaptchaFactory(answer).PerformRequestAsync();
         }
 
         public Task RemoveSoldItemsFromTradePileAsync()

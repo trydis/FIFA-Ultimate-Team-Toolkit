@@ -12,16 +12,8 @@ namespace UltimateTeam.Toolkit.Requests
         public async Task<ConsumablesResponse> PerformRequestAsync()
         {
             var uriString = Resources.FutHome + Resources.Consumables;
-
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
+            uriString += $"?_={DateTime.Now.ToUnixTime()}";
 
             var consumablesResponseMessage = await HttpClient
                 .GetAsync(string.Format(uriString))
