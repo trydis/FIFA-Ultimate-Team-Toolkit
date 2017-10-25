@@ -28,7 +28,7 @@ FIFA Ultimate Team Toolkit
 [Get trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-trade-pile)  
 [Get watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-watch-list)  
 [Get Consumables](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-consumables)  
-[Add auction to watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#add-auction-to-watchlist)  
+[Add auction to watch list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#add-auction-to-watch-list)  
 [Get Purchased items](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-purchased-items)  
 [Development search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#development-search)  
 [Training search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#training-search)  
