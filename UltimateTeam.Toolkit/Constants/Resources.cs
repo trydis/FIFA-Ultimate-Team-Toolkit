@@ -4,9 +4,9 @@ namespace UltimateTeam.Toolkit.Constants
 {
     internal class Resources
     {
-        private const int CurrentYearShort = 18;
+        private const int CurrentYearShort = 20;
 
-        private const int CurrentYearLong = 2018;
+        private const int CurrentYearLong = 2020;
 
         private const int PreviousYearShort = CurrentYearShort - 1;
 

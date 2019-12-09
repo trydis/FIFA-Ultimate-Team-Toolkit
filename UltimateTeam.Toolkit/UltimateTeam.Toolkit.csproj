@@ -120,6 +120,7 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DateOfBirth.cs" />
     <Compile Include="Models\DefinitionResponse.cs" />
+    <Compile Include="Models\DynamicObjectivesUpdates.cs" />
     <Compile Include="Models\DuplicateItem.cs" />
     <Compile Include="Models\FutError.cs" />
     <Compile Include="Models\GiftMessage.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Models\PurchasedPackResponse.cs" />
     <Compile Include="Models\QuickSellResponse.cs" />
     <Compile Include="Models\RareType.cs" />
+    <Compile Include="Models\ScmpCategoryProgressList.cs" />
     <Compile Include="Models\SendItemToClubResponse.cs" />
     <Compile Include="Models\SendItemToTradePileResponse.cs" />
     <Compile Include="Models\SquadDetailsResponse.cs" />
@@ -152,6 +154,8 @@
     <Compile Include="Models\UserAccountInfo.cs" />
     <Compile Include="Models\LoginDetails.cs" />
     <Compile Include="Models\LoginResponse.cs" />
+    <Compile Include="Models\ObjectiveProgressList.cs" />
+    <Compile Include="Models\ScmpGroupProgressList.cs" />
     <Compile Include="Models\Shard.cs" />
     <Compile Include="Models\ShardInfo.cs" />
     <Compile Include="Models\Shards.cs" />

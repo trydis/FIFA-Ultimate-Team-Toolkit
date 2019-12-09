@@ -26,5 +26,6 @@ namespace UltimateTeam.Toolkit.Models
         public int Cardassetid { get; set; }
         public int Weightrare { get; set; }
         public int Amount { get; set; }
+        public string ResourceGameYear { get; set; }
     }
 }

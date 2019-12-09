@@ -16,5 +16,7 @@ namespace UltimateTeam.Toolkit.Models
 
         // TODO: I have no idea what type/structure this has, only seen null
         public string ErrorState { get; set; }
+
+        public DynamicObjectivesUpdates DynamicObjectivesUpdates { get; set; }
     }
 }
