@@ -41,7 +41,7 @@ namespace UltimateTeam.Toolkit.Models
 
         public bool Dream { get; set; }
 
-        public ushort? DiscardValue { get; set; }
+        public uint? DiscardValue { get; set; }
 
         public int? Value { get; set; }
 
@@ -126,5 +126,27 @@ namespace UltimateTeam.Toolkit.Models
         public string FieldPos { get; set; }
 
         public string PosBonus { get; set; }
+
+        public string GuidAssetId { get; set; }
+
+        public List<uint> AttributeArray { get; set; }
+
+        public List<uint> StatsArray { get; set; }
+
+        public List<uint> LifetimeStatsArray { get; set; }
+
+        public int Skillmoves { get; set; }
+
+        public int WeakFootAbilityTypeCode { get; set; }
+
+        public int AttackingWorkrate { get; set; }
+
+        public int DefensiveWorkrate { get; set; }
+
+        public int Trait1 { get; set; }
+
+        public int Trait2 { get; set; }
+
+        public int PreferredFoot { get; set; }
     }
 }

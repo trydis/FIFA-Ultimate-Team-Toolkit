@@ -13,5 +13,7 @@
         public string Sid { get; set; }
 
         public string ExpiresOn { get; set; }
+
+        public string phishingToken { get; set; } // new
     }
 }
