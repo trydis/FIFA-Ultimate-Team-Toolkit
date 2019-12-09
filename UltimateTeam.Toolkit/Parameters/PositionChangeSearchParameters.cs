@@ -43,7 +43,7 @@ namespace UltimateTeam.Toolkit.Parameters
                 uriString += "&playStyle=" + (ushort)ChemistryStyle;
 
             if (Position != "")
-                uriString += @"&pos=" + EncodePosString(Position);
+                uriString += "&pos=" + Position;
 
 
             return uriString;

@@ -38,10 +38,15 @@ namespace UltimateTeam.Toolkit.Parameters
             if (MaxBid > 0)
                 uriString += "&macr=" + MaxBid;
 
-            if (ResourceId <= 16777216)
-                uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
-            else
-                uriString += "&definitionId=" + ResourceId;
+            // changed based on this issue
+            // https://github.com/trydis/FIFA-Ultimate-Team-Toolkit/issues/305#issuecomment-259940095
+            if (ResourceId != 0)
+            {
+                if (ResourceId <= 16777216)
+                    uriString += "&maskedDefId=" + ResourceId.CalculateBaseId();
+                else
+                    uriString += "&definitionId=" + ResourceId;
+            }  
 
             SetPosition(ref uriString);
 
@@ -60,6 +65,9 @@ namespace UltimateTeam.Toolkit.Parameters
                 case Level.Silver:
                 case Level.Gold:
                     uriString += "&lev=" + Level.ToString().ToLower();
+                    break;
+                case Level.Special:
+                    uriString += "&rare=SP";
                     break;
                 default:
                     throw new ArgumentException("Level");

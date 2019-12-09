@@ -11,12 +11,12 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
+            uriString += "&type=development";
+
+            uriString += "&cat=" + Type.ToLower();
+
             SetLevel(ref uriString);
-
-            uriString += "&cat=" + DevelopmentType.ToLower();
-
-            uriString += "&type=" + Type.ToLower();
 
             if (MinBuy > 0)
                 uriString += "&minb=" + MinBuy;
@@ -30,7 +30,7 @@ namespace UltimateTeam.Toolkit.Parameters
             if (MaxBid > 0)
                 uriString += "&macr=" + MaxBid;
 
-
+                
             return uriString;
         }
 

@@ -69,7 +69,7 @@ namespace UltimateTeam.Toolkit.Requests
                 LoginResponse.Persona.DisplayName = matchingPersona.PersonaName;
 
                 LoginResponse.AuthData = await AuthAsync();
-                LoginResponse.PhishingToken = await ValidateAsync(LoginDetails);
+                LoginResponse.PhishingToken = await ValidateAsync(LoginDetails, LoginResponse.AuthData.phishingToken);
 
                 return LoginResponse;
             }
@@ -246,8 +246,17 @@ namespace UltimateTeam.Toolkit.Requests
             return matchingPersona;
         }
 
-        protected async Task<PhishingToken> ValidateAsync(LoginDetails loginDetails)
+        protected async Task<PhishingToken> ValidateAsync(LoginDetails loginDetails, string _phishingTokenString)
         {
+            // new in FUT20
+            // phishing token comes from /ut/auth, so i change a little bit to receive as a parameter and create an object to return
+            PhishingToken _phishingToken = new PhishingToken();
+            _phishingToken.Code = "200";
+            _phishingToken.String = "OK";
+            _phishingToken.Token = _phishingTokenString;
+            return _phishingToken;
+
+
             AddLoginHeaders();
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.Persona.NucUserId);
 
