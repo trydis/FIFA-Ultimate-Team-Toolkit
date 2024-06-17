@@ -1,8 +1,6 @@
 FIFA Ultimate Team Toolkit
 ===============================
 
-[![NuGet package](https://img.shields.io/nuget/vpre/UltimateTeam.Toolkit.svg)](https://www.nuget.org/packages/UltimateTeam.Toolkit/) [![Build status]]
-
 ## Sample usage
 
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#initialization)  
