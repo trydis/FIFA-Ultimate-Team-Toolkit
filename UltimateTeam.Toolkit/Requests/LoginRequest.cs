@@ -52,7 +52,7 @@ namespace UltimateTeam.Toolkit.Requests
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
                 var loginResponseMessage = await LoginAsync(mainPageResponseMessage);
-                var accessToken = LoginResponse.AuthCode.Code;
+                var accessToken = LoginResponse.AuthCode;
                 var pidData = await GetPidDataAsync(accessToken);
 
                 LoginResponse.Persona.NucUserId = pidData.Pid.ExternalRefValue;
@@ -69,7 +69,6 @@ namespace UltimateTeam.Toolkit.Requests
                 LoginResponse.Persona.DisplayName = matchingPersona.PersonaName;
 
                 LoginResponse.AuthData = await AuthAsync();
-                LoginResponse.PhishingToken = await ValidateAsync(LoginDetails);
 
                 return LoginResponse;
             }
@@ -91,7 +90,7 @@ namespace UltimateTeam.Toolkit.Requests
             return pidData;
         }
 
-        private async Task<AuthCode> GetAuthCodeAsync(string accessToken)
+        private async Task<string> GetAuthCodeAsync(string accessToken)
         {
             AddLoginHeaders();
             var authCodeResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AuthCode, accessToken));
@@ -100,7 +99,7 @@ namespace UltimateTeam.Toolkit.Requests
             if (authCode == null || authCode.Code == null)
                 throw new Exception($"Got no AuthCode during the Loginprocess to {LoginDetails?.AppVersion}.");
 
-            return authCode;
+            return authCode.Code;
         }
 
         protected async Task<HttpResponseMessage> SetTwoFactorTypeAsync(HttpResponseMessage mainPageResponseMessage)
@@ -279,7 +278,7 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"file://");
-            httpContent = $@"{{""isReadOnly"":false,""sku"":""{Resources.Sku}"",""clientVersion"":{Resources.ClientVersion},""locale"":""en-US"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{LoginResponse.AuthCode.Code}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{LoginResponse.Persona.NucPersId}"",""gameSku"":""{GetGameSku(LoginDetails.Platform)}""}}";
+            httpContent = $@"{{""isReadOnly"":false,""sku"":""{Resources.Sku}"",""clientVersion"":{Resources.ClientVersion},""locale"":""en-US"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{LoginResponse.AuthCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{LoginResponse.Persona.NucPersId}"",""gameSku"":""{GetGameSku(LoginDetails.Platform)}""}}";
             authResponseMessage = await HttpClient.PostAsync(string.Format(String.Format(Resources.Auth, DateTime.Now.ToUnixTime()), DateTime.Now.ToUnixTime()), new StringContent(httpContent));
 
             var authResponse = await DeserializeAsync<Auth>(authResponseMessage);
@@ -334,8 +333,8 @@ namespace UltimateTeam.Toolkit.Requests
             if (loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Contains("access_token="))
             {
                 contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-                LoginResponse.AuthCode.Code = loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Substring(loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.IndexOf("=") + 1);
-                LoginResponse.AuthCode.Code = LoginResponse.AuthCode.Code.Substring(0, LoginResponse.AuthCode.Code.IndexOf('&'));
+                LoginResponse.AuthCode = loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Substring(loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.IndexOf("=") + 1);
+                LoginResponse.AuthCode = LoginResponse.AuthCode.Substring(0, LoginResponse.AuthCode.IndexOf('&'));
             }
 
             return loginResponseMessage;

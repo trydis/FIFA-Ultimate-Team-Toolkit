@@ -98,6 +98,9 @@ namespace UltimateTeam.Toolkit.Constants
 
         public string GameSku = $"FFA{CurrentYearShort}";
 
+        public string CaptchaImage;
+        public string CaptchaValidate;
+
 
         public Resources(AppVersion appVersion)
         {
