@@ -1,16 +1,7 @@
 FIFA Ultimate Team Toolkit
 ===============================
 
-[![NuGet package](https://img.shields.io/nuget/vpre/UltimateTeam.Toolkit.svg)](https://www.nuget.org/packages/UltimateTeam.Toolkit/) [![Build status](https://ci.appveyor.com/api/projects/status/4owj0a485hhx1j7c/branch/master?svg=true)](https://ci.appveyor.com/project/trydis/fifa-ultimate-team-toolkit/branch/master) [![Join the chat at https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/trydis/FIFA-Ultimate-Team-Toolkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-## Supported platforms
-- .NET 4.5
-- Windows 8.x
-- Windows Phone 8.1
-- Xamarin.Android
-- Xamarin.iOS
-- Xamarin.Mac
-- ASP.NET Core 1.0
+[![NuGet package](https://img.shields.io/nuget/vpre/UltimateTeam.Toolkit.svg)](https://www.nuget.org/packages/UltimateTeam.Toolkit/) [![Build status]
 
 ## Sample usage
 
@@ -43,7 +34,6 @@ FIFA Ultimate Team Toolkit
 [Get squads from club](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squads-from-club)  
 [Get squad details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-squad-details)  
 [Get definitions](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-definitions)    
-[Get daily gift](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-daily-gift)  
 [Remove sold items from trade pile](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#remove-sold-items-from-trade-pile)  
 [Open a pack](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#open-a-pack)  
 [Get club consumables details](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#get-club-consumables-details)
