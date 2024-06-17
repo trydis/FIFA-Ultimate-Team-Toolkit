@@ -228,16 +228,6 @@ namespace UltimateTeam.Toolkit
             return RequestFactories.ReListRequestFactory().PerformRequestAsync();
         }
 
-        public Task<ListGiftsResponse> GetGiftsListAsync()
-        {
-            return RequestFactories.GiftListRequestFactory().PerformRequestAsync();
-        }
-
-        public Task GetGiftAsync(int idGift)
-        {
-            return RequestFactories.GiftRequestFactory(idGift).PerformRequestAsync();
-        }
-
         public Task RemoveSoldItemsFromTradePileAsync()
         {
             return RequestFactories.RemoveSoldItemsFromTradePileRequestFactory().PerformRequestAsync();

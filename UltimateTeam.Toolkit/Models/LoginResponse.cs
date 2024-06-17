@@ -4,7 +4,7 @@ namespace UltimateTeam.Toolkit.Models
 {
     public class LoginResponse
     {
-        public AuthCode AuthCode { get; set; }
+        public string AuthCode { get; set; }
 
         public string POWSessionId { get; set; }
 
@@ -16,16 +16,17 @@ namespace UltimateTeam.Toolkit.Models
 
         public Auth AuthData { get; set; }
 
-        public PhishingToken PhishingToken { get; set; }
+        public LoginResponse(Shards shards, UserAccounts userAccounts, string authCode)
+        {
+            Persona = new UserDataInfo();
+            Shards = shards;
+            UserAccounts = userAccounts;
+            AuthData = new Auth();
+            AuthCode = authCode;
+        }
 
         public LoginResponse()
         {
-            Persona = new UserDataInfo();
-            Shards = new Shards();
-            UserAccounts = new UserAccounts();
-            AuthData = new Auth();
-            PhishingToken = new PhishingToken();
-            AuthCode = new AuthCode();
         }
     }
 }

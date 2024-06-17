@@ -7,6 +7,7 @@ namespace UltimateTeam.Toolkit.Requests
     internal class ValidateCaptcha : FutRequestBase, IFutRequest<byte>
     {
         private readonly int _answer;
+        private readonly AppVersion _appVersion;
 
         public ValidateCaptcha(int answer)
         {
@@ -15,14 +16,14 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte> PerformRequestAsync()
         {
-            if (AppVersion == AppVersion.WebApp)
+            if (_appVersion == AppVersion.WebApp)
             {
-                AddCaptchaHeaders();
-                AddMethodOverrideHeader(HttpMethod.Post);
+                //AddCaptchaHeaders(); ???
+                //AddMethodOverrideHeader(HttpMethod.Post); ???
             }
             else
             {
-                AddCommonMobileHeaders();
+                //AddCommonMobileHeaders(); ???
             }
 
             var content = @"{""token"":""AAAA"",""answer"":""" + _answer + @"""}";

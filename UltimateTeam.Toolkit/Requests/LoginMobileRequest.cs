@@ -57,13 +57,12 @@ namespace UltimateTeam.Toolkit.Requests
                 var shards = await GetMobileShardsAsync(nucleusId);
                 var userAccounts = await GetMobileUserAccountsAsync(_loginDetails.Platform);
                 _sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
-                var phishingToken = await ValidateAsync(_loginDetails, _sessionId);
 
-                return new LoginResponse(nucleusId, shards, userAccounts, _sessionId, phishingToken, nucleusId);
+                return new LoginResponse(shards, userAccounts, _token.AccessToken);
             }
             catch (Exception e)
             {
-                throw new FutException($"Unable to login to {AppVersion}", e);
+                throw new FutException($"Unable to login", e);
             }
         }
 
@@ -172,15 +171,6 @@ namespace UltimateTeam.Toolkit.Requests
             return await DeserializeAsync<UserAccounts>(await HttpClient.GetAsync(string.Format("{1}/ut/game/fifa17/user/accountinfo?filterConsoleLogin=true&sku=FUT17AND_={0}", CreateTimestamp(), _route)));
         }
 
-        private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
-        {
-            HttpClient.AddRequestHeader("X-UT-SID", sessionId);
-            return (await DeserializeAsync<ValidateResponse>(await HttpClient.PostAsync(string.Format("{0}/ut/game/fifa17/phishing/validate?answer={1}&timestamp={2}", _route, Hasher.Hash(loginDetails.SecretAnswer), CreateTimestamp()), new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
-            })))).Token;
-        }
-
         private async Task<HttpResponseMessage> LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
         {
             var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
@@ -269,9 +259,9 @@ namespace UltimateTeam.Toolkit.Requests
                 else
                 {
                     //var twoFactorCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync(_loginDetails.Username);
-                    var twoFactorCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
+                    var twoFactorCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync(Constants.AuthenticationType.App);
                     var loginResponseContent = await loginResponse.Content.ReadAsStringAsync();
-                    AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
+                    //AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
                     HttpResponseMessage httpResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri, new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>(loginResponseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", twoFactorCode),
@@ -291,7 +281,6 @@ namespace UltimateTeam.Toolkit.Requests
         }
         private async Task<HttpResponseMessage> GetMainPageAsync()
         {
-            AddMobileUserAgent();
             AddAcceptEncodingHeader();
             var mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
             mainPageResponseMessage.EnsureSuccessStatusCode();

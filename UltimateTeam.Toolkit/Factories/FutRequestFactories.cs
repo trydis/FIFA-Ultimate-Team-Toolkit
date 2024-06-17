@@ -76,8 +76,6 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<IFutRequest<RelistResponse>> _reListRequestFactory;
 
-        private Func<IFutRequest<ListGiftsResponse>> _giftListRequestFactory;
-
         private Func<int, IFutRequest<byte>> _giftRequestFactory;
 
         private Func<long, IFutRequest<DefinitionResponse>> _definitionRequestFactory;
@@ -556,30 +554,6 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _reListRequestFactory = value;
-            }
-        }
-
-        public Func<IFutRequest<ListGiftsResponse>> GiftListRequestFactory
-        {
-            get
-            {
-                return _giftListRequestFactory ??
-                       (_giftListRequestFactory = () => SetSharedRequestProperties(new ListGiftsRequest()));
-            }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _giftListRequestFactory = value;
-            }
-        }
-
-        public Func<int, IFutRequest<byte>> GiftRequestFactory
-        {
-            get { return _giftRequestFactory ?? (_giftRequestFactory = giftId => SetSharedRequestProperties(new GiftRequest(giftId))); }
-            set
-            {
-                value.ThrowIfNullArgument();
-                _giftRequestFactory = value;
             }
         }
 

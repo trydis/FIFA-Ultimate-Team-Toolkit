@@ -8,22 +8,24 @@ namespace UltimateTeam.Toolkit.Requests
 {
     internal class CaptchaRequest : FutRequestBase, IFutRequest<CaptchaResponse>
     {
+        private AppVersion _appVersion = AppVersion.WebApp;
+
         public async Task<CaptchaResponse> PerformRequestAsync()
         {
-            if (AppVersion == AppVersion.WebApp)
+            if (_appVersion == AppVersion.WebApp)
             {
-                AddCaptchaHeaders();
+                //AddCaptchaHeaders(); ???
             }
             else
             {
-                AddMobileCaptchaHeaders();
+                //AddMobileCaptchaHeaders(); ???
             }
 
             var responseMessage = await HttpClient
                   .GetAsync(string.Format(Resources.CaptchaImage, DateTime.Now.ToUnixTime()))
                   .ConfigureAwait(false);
 
-            if (AppVersion == AppVersion.WebApp)
+            if (_appVersion == AppVersion.WebApp)
             {
                 return await DeserializeAsync<CaptchaResponse>(responseMessage);
             }

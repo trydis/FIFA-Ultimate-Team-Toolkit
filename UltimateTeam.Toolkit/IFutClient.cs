@@ -71,10 +71,6 @@ namespace UltimateTeam.Toolkit
 
         Task<RelistResponse> ReListAsync();
 
-        Task<ListGiftsResponse> GetGiftsListAsync();
-
-        Task GetGiftAsync(int idGift);
-
         Task<DefinitionResponse> GetDefinitionsAsync(long baseId);
 
         Task RemoveSoldItemsFromTradePileAsync();

@@ -17,6 +17,8 @@ namespace UltimateTeam.Toolkit.Requests
         private LoginDetails _loginDetails = new LoginDetails();
         private LoginResponse _loginResponse = new LoginResponse();
 
+        protected AppVersion _appVersion;
+
         public LoginResponse LoginResponse
         {
             set
@@ -55,13 +57,12 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected void AddCommonHeaders()
         {
-            if (LoginResponse?.Persona?.NucUserId == null || LoginResponse?.AuthData?.Sid == null || LoginResponse?.PhishingToken?.Token == null)
+            if (LoginResponse?.Persona?.NucUserId == null || LoginResponse?.AuthData?.Sid == null)
             {
                 throw new Exception($"Got no Nucleus Data and Auth Data during the Loginprocess {LoginDetails?.AppVersion}.");
             }
 
             HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PhishingToken, _loginResponse.PhishingToken.Token);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _loginResponse.Persona.NucUserId);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _loginResponse.AuthData.Sid);
             HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");

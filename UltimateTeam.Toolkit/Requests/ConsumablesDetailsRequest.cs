@@ -13,13 +13,13 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = Resources.FutHome + Resources.ConsumablesDetails;
 
-            if (AppVersion == AppVersion.WebApp)
+            if (_appVersion == AppVersion.WebApp)
             {
-                AddCommonHeaders(HttpMethod.Get);
+                //AddCommonHeaders(HttpMethod.Get); ??
             }
             else
             {
-                AddCommonMobileHeaders();
+                //AddCommonMobileHeaders(); ??
                 uriString += $"?_={DateTime.Now.ToUnixTime()}";
             }
 
