@@ -95,6 +95,9 @@
     <Compile Include="FutClient.cs" />
     <Compile Include="IFutClient.cs" />
     <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\MobileToken.cs" />
+    <Compile Include="Models\ConsumablesDetails.cs" />
+    <Compile Include="Models\ConsumablesDetailsResponse.cs" />
     <Compile Include="Models\PackDetails.cs" />
     <Compile Include="Models\PackContentInfo.cs" />
     <Compile Include="Models\PackExtPrice.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Models\AuctionDuration.cs" />
     <Compile Include="Models\AuctionInfo.cs" />
     <Compile Include="Models\RelistResponse.cs" />
+    <Compile Include="Models\SessionAuthResponse.cs" />
     <Compile Include="Models\StoreResponse.cs" />
     <Compile Include="Models\AuctionResponse.cs" />
     <Compile Include="Models\Auth.cs" />
@@ -188,6 +192,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AddToWatchlistRequest.cs" />
     <Compile Include="Requests\ClubImageRequest.cs" />
+    <Compile Include="Requests\ConsumablesDetailsRequest.cs" />
     <Compile Include="Requests\ConsumablesRequest.cs" />
     <Compile Include="Requests\ClubItemRequest.cs" />
     <Compile Include="Requests\DefinitionRequest.cs" />
@@ -242,8 +247,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
