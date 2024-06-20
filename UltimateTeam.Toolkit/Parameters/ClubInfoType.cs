@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace UltimateTeam.Toolkit.Parameters
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class ClubInfoType : SearchParameterBase<string>
     {
@@ -19,7 +17,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public static IEnumerable<ClubInfoType> GetAll()
         {
             yield return new ClubInfoType("kit", Kit);
-            yield return new ClubInfoType("badge", Badge);   
+            yield return new ClubInfoType("badge", Badge);
         }
     }
 }

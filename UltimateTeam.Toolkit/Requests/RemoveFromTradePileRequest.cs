@@ -1,9 +1,7 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -23,7 +21,6 @@ namespace UltimateTeam.Toolkit.Requests
             Task<HttpResponseMessage> removeFromTradePileMessageTask;
 
             AddCommonHeaders();
-            uriString += $"?_={DateTime.Now.ToUnixTime()}";
             removeFromTradePileMessageTask = HttpClient.DeleteAsync(uriString);
 
             var removeFromTradePileMessage = await removeFromTradePileMessageTask.ConfigureAwait(false);

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class StadiumSearchParameters : SearchParameters
     {
@@ -11,7 +9,7 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
             SetLevel(ref uriString);
 
             uriString += "&type=" + Type.ToLower();
@@ -48,8 +46,7 @@ namespace UltimateTeam.Toolkit.Parameters
             }
         }
 
-     
+
     }
 }
 
-     

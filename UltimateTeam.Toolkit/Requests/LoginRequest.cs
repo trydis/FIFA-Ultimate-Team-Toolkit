@@ -1,34 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
-using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auth;
+using UltimateTeam.Toolkit.Models.Generic;
+using UltimateTeam.Toolkit.RequestFactory;
 using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class LoginRequest : FutRequestBase, IFutRequest<LoginResponse>
     {
-        private IHasher _hasher;
         private ITwoFactorCodeProvider _twoFactorCodeProvider;
         private AuthenticationType _authType;
-
-        public IHasher Hasher
-        {
-            get { return _hasher ?? (_hasher = new Hasher()); }
-            set { _hasher = value; }
-        }
-
-        public AuthenticationType AuthType
-        {
-            get { return _authType; }
-            set { _authType = value; }
-        }
 
         public ITwoFactorCodeProvider TwoFactorCodeProvider
         {
@@ -51,24 +35,23 @@ namespace UltimateTeam.Toolkit.Requests
             try
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
+
+                //Get the AccessToken
                 var loginResponseMessage = await LoginAsync(mainPageResponseMessage);
-                var accessToken = LoginResponse.AuthCode;
-                var pidData = await GetPidDataAsync(accessToken);
+                if (string.IsNullOrEmpty(LoginResponse.AccessToken))
+                    throw new FutException("No AccessToken received.");
 
-                LoginResponse.Persona.NucUserId = pidData.Pid.ExternalRefValue;
+                //GetPersonId & NucleusId
+                LoginResponse.PersonId = await GetPidDataAsync(LoginResponse.AccessToken);
+                LoginResponse.NucleusId = LoginResponse.PersonId.Pid.ExternalRefValue;
 
-                var sessionCode = await GetAuthCodeAsync(accessToken);
-                LoginResponse.AuthCode = await GetAuthCodeAsync(accessToken);
+                //Get Personas & Clubs
+                var userAccountsAuthCode = await GetAuthCodeAsync(LoginResponse.AccessToken, "shard5");
+                LoginResponse.UserAccounts = await GetUserAccountsAsync(userAccountsAuthCode);
+                LoginResponse.DefaultPersona = MatchDefaultPersona(LoginResponse.UserAccounts);
 
-                LoginResponse.Shards = await GetShardsAsync();
-                LoginResponse.UserAccounts = await GetUserAccountsAsync(LoginDetails);
-
-                var matchingPersona = MatchPersona(LoginResponse.UserAccounts);
-
-                LoginResponse.Persona.NucPersId = matchingPersona.PersonaId;
-                LoginResponse.Persona.DisplayName = matchingPersona.PersonaName;
-
-                LoginResponse.AuthData = await AuthAsync();
+                var utAuthCode = await GetAuthCodeAsync(LoginResponse.AccessToken, "ut-auth");
+                LoginResponse.AuthData = await AuthAsync(utAuthCode);
 
                 return LoginResponse;
             }
@@ -82,7 +65,7 @@ namespace UltimateTeam.Toolkit.Requests
         {
             AddLoginHeaders();
             AddAuthorizationHeader(authCode);
-            var pidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pid));
+            var pidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pids));
             var pidData = await DeserializeAsync<PidData>(pidDataResponseMessage);
 
             if (pidData == null || pidData.Pid == null)
@@ -90,16 +73,148 @@ namespace UltimateTeam.Toolkit.Requests
             return pidData;
         }
 
-        private async Task<string> GetAuthCodeAsync(string accessToken)
+        private async Task<string> GetAuthCodeAsync(string accessToken, string clientSequence)
         {
             AddLoginHeaders();
-            var authCodeResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AuthCode, accessToken));
+            var authCodeResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AuthCode, accessToken, clientSequence));
             var authCode = await DeserializeAsync<AuthCode>(authCodeResponseMessage);
 
             if (authCode == null || authCode.Code == null)
                 throw new Exception($"Got no AuthCode during the Loginprocess to {LoginDetails?.AppVersion}.");
 
             return authCode.Code;
+        }
+
+        protected async Task<UserAccounts> GetUserAccountsAsync(string authCode)
+        {
+            AddLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.NucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusAccessCode, authCode);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusRedirectUrl, "nucleus:rest");
+            HttpClient.AddRequestHeader("Content-Type", "application/json");
+
+
+
+            var accountInfoResponseMessage = await HttpClient.GetAsync(Resources.UserAccounts);
+            var accountInfoResponseMessageContent = await accountInfoResponseMessage.Content.ReadAsStringAsync();
+            var userAccounts = await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
+
+            if (userAccounts?.UserAccountInfo?.Personas == null || userAccounts.UserAccountInfo.Personas.Count() <= 0)
+            {
+                throw new Exception($"Unable to get Personas {LoginDetails?.AppVersion}.");
+            }
+            return userAccounts;
+        }
+
+        private Persona MatchDefaultPersona(UserAccounts userAccounts)
+        {
+            var matchingPersona = new Persona();
+            try
+            {
+                matchingPersona = LoginResponse.UserAccounts.UserAccountInfo.Personas.Where(p => p.UserClubList.Any(uc => uc.Year == Resources.CurrentYearLong.ToString() &&
+                                                                                                                    uc.SkuAccessList.ContainsKey(GetGameSku(LoginDetails.Platform)))).FirstOrDefault();
+                if (matchingPersona == null)
+                    throw new FutException($"Unable to match a valid Persona for {LoginDetails?.AppVersion}.");
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to match a valid Persona for {LoginDetails?.AppVersion}.", e);
+            }
+            return matchingPersona;
+        }
+
+        protected async Task<AuthInfo> AuthAsync(string utAuthCode)
+        {
+            string httpContent;
+            var authResponseMessage = new HttpResponseMessage();
+
+            AddLoginHeaders();
+            httpContent = $@"{{""clientVersion"":{Resources.ClientVersion},""gameSku"":""{GetGameSku(LoginDetails.Platform)}"",""identification"":{{""authCode"":""{utAuthCode}"",""redirectUrl"":""nucleus:rest""}},""isReadOnly"":false,""locale"":""en-US"",""method"":""authcode"",""nucleusPersonaId"":{LoginResponse.DefaultPersona.PersonaId},""priorityLevel"":4,""sku"":""{Resources.Sku}""}}";
+            authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(httpContent));
+
+            var authResponse = await DeserializeAsync<AuthInfo>(authResponseMessage);
+            var authResponseContent = await authResponseMessage.Content.ReadAsStringAsync();
+
+            if (authResponse.Sid == null)
+            {
+                throw new Exception($"Unable to get Session Id {LoginDetails?.AppVersion}.");
+            }
+
+            return authResponse;
+        }
+
+        protected async Task<HttpResponseMessage> LoginAsync(HttpResponseMessage mainPageResponseMessage)
+        {
+            var loginResponseMessage = new HttpResponseMessage();
+            var contentData = string.Empty;
+
+            loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
+                                                                                                                        new[]
+                                                                                                                        {
+                                                                                                                            new KeyValuePair<string, string>("email", LoginDetails.Username),
+                                                                                                                            new KeyValuePair<string, string>("password", LoginDetails.Password),
+                                                                                                                            new KeyValuePair<string, string>("loginMethod", "emailPassword"),
+                                                                                                                            new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                            new KeyValuePair<string, string>("cid", ""),
+                                                                                                                            new KeyValuePair<string, string>("regionCode", "DE"),
+                                                                                                                            new KeyValuePair<string, string>("phoneNumber", ""),
+                                                                                                                            new KeyValuePair<string, string>("passwordForPhone", ""),
+                                                                                                                            new KeyValuePair<string, string>("_rememberMe", "on"),
+                                                                                                                            new KeyValuePair<string, string>("rememberMe", "on"),
+                                                                                                                            new KeyValuePair<string, string>("thirdPartyCaptchaResponse", ""),
+                                                                                                                            new KeyValuePair<string, string>("isPhoneNumberLogin", "false"),
+                                                                                                                            new KeyValuePair<string, string>("isIncompletePhone", ""),
+                                                                                                                            new KeyValuePair<string, string>("showAgeUp", "true")
+                                                                                                                        }));
+            contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+
+            if (contentData.Contains("Your credentials are incorrect or have expired") || contentData.Contains("Email address is invalid"))
+            {
+                throw new Exception($"Wrong credentials for {LoginDetails?.AppVersion}.");
+            }
+
+
+            if (contentData.Contains("Verify your identity"))
+            {
+                loginResponseMessage = await SetTwoFactorCodeAsync(loginResponseMessage);
+                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+            }
+
+            string pattern = @"window\.location\s*=\s*['""](?<url>https?://[^'""]+)['""]";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            Match match = regex.Match(contentData);
+            if (match.Success)
+            {
+                string redirectUrl = match.Groups["url"].Value;
+                loginResponseMessage = await LoginForwarder(redirectUrl);
+            }
+
+            if (loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Contains("access_token="))
+            {
+                loginResponseMessage = await LoginForwarder(loginResponseMessage.RequestMessage.RequestUri.ToString());
+                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+                LoginResponse.AccessToken = loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Substring(loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.IndexOf("=") + 1);
+                LoginResponse.AccessToken = LoginResponse.AccessToken.Substring(0, LoginResponse.AccessToken.IndexOf('&'));
+            }
+
+            return loginResponseMessage;
+        }
+
+        protected async Task<HttpResponseMessage> GetMainPageAsync()
+        {
+            HttpClient.ClearRequestHeaders();
+            var mainPageResponseMessage = new HttpResponseMessage();
+            mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
+
+            return mainPageResponseMessage;
+        }
+
+        protected async Task<HttpResponseMessage> LoginForwarder(string requestUri)
+        {
+            HttpResponseMessage forwardResponseMessage = new HttpResponseMessage();
+
+            forwardResponseMessage = await HttpClient.GetAsync(requestUri);
+            return forwardResponseMessage;
         }
 
         protected async Task<HttpResponseMessage> SetTwoFactorTypeAsync(HttpResponseMessage mainPageResponseMessage)
@@ -113,6 +228,8 @@ namespace UltimateTeam.Toolkit.Requests
                                                                                                                             new[]
                                                                                                                             {
                                                                                                                             new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                            new KeyValuePair<string, string>("codeType", "EMAIL"),
+                                                                                                                            new KeyValuePair<string, string>("maskedDestination", string.Concat(LoginDetails.Username.Substring(0, 2), new string('*', LoginDetails.Username.IndexOf('@') - 2), "%40", LoginDetails.Username.Split('@')[1]))
                                                                                                                             }));
             }
             else
@@ -130,13 +247,14 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected async Task<HttpResponseMessage> SetTwoFactorCodeAsync(HttpResponseMessage loginResponse)
         {
-            var contentData = await loginResponse.Content.ReadAsStringAsync();
-            loginResponse = await LoginForwarder(loginResponse);
+            _authType = AuthenticationType.Email;
+
+            string contentData = await loginResponse.Content.ReadAsStringAsync();
+            loginResponse = await LoginForwarder(loginResponse.RequestMessage.RequestUri.ToString());
             contentData = await loginResponse.Content.ReadAsStringAsync();
 
-            _authType = AuthenticationType.Unknown;
-            var sended = await SetTwoFactorTypeAsync(loginResponse);
-            loginResponse = await LoginForwarder(sended);
+            HttpResponseMessage sended = await SetTwoFactorTypeAsync(loginResponse);
+            loginResponse = await LoginForwarder(sended.RequestMessage.RequestUri.ToString());
 
             if (contentData.Contains("send you a code to:"))
             {
@@ -154,7 +272,7 @@ namespace UltimateTeam.Toolkit.Requests
                 throw new Exception($"Two Factor Code MUST be 6 digits long {LoginDetails?.AppVersion}.");
             }
 
-            if (_authType ==AuthenticationType.Unknown)
+            if (_authType == AuthenticationType.Unknown)
             {
                 throw new Exception($"Unable to determine AuthType (i.e. App Authenticator or E-Mail) for {LoginDetails?.AppVersion}.");
             }
@@ -181,176 +299,6 @@ namespace UltimateTeam.Toolkit.Requests
             return codeResponseMessage;
         }
 
-        protected async Task<HttpResponseMessage> LoginForwarder(HttpResponseMessage responseMessage)
-        {
-            HttpResponseMessage forwardResponseMessage = new HttpResponseMessage();
-            var contentData = await responseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("https://signin.ea.com:443/p/web2/login?execution="))
-            {
-                Match executionIdMatch = Regex.Match(contentData, @"https:\/\/signin\.ea\.com:443\/p\/web2\/login\?execution=([A-Za-z0-9\-]+)");
-
-                string executionId = executionIdMatch.Groups[1].Value;
-                forwardResponseMessage = await HttpClient.GetAsync("https://signin.ea.com:443/p/web2/login?execution=" + executionId + "&_eventId=end");
-
-                return forwardResponseMessage;
-            }
-            return responseMessage;
-        }
-
-        protected async Task<Shards> GetShardsAsync()
-        {
-            AddLoginHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.Persona.NucUserId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, LoginResponse.POWSessionId);
-
-            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
-            var shardsResponseContent = await shardsResponseMessage.Content.ReadAsStringAsync();
-            var shards = await DeserializeAsync<Shards>(shardsResponseMessage);
-
-            if (shards?.ShardInfo == null || shards.ShardInfo.Count <= 0)
-            {
-                throw new Exception($"Unable to get Shards {LoginDetails?.AppVersion}.");
-            }
-            return shards;
-        }
-
-        protected async Task<UserAccounts> GetUserAccountsAsync(LoginDetails LoginDetails)
-        {
-            AddLoginHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.Persona.NucUserId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-
-            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
-            var accountInfoResponseMessageContent = await accountInfoResponseMessage.Content.ReadAsStringAsync();
-            var userAccounts = await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
-
-            if (userAccounts?.UserAccountInfo?.Personas == null || userAccounts.UserAccountInfo.Personas.Count() <= 0)
-            {
-                throw new Exception($"Unable to get Personas {LoginDetails?.AppVersion}.");
-            }
-            return userAccounts;
-        }
-
-        private Persona MatchPersona(UserAccounts userAccounts)
-        {
-            var matchingPersona = new Persona();
-            try
-            {
-                matchingPersona = LoginResponse.UserAccounts.UserAccountInfo.Personas.First(n => n.UserClubList.First().Platform ==     GetPlatform(LoginDetails.Platform));
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Unable to match a valid Persona for {LoginDetails?.AppVersion}.", e);
-            }
-            return matchingPersona;
-        }
-
-        protected async Task<PhishingToken> ValidateAsync(LoginDetails loginDetails)
-        {
-            AddLoginHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.Persona.NucUserId);
-
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, LoginResponse.AuthData.Sid);
-            var validateResponseMessage = await HttpClient.GetAsync(String.Format(Resources.ValidateQuestion, DateTime.Now.ToUnixTime()));
-            validateResponseMessage = await HttpClient.PostAsync(String.Format(Resources.ValidateAnswer, Hasher.Hash(loginDetails.SecretAnswer)), new FormUrlEncodedContent(
-                  new[]
-                  {
-                    new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
-                  }));
-            var phishingToken = await DeserializeAsync<PhishingToken>(validateResponseMessage);
-            var validateResponseMessageContent = await validateResponseMessage.Content.ReadAsStringAsync();
-
-            if (phishingToken.Code != "200" || phishingToken.Token == null)
-            {
-                throw new Exception($"Unable to get Phishing Token {LoginDetails?.AppVersion}.");
-            }
-
-            return phishingToken;
-
-        }
-
-        protected async Task<Auth> AuthAsync()
-        {
-            string httpContent;
-            var authResponseMessage = new HttpResponseMessage();
-
-            AddLoginHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, string.Empty);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.PowSessionId, string.Empty);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"file://");
-            httpContent = $@"{{""isReadOnly"":false,""sku"":""{Resources.Sku}"",""clientVersion"":{Resources.ClientVersion},""locale"":""en-US"",""method"":""authcode"",""priorityLevel"":4,""identification"":{{""authCode"":""{LoginResponse.AuthCode}"",""redirectUrl"":""nucleus:rest""}},""nucleusPersonaId"":""{LoginResponse.Persona.NucPersId}"",""gameSku"":""{GetGameSku(LoginDetails.Platform)}""}}";
-            authResponseMessage = await HttpClient.PostAsync(string.Format(String.Format(Resources.Auth, DateTime.Now.ToUnixTime()), DateTime.Now.ToUnixTime()), new StringContent(httpContent));
-
-            var authResponse = await DeserializeAsync<Auth>(authResponseMessage);
-            var authResponseContent = await authResponseMessage.Content.ReadAsStringAsync();
-
-            if (authResponse.Sid == null)
-            {
-                throw new Exception($"Unable to get Session Id {LoginDetails?.AppVersion}.");
-            }
-
-            return authResponse;
-        }
-
-        protected async Task<HttpResponseMessage> LoginAsync(HttpResponseMessage mainPageResponseMessage)
-        {
-            var loginResponseMessage = new HttpResponseMessage();
-            var contentData = string.Empty;
-
-            loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
-                                                                                                                        new[]
-                                                                                                                        {
-                                                                                                                            new KeyValuePair<string, string>("email", LoginDetails.Username),
-                                                                                                                            new KeyValuePair<string, string>("password", LoginDetails.Password),
-                                                                                                                            new KeyValuePair<string, string>("_eventId", "submit"),
-                                                                                                                            new KeyValuePair<string, string>("country", "UK"),
-                                                                                                                            new KeyValuePair<string, string>("phoneNumber", ""),
-                                                                                                                            new KeyValuePair<string, string>("passwordForPhone", ""),
-                                                                                                                            new KeyValuePair<string, string>("_rememberMe", "on"),
-                                                                                                                            new KeyValuePair<string, string>("rememberMe", "on"),
-                                                                                                                            new KeyValuePair<string, string>("gCaptchaResponse", ""),
-                                                                                                                            new KeyValuePair<string, string>("isPhoneNumberLogin", "false"),
-                                                                                                                            new KeyValuePair<string, string>("isIncompletePhone", "")
-                                                                                                                        }));
-            contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-
-            if (contentData.Contains("Your credentials are incorrect or have expired") || contentData.Contains("Email address is invalid"))
-            {
-                throw new Exception($"Wrong credentials for {LoginDetails?.AppVersion}.");
-            }
-
-            var forwardedResponse = await LoginForwarder(loginResponseMessage);
-            contentData = await forwardedResponse.Content.ReadAsStringAsync();
-            loginResponseMessage = forwardedResponse;
-
-
-            if (contentData.Contains("Login Verification"))
-            {
-                loginResponseMessage = await SetTwoFactorCodeAsync(loginResponseMessage);
-                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-            }
-
-            if (loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Contains("access_token="))
-            {
-                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-                LoginResponse.AuthCode = loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Substring(loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.IndexOf("=") + 1);
-                LoginResponse.AuthCode = LoginResponse.AuthCode.Substring(0, LoginResponse.AuthCode.IndexOf('&'));
-            }
-
-            return loginResponseMessage;
-        }
-
-        protected async Task<HttpResponseMessage> GetMainPageAsync()
-        {
-
-            HttpClient.ClearRequestHeaders();
-            var mainPageResponseMessage = new HttpResponseMessage();
-
-            mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
-
-            return mainPageResponseMessage;
-        }
-
         protected string GetGameSku(Platform platform)
         {
             switch (platform)
@@ -359,33 +307,14 @@ namespace UltimateTeam.Toolkit.Requests
                     return $"{Resources.GameSku}PS3";
                 case Platform.Ps4:
                     return $"{Resources.GameSku}PS4";
-                case Platform.Xbox360:
-                    return $"{Resources.GameSku}XBX";
+                case Platform.Ps5:
+                    return $"{Resources.GameSku}PS5";
                 case Platform.XboxOne:
                     return $"{Resources.GameSku}XBO";
                 case Platform.Pc:
                     return $"{Resources.GameSku}PCC";
                 case Platform.Switch:
                     return $"{Resources.GameSku}SWI";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(platform));
-            }
-        }
-
-        protected static string GetPlatform(Platform platform)
-        {
-            switch (platform)
-            {
-                case Platform.Ps3:
-                case Platform.Ps4:
-                    return "ps3";
-                case Platform.Xbox360:
-                case Platform.XboxOne:
-                    return "360";
-                case Platform.Pc:
-                    return "pc";
-                case Platform.Switch:
-                    return "swi";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform));
             }

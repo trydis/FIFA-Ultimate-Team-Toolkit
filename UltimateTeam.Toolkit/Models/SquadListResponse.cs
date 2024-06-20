@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 
 namespace UltimateTeam.Toolkit.Models
 {
@@ -6,6 +6,7 @@ namespace UltimateTeam.Toolkit.Models
     {
         public ushort ActiveSquadId { get; set; }
 
-        public List<SquadDetailsResponse> Squad { get; set; }
+        [JsonProperty("squad")]
+        public List<SquadDetailsResponse>? Squads { get; set; }
     }
 }

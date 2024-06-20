@@ -5,6 +5,7 @@
         All,
         Bronze,
         Silver,
-        Gold
+        Gold,
+        Special
     }
 }

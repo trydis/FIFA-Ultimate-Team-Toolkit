@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class DevelopmentSearchParameters : SearchParameters
     {
@@ -11,12 +9,12 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
+            uriString += "&type=development";
+
+            uriString += "&cat=" + DevelopmentType;
+
             SetLevel(ref uriString);
-
-            uriString += "&cat=" + DevelopmentType.ToLower();
-
-            uriString += "&type=" + Type.ToLower();
 
             if (MinBuy > 0)
                 uriString += "&minb=" + MinBuy;
@@ -50,8 +48,7 @@ namespace UltimateTeam.Toolkit.Parameters
             }
         }
 
-     
+
     }
 }
 
-     

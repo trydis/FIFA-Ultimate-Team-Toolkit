@@ -1,6 +1,5 @@
-﻿using System;
-using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+﻿using UltimateTeam.Toolkit.Extensions;
+using UltimateTeam.Toolkit.Models.Generic;
 
 
 namespace UltimateTeam.Toolkit.Exceptions
@@ -24,7 +23,7 @@ namespace UltimateTeam.Toolkit.Exceptions
         private static string ExtractMessage(FutError futError)
         {
             futError.ThrowIfNullArgument();
-            
+
             string result = "Code: " + futError.Code;
             if (!string.IsNullOrEmpty(futError.Reason))
                 result += ", Reason: " + futError.Reason;

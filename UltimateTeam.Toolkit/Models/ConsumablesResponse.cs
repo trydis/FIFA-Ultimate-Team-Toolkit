@@ -1,12 +1,9 @@
-using System.Collections.Generic;
+using UltimateTeam.Toolkit.Models.Consumables;
 
 namespace UltimateTeam.Toolkit.Models
 {
     public class ConsumablesResponse
     {
-        public string category { get; set;  }
-        
-        public List<Consumables> stat { get; set; }
-    
+        public List<Consumable>? ItemData { get; set; }
     }
 }

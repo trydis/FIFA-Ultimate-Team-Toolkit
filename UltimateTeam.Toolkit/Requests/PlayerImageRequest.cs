@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -20,7 +20,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAnonymousHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
 
             return await HttpClient
-                             .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.CalculateBaseId()))
+                             .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.ItemData.AssetId))
                              .ConfigureAwait(false);
         }
     }

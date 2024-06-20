@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class ClubInfoSearchParameters : SearchParameters
     {
@@ -11,14 +9,14 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
             SetLevel(ref uriString);
 
             if (Convert.ToBoolean(League))
-            uriString += "&leag=" + League;
+                uriString += "&leag=" + League;
 
             if (Convert.ToBoolean(Team))
-            uriString += "&team=" + Team;
+                uriString += "&team=" + Team;
 
             uriString += "&cat=" + ClubInfoType.ToLower();
 
@@ -35,6 +33,9 @@ namespace UltimateTeam.Toolkit.Parameters
 
             if (MaxBid > 0)
                 uriString += "&macr=" + MaxBid;
+
+            if (HasContraints == true)
+                uriString += "&contraits=1";
 
 
             return uriString;
@@ -56,8 +57,7 @@ namespace UltimateTeam.Toolkit.Parameters
             }
         }
 
-     
+
     }
 }
 
-     

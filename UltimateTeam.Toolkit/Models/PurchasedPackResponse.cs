@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using UltimateTeam.Toolkit.Models.Generic;
+using UltimateTeam.Toolkit.Models.Player;
 
 namespace UltimateTeam.Toolkit.Models
 {
@@ -19,5 +20,7 @@ namespace UltimateTeam.Toolkit.Models
         public uint PurchasedPackId { get; set; }
 
         public string EntitlementQuantities { get; set; }
+
+        public DynamicObjectivesUpdates? DynamicObjectivesUpdates { get; set; }
     }
 }

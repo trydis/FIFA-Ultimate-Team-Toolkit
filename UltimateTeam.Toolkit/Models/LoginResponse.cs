@@ -1,32 +1,19 @@
-﻿using UltimateTeam.Toolkit.Extensions;
+﻿using UltimateTeam.Toolkit.Models.Auth;
 
 namespace UltimateTeam.Toolkit.Models
 {
     public class LoginResponse
     {
-        public string AuthCode { get; set; }
+        public string? NucleusId { get; set; }
 
-        public string POWSessionId { get; set; }
+        public string? AccessToken { get; set; }
 
-        public UserDataInfo Persona { get; set; }
+        public PidData? PersonId { get; set; }
 
-        public Shards Shards { get; set; }
+        public UserAccounts? UserAccounts { get; set; }
 
-        public UserAccounts UserAccounts { get; set; }
+        public Persona? DefaultPersona { get; set; }
 
-        public Auth AuthData { get; set; }
-
-        public LoginResponse(Shards shards, UserAccounts userAccounts, string authCode)
-        {
-            Persona = new UserDataInfo();
-            Shards = shards;
-            UserAccounts = userAccounts;
-            AuthData = new Auth();
-            AuthCode = authCode;
-        }
-
-        public LoginResponse()
-        {
-        }
+        public Auth.AuthInfo? AuthData { get; set; }
     }
 }

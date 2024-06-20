@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -26,7 +25,7 @@ namespace UltimateTeam.Toolkit.Requests
             var content = new StringContent($"{{\"bid\":{_bidAmount}}}");
 
             AddCommonHeaders();
-            bidResponseMessageTask = HttpClient.PutAsync(uriString + $"?_={DateTime.Now.ToUnixTime()}", content);
+            bidResponseMessageTask = HttpClient.PutAsync(uriString, content);
 
             var bidResponseMessage = await bidResponseMessageTask.ConfigureAwait(false);
 

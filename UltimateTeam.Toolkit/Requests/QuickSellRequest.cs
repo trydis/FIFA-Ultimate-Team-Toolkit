@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -19,16 +15,23 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<QuickSellResponse> PerformRequestAsync()
         {
-            var uriString = string.Format(Resources.FutHome + Resources.QuickSell, string.Join("%2C", _itemIds));
             Task<HttpResponseMessage> quickSellResponseTask;
-
             AddCommonHeaders();
-            uriString += $"&_={DateTime.Now.ToUnixTime()}";
-            quickSellResponseTask = HttpClient.DeleteAsync(uriString);
 
-            var quickSellResponse = await quickSellResponseTask.ConfigureAwait(false);
+            if (_itemIds.Count() == 1)
+            {
+                var uriString = Resources.FutHomeDelete + string.Format(Resources.ItemDetails, _itemIds.First());
+                quickSellResponseTask = HttpClient.DeleteAsync(uriString);
+            }
+            else
+            {
+                var uriString = Resources.FutHomeDelete + Resources.Item;
+                var content = $"{{\"itemId\":[{string.Join(",", _itemIds)}]}}";
+                quickSellResponseTask = HttpClient.PostAsync(uriString, new StringContent(content));
+            }
 
-            return await DeserializeAsync<QuickSellResponse>(quickSellResponse);
+            var quickSellResponseMessage = await quickSellResponseTask.ConfigureAwait(false);
+            return await DeserializeAsync<QuickSellResponse>(quickSellResponseMessage).ConfigureAwait(false);
         }
     }
 }

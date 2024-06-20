@@ -1,12 +1,12 @@
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Net;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auth;
+using UltimateTeam.Toolkit.Models.Generic;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -57,21 +57,20 @@ namespace UltimateTeam.Toolkit.Requests
 
         protected void AddCommonHeaders()
         {
-            if (LoginResponse?.Persona?.NucUserId == null || LoginResponse?.AuthData?.Sid == null)
+            if (LoginResponse?.NucleusId == null)
             {
                 throw new Exception($"Got no Nucleus Data and Auth Data during the Loginprocess {LoginDetails?.AppVersion}.");
             }
 
             HttpClient.ClearRequestHeaders();
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, _loginResponse.Persona.NucUserId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, _loginResponse.AuthData.Sid);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.easports.com");
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, LoginResponse.AuthData.Sid);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.ea.com");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
             AddAcceptHeader("text/plain, */*; q=0.01");
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             AddUserAgent();
-            AddRefererHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
+            AddRefererHeader("https://www.ea.com/");
             HttpClient.AddConnectionKeepAliveHeader();
         }
 
@@ -94,6 +93,8 @@ namespace UltimateTeam.Toolkit.Requests
             HttpClient.AddRequestHeader(HttpHeaders.ContentType, "application/json");
             AddAcceptEncodingHeader();
             AddAcceptLanguageHeader();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Origin, @"https://www.ea.com");
+            AddRefererHeader("https://www.ea.com/");
             AddUserAgent();
         }
 
@@ -165,6 +166,8 @@ namespace UltimateTeam.Toolkit.Requests
                 }
             }
 
+            if (deserializedObject == null)
+                throw new Exception($"Unable to deserialize {typeof(T).FullName}");
             return deserializedObject;
         }
 
@@ -183,7 +186,7 @@ namespace UltimateTeam.Toolkit.Requests
                 case FutErrorCode.Conflict:
                     if (Activator.CreateInstance(typeof(T)) is ListAuctionResponse)
                     {
-                        futError.Reason = $"Conflict - Please check the EA pricerange";
+                        futError.Reason = $"Conflict - Please check the pricerange";
                         throw new WrongPriceRangeException(futError, exception);
                     }
                     else
@@ -249,32 +252,32 @@ namespace UltimateTeam.Toolkit.Requests
                     throw new PurchasedItemsFullException(futError, exception);
 
                 case FutErrorCode.NoRemainingAuthenticationAttemptsAccountLocked:
-                    futError.Reason = $"Account locked - You need to set the security question in a validated console";
+                    futError.Reason = $"Account locked - You need to login in a validated console or pc";
                     throw new AccountLockedException(futError, exception);
 
                 case FutErrorCode.TooManyRequests:
-                    futError.Reason = $"Temporary BAN detected";
-                    throw new TemporaryBanException(futError, exception);
-
-                case FutErrorCode.Unknown_HTTP_512:
-                    futError.Reason = $"Temporary BAN detected";
-                    throw new TemporaryBanException(futError, exception);
-
-                case FutErrorCode.Unknown_HTTP_521:
-                    futError.Reason = $"Temporary BAN detected";
+                    futError.Reason = $"Too many requests";
                     throw new TemporaryBanException(futError, exception);
 
                 case FutErrorCode.UpgradeRequired:
-                    futError.Reason = $"Temporary BAN detected";
+                    futError.Reason = $"Auction state is stale";
                     throw new TemporaryBanException(futError, exception);
 
                 case FutErrorCode.ServiceDisabled:
-                    futError.Reason = $"FUT WebApp / CompanionApp disabled by EA";
+                    futError.Reason = $"FUT WebApp / CompanionApp not reachable";
                     throw new ServiceDisabledException(futError, exception);
 
                 case FutErrorCode.TransfermarketBlocked:
-                    futError.Reason = $"Transfermarket blocked by EA";
+                    futError.Reason = $"Transfermarket not available";
                     throw new TransfermarketBlockedException(futError, exception);
+
+                case FutErrorCode.FunCaptchaTriggered:
+                    futError.Reason = $"FunCaptcha has been triggered";
+                    throw new FunCaptchaTriggeredException(futError, exception);
+
+                case FutErrorCode.DuplicateItem:
+                    futError.Reason = $"Item is a duplicate and cannot be sent to the club";
+                    throw new DuplicateItemException(futError, exception);
 
                 default:
                     var newException = new FutErrorException(futError, exception);

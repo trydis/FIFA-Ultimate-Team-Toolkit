@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Exceptions
+﻿namespace UltimateTeam.Toolkit.Exceptions
 {
     public class FutException : Exception
     {

@@ -1,4 +1,4 @@
-﻿namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class BallSearchParameters : SearchParameters
     {
@@ -9,7 +9,7 @@
 
         internal override string BuildUriString(ref string uriString)
         {
-      
+
             uriString += "&type=" + Type.ToLower();
 
             if (MinBuy > 0)
@@ -30,4 +30,3 @@
     }
 }
 
-     

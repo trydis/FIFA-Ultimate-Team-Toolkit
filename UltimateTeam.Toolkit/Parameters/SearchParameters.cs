@@ -2,10 +2,10 @@
 {
     public abstract class SearchParameters
     {
-        private const byte DefaultPageSize = 12;
+        private const byte DefaultPageSize = 20;
 
         public string Type { get; set; }
-        
+
         public uint Page { get; set; }
 
         public uint League { get; set; }
@@ -39,6 +39,8 @@
         public long ResourceId { get; set; }
 
         public byte PageSize { get; set; }
+
+        public bool HasContraints { get; set; }
 
         protected SearchParameters(ResourceType resourceType)
         {

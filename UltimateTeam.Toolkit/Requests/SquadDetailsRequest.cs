@@ -1,22 +1,15 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Extensions;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class SquadDetailsRequest : FutRequestBase, IFutRequest<SquadDetailsResponse>
     {
         private readonly ushort _squadId;
-        private readonly string _personaId;
-
-        public SquadDetailsRequest(ushort squadId, string personaId)
+        public SquadDetailsRequest(ushort squadId)
         {
-            personaId.ThrowIfInvalidArgument();
             _squadId = squadId;
-            _personaId = personaId;
         }
 
         public async Task<SquadDetailsResponse> PerformRequestAsync()
@@ -24,7 +17,9 @@ namespace UltimateTeam.Toolkit.Requests
             var uriString = string.Format(Resources.FutHome + Resources.SquadDetails, _squadId);
 
             AddCommonHeaders();
-            uriString += $"/user/{_personaId}?_={DateTime.Now.ToUnixTime()}";
+            if (base.LoginResponse?.DefaultPersona?.PersonaId == null || base.LoginResponse.DefaultPersona.PersonaId <= 0)
+                throw new Exception("PersonaId is not set");
+            uriString += $"/user/{base.LoginResponse.DefaultPersona.PersonaId}";
 
             var squadResponseMessage = await HttpClient
                     .GetAsync(uriString)

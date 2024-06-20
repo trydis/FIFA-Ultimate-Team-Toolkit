@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 
 namespace UltimateTeam.Toolkit.Services
 {

@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.Models.Generic;
 
 namespace UltimateTeam.Toolkit.Models
 {
     public class AuctionResponse
     {
-        public List<AuctionInfo> AuctionInfo { get; set; }
+        public List<AuctionInfo>? AuctionInfo { get; set; }
 
-        public BidTokens BidTokens { get; set; }
+        public BidTokens? BidTokens { get; set; }
 
         public uint Credits { get; set; }
 
-        public List<Currency> Currencies { get; set; }
+        public List<Currency>? Currencies { get; set; }
 
-        public List<DuplicateItem> DuplicateItemIdList { get; set; }
+        public List<DuplicateItem>? DuplicateItemIdList { get; set; }
 
-        // TODO: I have no idea what type/structure this has, only seen null
-        public string ErrorState { get; set; }
+        public DynamicObjectivesUpdates? DynamicObjectivesUpdates { get; set; }
+
+        public string? ErrorState { get; set; }
     }
 }
