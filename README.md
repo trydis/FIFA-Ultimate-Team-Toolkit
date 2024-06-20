@@ -1,4 +1,4 @@
-FIFA Ultimate Team Toolkit
+EAFC Ultimate Team Toolkit
 ===============================
 
 ## Sample usage
