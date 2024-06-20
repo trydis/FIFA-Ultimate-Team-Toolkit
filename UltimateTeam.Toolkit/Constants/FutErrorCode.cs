@@ -2,17 +2,18 @@
 {
     public enum FutErrorCode : ushort
     {
-        NoSecurityQuestionSetup = 204,
         ExpiredSession = 401,
         NotFound = 404,
         Conflict = 409,
+        Gone = 410,
         UpgradeRequired = 426,
         TooManyRequests = 429,
-        CaptchaTriggered = 459,
+        FunCaptchaTriggered = 458,
         BadRequest = 460,
         PermissionDenied = 461,
         NotEnoughCredit = 470,
         PurchasedItemsFull = 471,
+        DuplicateItem = 472,
         DestinationFull = 473,
         InvalidTransaction = 475,
         InvalidDeck = 477,

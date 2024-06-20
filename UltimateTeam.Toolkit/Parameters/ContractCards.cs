@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace UltimateTeam.Toolkit.Parameters
 {
     public class ContractCard : SearchParameterBase<uint>
@@ -16,7 +14,7 @@ namespace UltimateTeam.Toolkit.Parameters
         public const uint NonShinyBronzeManagerContract = 1615613743;
         public const uint NonShinySilverManagerContract = 1615613744;
         public const uint NonShinyGoldManagerContract = 1615613745;
-   
+
 
         private ContractCard(string description, uint value)
         {
@@ -38,7 +36,7 @@ namespace UltimateTeam.Toolkit.Parameters
             yield return new ContractCard("Non-Shiny Bronze Manager Contract", NonShinyBronzeManagerContract);
             yield return new ContractCard("Non-Shiny Silver Manager Contract", NonShinySilverManagerContract);
             yield return new ContractCard("Non-Shiny Gold Manager Contract", NonShinyGoldManagerContract);
-            
+
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using UltimateTeam.Toolkit.Models;
-using System;
+﻿using UltimateTeam.Toolkit.Models.Generic;
 
 namespace UltimateTeam.Toolkit.Exceptions
 {

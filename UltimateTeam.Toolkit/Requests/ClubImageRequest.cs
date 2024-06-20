@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {

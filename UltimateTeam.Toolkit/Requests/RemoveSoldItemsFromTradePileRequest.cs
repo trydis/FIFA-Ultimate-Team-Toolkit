@@ -1,6 +1,5 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {

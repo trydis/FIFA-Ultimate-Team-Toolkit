@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace UltimateTeam.Toolkit.Parameters
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class Position : SearchParameterBase<string>
     {
