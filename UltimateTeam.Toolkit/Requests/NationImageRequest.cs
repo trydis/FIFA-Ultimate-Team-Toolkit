@@ -1,15 +1,15 @@
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class NationImageRequest : FutRequestBase, IFutRequest<byte[]>
     {
-        private readonly Item _auctionInfo;
+        private readonly AuctionInfo _auctionInfo;
 
-        public NationImageRequest(Item auctionInfo)
+        public NationImageRequest(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
             _auctionInfo = auctionInfo;
@@ -17,17 +17,10 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte[]> PerformRequestAsync()
         {
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddAnonymousHeader();
-            }
-            else
-            {
-                AddAnonymousMobileHeader();
-            }
+            AddAnonymousHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
 
             return await HttpClient
-                .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.NationId))
+                .GetByteArrayAsync(string.Format(Resources.FlagsImage, _auctionInfo.ItemData.Nation))
                 .ConfigureAwait(false);
         }
     }

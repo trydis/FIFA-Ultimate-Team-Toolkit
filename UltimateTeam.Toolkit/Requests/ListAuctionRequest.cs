@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -23,15 +22,7 @@ namespace UltimateTeam.Toolkit.Requests
             var content = $"{{\"buyNowPrice\":{_auctionDetails.BuyNowPrice},\"startingBid\":{_auctionDetails.StartingBid}," +
                           $"\"duration\":{(uint)_auctionDetails.AuctionDuration},\"itemData\":{{\"id\":{_auctionDetails.ItemDataId}}}}}";
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Post);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
+            AddCommonHeaders();
 
             var tradepileResponseMessage = await HttpClient
                 .PostAsync(uriString, new StringContent(content))

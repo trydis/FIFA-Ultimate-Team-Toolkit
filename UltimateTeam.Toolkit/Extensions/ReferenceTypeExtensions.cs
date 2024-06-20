@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Extensions
+﻿namespace UltimateTeam.Toolkit.Extensions
 {
     internal static class ReferenceTypeExtensions
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using UltimateTeam.Toolkit.Models.Auction;
 
 namespace UltimateTeam.Toolkit.Models
 {

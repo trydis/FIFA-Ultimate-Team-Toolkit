@@ -6,6 +6,6 @@
     public enum AppVersion : uint
     {
         WebApp,
-        CompanionApp
+        CompanionApp //Must be reimplemented - not supported
     }
 }

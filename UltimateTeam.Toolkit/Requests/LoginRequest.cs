@@ -1,41 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Exceptions;
-using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auth;
+using UltimateTeam.Toolkit.Models.Generic;
+using UltimateTeam.Toolkit.RequestFactory;
 using UltimateTeam.Toolkit.Services;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class LoginRequest : FutRequestBase, IFutRequest<LoginResponse>
     {
-        private readonly LoginDetails _loginDetails;
-        private readonly ITwoFactorCodeProvider _twoFactorCodeProvider;
-        private IHasher _hasher;
-        private string _personaId;
+        private ITwoFactorCodeProvider _twoFactorCodeProvider;
+        private AuthenticationType _authType;
 
-        public IHasher Hasher
+        public ITwoFactorCodeProvider TwoFactorCodeProvider
         {
-            get { return _hasher ?? (_hasher = new Hasher()); }
-            set { _hasher = value; }
+            get { return _twoFactorCodeProvider; }
+            set { _twoFactorCodeProvider = value; }
         }
 
         public LoginRequest(LoginDetails loginDetails, ITwoFactorCodeProvider twoFactorCodeProvider)
         {
-            loginDetails.ThrowIfNullArgument();
-            _loginDetails = loginDetails;
-            _twoFactorCodeProvider = twoFactorCodeProvider;
-        }
-
-        public void SetCookieContainer(CookieContainer cookieContainer)
-        {
-            HttpClient.MessageHandler.CookieContainer = cookieContainer;
+            if (loginDetails.Username == null || loginDetails.Password == null)
+            {
+                throw new FutException($"No Username or Password provided for {LoginDetails?.AppVersion}.");
+            }
+            LoginDetails = loginDetails;
+            TwoFactorCodeProvider = twoFactorCodeProvider;
         }
 
         public async Task<LoginResponse> PerformRequestAsync()
@@ -43,233 +35,289 @@ namespace UltimateTeam.Toolkit.Requests
             try
             {
                 var mainPageResponseMessage = await GetMainPageAsync().ConfigureAwait(false);
-                if (!(await IsLoggedInAsync()))
-                {
-                    var loginResponseMessage = await LoginAsync(_loginDetails, mainPageResponseMessage);
-                    loginResponseMessage = await SetTwoFactorCodeAsync(loginResponseMessage);
-                    await CancelUpdateAuthenticationModeAsync(loginResponseMessage);
-                }
-                var nucleusId = await GetNucleusIdAsync();
-                var shards = await GetShardsAsync(nucleusId);
-                var userAccounts = await GetUserAccountsAsync(_loginDetails.Platform);
-                var sessionId = await GetSessionIdAsync(userAccounts, _loginDetails.Platform);
-                var phishingToken = await ValidateAsync(_loginDetails, sessionId);
 
-                return new LoginResponse(nucleusId, shards, userAccounts, sessionId, phishingToken, _personaId);
+                //Get the AccessToken
+                var loginResponseMessage = await LoginAsync(mainPageResponseMessage);
+                if (string.IsNullOrEmpty(LoginResponse.AccessToken))
+                    throw new FutException("No AccessToken received.");
+
+                //GetPersonId & NucleusId
+                LoginResponse.PersonId = await GetPidDataAsync(LoginResponse.AccessToken);
+                LoginResponse.NucleusId = LoginResponse.PersonId.Pid.ExternalRefValue;
+
+                //Get Personas & Clubs
+                var userAccountsAuthCode = await GetAuthCodeAsync(LoginResponse.AccessToken, "shard5");
+                LoginResponse.UserAccounts = await GetUserAccountsAsync(userAccountsAuthCode);
+                LoginResponse.DefaultPersona = MatchDefaultPersona(LoginResponse.UserAccounts);
+
+                var utAuthCode = await GetAuthCodeAsync(LoginResponse.AccessToken, "ut-auth");
+                LoginResponse.AuthData = await AuthAsync(utAuthCode);
+
+                return LoginResponse;
             }
             catch (Exception e)
             {
-                throw new FutException($"Unable to login to {AppVersion}", e);
+                throw new FutException($"Unable to login to {LoginDetails.AppVersion}", e);
             }
         }
 
-        private async Task CancelUpdateAuthenticationModeAsync(HttpResponseMessage loginResponseMessage)
+        private async Task<PidData> GetPidDataAsync(string authCode)
         {
-            var contentData = await loginResponseMessage.Content.ReadAsStringAsync();
-            if (!contentData.Contains("Set Up an App Authenticator")) return;
+            AddLoginHeaders();
+            AddAuthorizationHeader(authCode);
+            var pidDataResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Pids));
+            var pidData = await DeserializeAsync<PidData>(pidDataResponseMessage);
 
-
-            AddReferrerHeader(loginResponseMessage.RequestMessage.RequestUri.ToString());
-            var cancelSetUp = await HttpClient.PostAsync(loginResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(new[] {
-                    new KeyValuePair<string, string>("_eventId", "cancel"),
-                    new KeyValuePair<string, string>("appDevice","IPHONE") // ????? 
-                }));
-
-            cancelSetUp.EnsureSuccessStatusCode();
+            if (pidData == null || pidData.Pid == null)
+                throw new Exception($"Got no PID Data during the Loginprocess to to {LoginDetails?.AppVersion}.");
+            return pidData;
         }
 
-        private async Task<bool> IsLoggedInAsync()
+        private async Task<string> GetAuthCodeAsync(string accessToken, string clientSequence)
         {
-            var loginResponse = await HttpClient.GetAsync(Resources.LoggedIn);
-            var loggedInResponse = await DeserializeAsync<IsUserLoggedIn>(loginResponse);
+            AddLoginHeaders();
+            var authCodeResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AuthCode, accessToken, clientSequence));
+            var authCode = await DeserializeAsync<AuthCode>(authCodeResponseMessage);
 
-            return loggedInResponse.IsLoggedIn;
+            if (authCode == null || authCode.Code == null)
+                throw new Exception($"Got no AuthCode during the Loginprocess to {LoginDetails?.AppVersion}.");
+
+            return authCode.Code;
         }
 
-        private async Task<string> ValidateAsync(LoginDetails loginDetails, string sessionId)
+        protected async Task<UserAccounts> GetUserAccountsAsync(string authCode)
         {
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.SessionId, sessionId);
-            var validateResponseMessage = await HttpClient.PostAsync(Resources.Validate, new FormUrlEncodedContent(
-                new[]
-                {
-                    new KeyValuePair<string, string>("answer", Hasher.Hash(loginDetails.SecretAnswer))
-                }));
-            var validateResponse = await DeserializeAsync<ValidateResponse>(validateResponseMessage);
+            AddLoginHeaders();
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, LoginResponse.NucleusId);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusAccessCode, authCode);
+            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusRedirectUrl, "nucleus:rest");
+            HttpClient.AddRequestHeader("Content-Type", "application/json");
 
-            return validateResponse.Token;
-        }
 
-        private async Task<string> GetSessionIdAsync(UserAccounts userAccounts, Platform platform)
-        {
-            var persona = userAccounts
-                .UserAccountInfo
-                .Personas
-                .FirstOrDefault(p => p.UserClubList.Any(club => club.Platform == GetNucleusPersonaPlatform(platform)));
-            if (persona == null)
+
+            var accountInfoResponseMessage = await HttpClient.GetAsync(Resources.UserAccounts);
+            var accountInfoResponseMessageContent = await accountInfoResponseMessage.Content.ReadAsStringAsync();
+            var userAccounts = await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
+
+            if (userAccounts?.UserAccountInfo?.Personas == null || userAccounts.UserAccountInfo.Personas.Count() <= 0)
             {
-                throw new FutException("Couldn't find a persona matching the selected platform");
+                throw new Exception($"Unable to get Personas {LoginDetails?.AppVersion}.");
             }
-            _personaId = persona.PersonaId.ToString();
-
-            var authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(
-               string.Format(@"{{ ""isReadOnly"": false, ""sku"": ""FUT17WEB"", ""clientVersion"": 1, ""nucleusPersonaId"": {0}, ""nucleusPersonaDisplayName"": ""{1}"", ""gameSku"": ""{2}"", ""nucleusPersonaPlatform"": ""{3}"", ""locale"": ""en-GB"", ""method"": ""authcode"", ""priorityLevel"":4, ""identification"": {{ ""authCode"": """" }} }}",
-                    persona.PersonaId, persona.PersonaName, GetGameSku(platform), GetNucleusPersonaPlatform(platform))));
-            authResponseMessage.EnsureSuccessStatusCode();
-            var sessionId = Regex.Match(await authResponseMessage.Content.ReadAsStringAsync(), "\"sid\":\"\\S+\"")
-                .Value
-                .Split(new[] { ':' })[1]
-                .Replace("\"", string.Empty);
-
-            return sessionId;
+            return userAccounts;
         }
 
-        private static string GetGameSku(Platform platform)
+        private Persona MatchDefaultPersona(UserAccounts userAccounts)
         {
-            switch (platform)
+            var matchingPersona = new Persona();
+            try
             {
-                case Platform.Ps3:
-                    return "FFA17PS3";
-                case Platform.Ps4:
-                    return "FFA17PS4";
-                case Platform.Xbox360:
-                    return "FFA17XBX";
-                case Platform.XboxOne:
-                    return "FFA17XBO";
-                case Platform.Pc:
-                    return "FFA17PCC";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
+                matchingPersona = LoginResponse.UserAccounts.UserAccountInfo.Personas.Where(p => p.UserClubList.Any(uc => uc.Year == Resources.CurrentYearLong.ToString() &&
+                                                                                                                    uc.SkuAccessList.ContainsKey(GetGameSku(LoginDetails.Platform)))).FirstOrDefault();
+                if (matchingPersona == null)
+                    throw new FutException($"Unable to match a valid Persona for {LoginDetails?.AppVersion}.");
             }
-        }
-
-        private static string GetNucleusPersonaPlatform(Platform platform)
-        {
-            switch (platform)
+            catch (Exception e)
             {
-                case Platform.Ps3:
-                case Platform.Ps4:
-                    return "ps3";
-                case Platform.Xbox360:
-                case Platform.XboxOne:
-                    return "360";
-                case Platform.Pc:
-                    return "pc";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(platform));
+                throw new Exception($"Unable to match a valid Persona for {LoginDetails?.AppVersion}.", e);
             }
+            return matchingPersona;
         }
 
-        private async Task<UserAccounts> GetUserAccountsAsync(Platform platform)
+        protected async Task<AuthInfo> AuthAsync(string utAuthCode)
         {
-            HttpClient.RemoveRequestHeader(NonStandardHttpHeaders.Route);
-            var route = $"https://utas.external.{(platform == Platform.Xbox360 || platform == Platform.XboxOne ? "s3" : "s2")}.fut.ea.com:443";
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, route);
-            var accountInfoResponseMessage = await HttpClient.GetAsync(string.Format(Resources.AccountInfo, DateTime.Now.ToUnixTime()));
+            string httpContent;
+            var authResponseMessage = new HttpResponseMessage();
 
-            return await DeserializeAsync<UserAccounts>(accountInfoResponseMessage);
+            AddLoginHeaders();
+            httpContent = $@"{{""clientVersion"":{Resources.ClientVersion},""gameSku"":""{GetGameSku(LoginDetails.Platform)}"",""identification"":{{""authCode"":""{utAuthCode}"",""redirectUrl"":""nucleus:rest""}},""isReadOnly"":false,""locale"":""en-US"",""method"":""authcode"",""nucleusPersonaId"":{LoginResponse.DefaultPersona.PersonaId},""priorityLevel"":4,""sku"":""{Resources.Sku}""}}";
+            authResponseMessage = await HttpClient.PostAsync(Resources.Auth, new StringContent(httpContent));
+
+            var authResponse = await DeserializeAsync<AuthInfo>(authResponseMessage);
+            var authResponseContent = await authResponseMessage.Content.ReadAsStringAsync();
+
+            if (authResponse.Sid == null)
+            {
+                throw new Exception($"Unable to get Session Id {LoginDetails?.AppVersion}.");
+            }
+
+            return authResponse;
         }
 
-        private async Task<Shards> GetShardsAsync(string nucleusId)
+        protected async Task<HttpResponseMessage> LoginAsync(HttpResponseMessage mainPageResponseMessage)
         {
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.NucleusId, nucleusId);
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.EmbedError, "true");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.Route, "https://utas.external.fut.ea.com");
-            HttpClient.AddRequestHeader(NonStandardHttpHeaders.RequestedWith, "XMLHttpRequest");
-            AddAcceptHeader("application/json, text/javascript");
-            AddAcceptLanguageHeader();
-            AddReferrerHeader(Resources.BaseShowoff);
-            var shardsResponseMessage = await HttpClient.GetAsync(string.Format(Resources.Shards, DateTime.Now.ToUnixTime()));
+            var loginResponseMessage = new HttpResponseMessage();
+            var contentData = string.Empty;
 
-            return await DeserializeAsync<Shards>(shardsResponseMessage);
-        }
+            loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
+                                                                                                                        new[]
+                                                                                                                        {
+                                                                                                                            new KeyValuePair<string, string>("email", LoginDetails.Username),
+                                                                                                                            new KeyValuePair<string, string>("password", LoginDetails.Password),
+                                                                                                                            new KeyValuePair<string, string>("loginMethod", "emailPassword"),
+                                                                                                                            new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                            new KeyValuePair<string, string>("cid", ""),
+                                                                                                                            new KeyValuePair<string, string>("regionCode", "DE"),
+                                                                                                                            new KeyValuePair<string, string>("phoneNumber", ""),
+                                                                                                                            new KeyValuePair<string, string>("passwordForPhone", ""),
+                                                                                                                            new KeyValuePair<string, string>("_rememberMe", "on"),
+                                                                                                                            new KeyValuePair<string, string>("rememberMe", "on"),
+                                                                                                                            new KeyValuePair<string, string>("thirdPartyCaptchaResponse", ""),
+                                                                                                                            new KeyValuePair<string, string>("isPhoneNumberLogin", "false"),
+                                                                                                                            new KeyValuePair<string, string>("isIncompletePhone", ""),
+                                                                                                                            new KeyValuePair<string, string>("showAgeUp", "true")
+                                                                                                                        }));
+            contentData = await loginResponseMessage.Content.ReadAsStringAsync();
 
-        private async Task<string> GetNucleusIdAsync()
-        {
-            var nucleusResponseMessage = await HttpClient.GetAsync(Resources.NucleusId);
-            nucleusResponseMessage.EnsureSuccessStatusCode();
-            var nucleusId = Regex.Match(await nucleusResponseMessage.Content.ReadAsStringAsync(), "EASW_ID = '\\d+'")
-                .Value
-                .Split(new[] { " = " }, StringSplitOptions.RemoveEmptyEntries)[1]
-                .Replace("'", string.Empty);
-
-            return nucleusId;
-        }
+            if (contentData.Contains("Your credentials are incorrect or have expired") || contentData.Contains("Email address is invalid"))
+            {
+                throw new Exception($"Wrong credentials for {LoginDetails?.AppVersion}.");
+            }
 
 
-        private async Task<HttpResponseMessage> LoginAsync(LoginDetails loginDetails, HttpResponseMessage mainPageResponseMessage)
-        {
-            var loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri,
-                new FormUrlEncodedContent(
-                    new[]
-                    {
-                        new KeyValuePair<string, string>("email", loginDetails.Username),
-                        new KeyValuePair<string, string>("password", loginDetails.Password),
-                        new KeyValuePair<string, string>("_rememberMe", "on"),
-                        new KeyValuePair<string, string>("rememberMe", "on"),
-                        new KeyValuePair<string, string>("_eventId", "submit"),
-                        new KeyValuePair<string, string>("facebookAuth", "")
-                    }));
-            loginResponseMessage.EnsureSuccessStatusCode();
+            if (contentData.Contains("Verify your identity"))
+            {
+                loginResponseMessage = await SetTwoFactorCodeAsync(loginResponseMessage);
+                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+            }
+
+            string pattern = @"window\.location\s*=\s*['""](?<url>https?://[^'""]+)['""]";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            Match match = regex.Match(contentData);
+            if (match.Success)
+            {
+                string redirectUrl = match.Groups["url"].Value;
+                loginResponseMessage = await LoginForwarder(redirectUrl);
+            }
+
+            if (loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Contains("access_token="))
+            {
+                loginResponseMessage = await LoginForwarder(loginResponseMessage.RequestMessage.RequestUri.ToString());
+                contentData = await loginResponseMessage.Content.ReadAsStringAsync();
+                LoginResponse.AccessToken = loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.Substring(loginResponseMessage.RequestMessage.RequestUri.AbsoluteUri.IndexOf("=") + 1);
+                LoginResponse.AccessToken = LoginResponse.AccessToken.Substring(0, LoginResponse.AccessToken.IndexOf('&'));
+            }
 
             return loginResponseMessage;
-
         }
 
-        private async Task<HttpResponseMessage> SetTwoFactorCodeAsync(HttpResponseMessage loginResponse)
+        protected async Task<HttpResponseMessage> GetMainPageAsync()
         {
-            //check if twofactorcode is required
-            var contentData = await loginResponse.Content.ReadAsStringAsync();
+            HttpClient.ClearRequestHeaders();
+            var mainPageResponseMessage = new HttpResponseMessage();
+            mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
 
-            if (!(contentData.Contains("We sent a security code to your") ||
-                  contentData.Contains("Your security code was sent to") ||
-                  contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator")))
+            return mainPageResponseMessage;
+        }
+
+        protected async Task<HttpResponseMessage> LoginForwarder(string requestUri)
+        {
+            HttpResponseMessage forwardResponseMessage = new HttpResponseMessage();
+
+            forwardResponseMessage = await HttpClient.GetAsync(requestUri);
+            return forwardResponseMessage;
+        }
+
+        protected async Task<HttpResponseMessage> SetTwoFactorTypeAsync(HttpResponseMessage mainPageResponseMessage)
+        {
+            var loginResponseMessage = new HttpResponseMessage();
+            var contentData = string.Empty;
+
+            if (_authType == AuthenticationType.Email)
             {
-                return loginResponse;
+                loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
+                                                                                                                            new[]
+                                                                                                                            {
+                                                                                                                            new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                            new KeyValuePair<string, string>("codeType", "EMAIL"),
+                                                                                                                            new KeyValuePair<string, string>("maskedDestination", string.Concat(LoginDetails.Username.Substring(0, 2), new string('*', LoginDetails.Username.IndexOf('@') - 2), "%40", LoginDetails.Username.Split('@')[1]))
+                                                                                                                            }));
+            }
+            else
+            {
+                loginResponseMessage = await HttpClient.PostAsync(mainPageResponseMessage.RequestMessage.RequestUri, new FormUrlEncodedContent(
+                                                                                                                            new[]
+                                                                                                                            {
+                                                                                                                            new KeyValuePair<string, string>("_eventId", "submit"),
+                                                                                                                            new KeyValuePair<string, string>("codeType", "APP"),
+                                                                                                                            }));
             }
 
-            var tfCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync();
+            return loginResponseMessage;
+        }
 
-            var responseContent = await loginResponse.Content.ReadAsStringAsync();
+        protected async Task<HttpResponseMessage> SetTwoFactorCodeAsync(HttpResponseMessage loginResponse)
+        {
+            _authType = AuthenticationType.Email;
 
-            AddReferrerHeader(loginResponse.RequestMessage.RequestUri.ToString());
+            string contentData = await loginResponse.Content.ReadAsStringAsync();
+            loginResponse = await LoginForwarder(loginResponse.RequestMessage.RequestUri.ToString());
+            contentData = await loginResponse.Content.ReadAsStringAsync();
+
+            HttpResponseMessage sended = await SetTwoFactorTypeAsync(loginResponse);
+            loginResponse = await LoginForwarder(sended.RequestMessage.RequestUri.ToString());
+
+            if (contentData.Contains("send you a code to:"))
+            {
+                _authType = AuthenticationType.Email;
+            }
+            else if (contentData.Contains("App Authenticator"))
+            {
+                _authType = AuthenticationType.App;
+            }
+
+            var twoFactorCode = await _twoFactorCodeProvider.GetTwoFactorCodeAsync(_authType);
+
+            if (twoFactorCode.Length != 6)
+            {
+                throw new Exception($"Two Factor Code MUST be 6 digits long {LoginDetails?.AppVersion}.");
+            }
+
+            if (_authType == AuthenticationType.Unknown)
+            {
+                throw new Exception($"Unable to determine AuthType (i.e. App Authenticator or E-Mail) for {LoginDetails?.AppVersion}.");
+            }
+
+            AddRefererHeader(loginResponse.RequestMessage.RequestUri.ToString());
 
             var codeResponseMessage = await HttpClient.PostAsync(loginResponse.RequestMessage.RequestUri,
                 new FormUrlEncodedContent(
                     new[]
                     {
-                        new KeyValuePair<string, string>(responseContent.Contains("twofactorCode") ? "twofactorCode" : "twoFactorCode", tfCode),
+                        new KeyValuePair<string, string>("oneTimeCode", twoFactorCode),
                         new KeyValuePair<string, string>("_eventId", "submit"),
+                        new KeyValuePair<string, string>("trustThisDevice", "on"),
                         new KeyValuePair<string, string>("_trustThisDevice", "on"),
-                        new KeyValuePair<string, string>("trustThisDevice", "on")
                     }));
 
-            codeResponseMessage.EnsureSuccessStatusCode();
+            var codeResponseMessageContent = await codeResponseMessage.Content.ReadAsStringAsync();
 
-            var tfcResponseContent = await codeResponseMessage.Content.ReadAsStringAsync();
-
-            if (tfcResponseContent.Contains("Incorrect code entered"))
-                throw new FutException("Incorrect TwoFactorCode entered.");
+            if (codeResponseMessageContent.Contains("Incorrect code entered"))
+            {
+                throw new Exception($"Incorrect Two Factor Code entered for {LoginDetails?.AppVersion}.");
+            }
 
             return codeResponseMessage;
         }
 
-        private async Task<HttpResponseMessage> GetMainPageAsync()
+        protected string GetGameSku(Platform platform)
         {
-            AddUserAgent();
-            AddAcceptEncodingHeader();
-            var mainPageResponseMessage = await HttpClient.GetAsync(Resources.Home);
-            mainPageResponseMessage.EnsureSuccessStatusCode();
-
-            //check if twofactorcode is required
-            var contentData = await mainPageResponseMessage.Content.ReadAsStringAsync();
-            if (contentData.Contains("We sent a security code to your") ||
-                contentData.Contains("Your security code was sent to") ||
-                contentData.Contains("Enter the 6-digit verification code generated by your App Authenticator"))
+            switch (platform)
             {
-                await SetTwoFactorCodeAsync(mainPageResponseMessage);
+                case Platform.Ps3:
+                    return $"{Resources.GameSku}PS3";
+                case Platform.Ps4:
+                    return $"{Resources.GameSku}PS4";
+                case Platform.Ps5:
+                    return $"{Resources.GameSku}PS5";
+                case Platform.XboxOne:
+                    return $"{Resources.GameSku}XBO";
+                case Platform.Pc:
+                    return $"{Resources.GameSku}PCC";
+                case Platform.Switch:
+                    return $"{Resources.GameSku}SWI";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform));
             }
-
-            return mainPageResponseMessage;
         }
     }
 }

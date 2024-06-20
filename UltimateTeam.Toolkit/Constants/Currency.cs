@@ -1,8 +1,8 @@
 ﻿namespace UltimateTeam.Toolkit.Constants
 {
-    public enum Currency : byte
+    public enum CurrencyOption
     {
-        COINS = 1,
-        MTX = 2
+        COINS,
+        MTX
     }
 }

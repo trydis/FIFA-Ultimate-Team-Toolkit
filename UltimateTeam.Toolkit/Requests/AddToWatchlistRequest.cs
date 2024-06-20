@@ -1,49 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
-using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.Models.Auction;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
     internal class AddToWatchlistRequest : FutRequestBase, IFutRequest<byte>
     {
-        private readonly IEnumerable<AuctionInfo> _auctioninfo;
+        private readonly AuctionInfo _auctioninfo;
 
-        public AddToWatchlistRequest(IEnumerable<AuctionInfo> auctioninfo)
+        public AddToWatchlistRequest(AuctionInfo auctionInfo)
         {
-            auctioninfo.ThrowIfNullArgument();
-            _auctioninfo = auctioninfo;
+            auctionInfo.ThrowIfNullArgument();
+            _auctioninfo = auctionInfo;
         }
 
         public async Task<byte> PerformRequestAsync()
         {
-            var tradeIds = string.Join("%2C", _auctioninfo.Select(p => p.TradeId));
-            var content = $"{{\"auctionInfo\":[{{\"id\":{tradeIds}}}]}}";
-            var uriString = Resources.FutHome + Resources.Watchlist + $"?tradeId={tradeIds}";
+            var content = $"{{\"auctionInfo\":[{{\"id\":{_auctioninfo.TradeId}}}]}}";
+            var uriString = Resources.FutHome + Resources.Watchlist;
             ConfiguredTaskAwaitable<HttpResponseMessage> addToWatchlistTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Put);
-                addToWatchlistTask = HttpClient
-                    .PostAsync(uriString, new StringContent(content))
-                    .ConfigureAwait(false);
-
-            }
-            if (AppVersion == AppVersion.CompanionApp)
-            {
-                AddCommonMobileHeaders();
-                uriString += $"&_={DateTime.Now.ToUnixTime()}";
-
-                addToWatchlistTask = HttpClient
-                    .PutAsync(uriString, new StringContent(content))
-                    .ConfigureAwait(false);
-            }
+            AddCommonHeaders();
+            addToWatchlistTask = HttpClient
+                .PutAsync(uriString, new StringContent(content))
+                .ConfigureAwait(false);
 
             var addToWatchlistResponseMessage = await addToWatchlistTask;
             addToWatchlistResponseMessage.EnsureSuccessStatusCode();

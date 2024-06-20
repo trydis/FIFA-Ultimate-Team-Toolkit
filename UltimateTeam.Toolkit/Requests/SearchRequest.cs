@@ -1,10 +1,8 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Extensions;
 using UltimateTeam.Toolkit.Models;
 using UltimateTeam.Toolkit.Parameters;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -25,16 +23,8 @@ namespace UltimateTeam.Toolkit.Requests
             _searchParameters.BuildUriString(ref uriString);
             Task<HttpResponseMessage> searchResponseMessageTask;
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-                searchResponseMessageTask = HttpClient.PostAsync(uriString, new StringContent(" "));
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                searchResponseMessageTask = HttpClient.GetAsync(uriString + $"&_={DateTime.Now.ToUnixTime()}");
-            }
+            AddCommonHeaders();
+            searchResponseMessageTask = HttpClient.GetAsync(uriString);
 
             var searchResponseMessage = await searchResponseMessageTask.ConfigureAwait(false);
 

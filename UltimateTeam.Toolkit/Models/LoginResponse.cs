@@ -1,34 +1,19 @@
-﻿using UltimateTeam.Toolkit.Extensions;
+﻿using UltimateTeam.Toolkit.Models.Auth;
 
 namespace UltimateTeam.Toolkit.Models
 {
     public class LoginResponse
     {
-        public string NucleusId { get; private set; }
+        public string? NucleusId { get; set; }
 
-        public Shards Shards { get; private set; }
-        
-        public UserAccounts UserAccounts { get; private set; }
-        
-        public string SessionId { get; private set; }
+        public string? AccessToken { get; set; }
 
-        public string PhishingToken { get; private set; }
+        public PidData? PersonId { get; set; }
 
-        public string PersonaId { get; private set; }
+        public UserAccounts? UserAccounts { get; set; }
 
-        public LoginResponse(string nucleusId, Shards shards, UserAccounts userAccounts, string sessionId, string phishingToken, string personaId)
-        {
-            nucleusId.ThrowIfInvalidArgument();
-            shards.ThrowIfNullArgument();
-            userAccounts.ThrowIfNullArgument();
-            sessionId.ThrowIfInvalidArgument();
-            phishingToken.ThrowIfInvalidArgument();
-            NucleusId = nucleusId;
-            Shards = shards;
-            UserAccounts = userAccounts;
-            SessionId = sessionId;
-            PhishingToken = phishingToken;
-            PersonaId = personaId;
-        }
+        public Persona? DefaultPersona { get; set; }
+
+        public Auth.AuthInfo? AuthData { get; set; }
     }
 }

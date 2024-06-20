@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class TrainingSearchParameters : SearchParameters
     {
@@ -11,7 +9,7 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
             SetLevel(ref uriString);
 
             uriString += "&cat=" + TrainingType;
@@ -53,8 +51,7 @@ namespace UltimateTeam.Toolkit.Parameters
             }
         }
 
-     
+
     }
 }
 
-     

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using UltimateTeam.Toolkit.Models.Generic;
+using UltimateTeam.Toolkit.Models.Player;
 
 namespace UltimateTeam.Toolkit.Models
 {

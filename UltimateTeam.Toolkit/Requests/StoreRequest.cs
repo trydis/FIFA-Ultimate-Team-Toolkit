@@ -1,9 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using UltimateTeam.Toolkit.Constants;
-using UltimateTeam.Toolkit.Extensions;
+﻿using UltimateTeam.Toolkit.Constants;
 using UltimateTeam.Toolkit.Models;
+using UltimateTeam.Toolkit.RequestFactory;
 
 namespace UltimateTeam.Toolkit.Requests
 {
@@ -13,18 +10,9 @@ namespace UltimateTeam.Toolkit.Requests
         {
             var uriString = string.Format(Resources.FutHome + Resources.Store);
 
-            if (AppVersion == AppVersion.WebApp)
-            {
-                AddCommonHeaders(HttpMethod.Get);
-            }
-            else
-            {
-                AddCommonMobileHeaders();
-                uriString += $"?_={DateTime.Now.ToUnixTime()}";
-            }
-
+            AddCommonHeaders();
             var storeResponseMessage = await HttpClient
-                .PostAsync(uriString, new StringContent(" "))
+                .GetAsync(uriString)
                 .ConfigureAwait(false);
 
             return await DeserializeAsync<StoreResponse>(storeResponseMessage);

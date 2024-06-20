@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UltimateTeam.Toolkit.Parameters 
+﻿namespace UltimateTeam.Toolkit.Parameters
 {
     public class StaffSearchParameters : SearchParameters
     {
@@ -11,16 +9,16 @@ namespace UltimateTeam.Toolkit.Parameters
 
         internal override string BuildUriString(ref string uriString)
         {
-        
+
             SetLevel(ref uriString);
 
             // only the manager type has Nation category
             if (Convert.ToBoolean(Nation) && StaffType == "manager")
-            uriString += "&nat=" + Nation;
+                uriString += "&nat=" + Nation;
 
             // only the manager type has League category
             if (Convert.ToBoolean(League) && StaffType == "manager")
-            uriString += "&leag=" + League;
+                uriString += "&leag=" + League;
 
             uriString += "&cat=" + StaffType;
 
@@ -58,8 +56,7 @@ namespace UltimateTeam.Toolkit.Parameters
             }
         }
 
-     
+
     }
 }
 
-     
