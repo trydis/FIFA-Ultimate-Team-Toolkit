@@ -52,10 +52,8 @@ var loginResponse = await client.LoginAsync(loginDetails, provider);
 Example implementation of ITwoFactorCodeProvider interface
 ```csharp
 
-    ...
-	ITwoFactorCodeProvider provider = new FutAuth();
-    ...
-	
+    ITwoFactorCodeProvider provider = new FutAuth();
+
     public class FutAuth : ITwoFactorCodeProvider
     {
         public TaskCompletionSource<string> taskResult = new TaskCompletionSource<string>();
@@ -66,6 +64,11 @@ Example implementation of ITwoFactorCodeProvider interface
             return taskResult.Task;
         }
     }
+```
+
+In order to avoid to enter OTP at each session you can overload it with a `CookieHandler`
+```csharp
+FutClient client = new FutClient(cookieContainer);
 ```
 
 ### Player search
@@ -82,6 +85,23 @@ var searchParameters = new PlayerSearchParameters
     Nation = Nation.Norway,
     Position = Position.Striker,
     Team = Team.ManchesterUnited
+};
+
+var searchResponse = await client.SearchAsync(searchParameters);
+foreach (var auctionInfo in searchResponse.AuctionInfo)
+{
+	// Handle auction data
+}
+```
+
+It is also possible to search for a definition (i.e. a Herocard of a player)
+
+```csharp
+var searchParameters = new PlayerSearchParameters
+{
+    Page = 1,
+    ResourceId = <AssetId>, //see section Get Definitions
+    MaxBuy = 2500
 };
 
 var searchResponse = await client.SearchAsync(searchParameters);
