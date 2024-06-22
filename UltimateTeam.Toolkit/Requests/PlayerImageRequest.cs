@@ -17,7 +17,7 @@ namespace UltimateTeam.Toolkit.Requests
 
         public async Task<byte[]> PerformRequestAsync()
         {
-            AddAnonymousHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
+            AddAnonymousHeader("https://www.ea.com/ea-sports-fc/ultimate-team/web-app/");
 
             return await HttpClient
                              .GetByteArrayAsync(string.Format(Resources.PlayerImage, _auctionInfo.ItemData.AssetId))

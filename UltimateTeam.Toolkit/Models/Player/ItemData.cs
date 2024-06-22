@@ -9,7 +9,7 @@ namespace UltimateTeam.Toolkit.Models.Player
     {
         public int? Amount { get; set; }
         public bool? Authenticity { get; set; }
-        public int? AssetId { get; set; }
+        public uint AssetId { get; set; }
         public int? Assists { get; set; }
         public int? AttackingWorkRate { get; set; }
         public List<int>? AttributeArray { get; set; }
@@ -47,7 +47,7 @@ namespace UltimateTeam.Toolkit.Models.Player
         public string? ItemType { get; set; }
         public bool? IsPlatformSpecific { get; set; }
         public string? LastName { get; set; }
-        public int? LastSalePrice { get; set; }
+        public uint LastSalePrice { get; set; }
         public int? LeagueId { get; set; }
         public int? LifetimeAssists { get; set; }
         public List<ItemStat>? LifetimeStats { get; set; } = new List<ItemStat>();
@@ -72,6 +72,7 @@ namespace UltimateTeam.Toolkit.Models.Player
         public int? PreferredTime2 { get; set; }
         public int? PreferredWeather { get; set; }
         public int? PlayStyle { get; set; }
+        public uint RankId { get; set; }
         public int? Rareflag { get; set; }
         public int? Rating { get; set; }
         public int? ResourceGameYear { get; set; }

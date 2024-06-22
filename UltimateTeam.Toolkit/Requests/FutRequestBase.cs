@@ -81,7 +81,7 @@ namespace UltimateTeam.Toolkit.Requests
             AddAcceptLanguageHeader();
             AddAcceptHeader(acceptHeader);
             AddUserAgent();
-            AddRefererHeader("https://www.easports.com/de/fifa/ultimate-team/web-app/");
+            AddRefererHeader("https://www.ea.com/ea-sports-fc/ultimate-team/web-app/");
             HttpClient.AddConnectionKeepAliveHeader();
         }
 
