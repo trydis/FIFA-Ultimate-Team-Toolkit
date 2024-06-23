@@ -54,6 +54,11 @@ namespace UltimateTeam.Toolkit.Factories
             return RequestFactories.PlaceBidRequestFactory(auctionInfo, bidAmount).PerformRequestAsync();
         }
 
+        public Task<PlayerListResponse> GetPlayerListAsync()
+        {
+            return RequestFactories.PlayerListRequestFactory().PerformRequestAsync();
+        }
+
         public Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo)
         {
             auctionInfo.ThrowIfNullArgument();
