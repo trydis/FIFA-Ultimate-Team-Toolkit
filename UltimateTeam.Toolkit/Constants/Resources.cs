@@ -37,6 +37,8 @@ namespace UltimateTeam.Toolkit.Constants
 
         public const string Store = "store/purchaseGroup/all?ppInfo=true&categoryInfo=true";
 
+        public string Players = $"https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/{CurrentYearLong}/fut/items/web/players.json";
+
         public const string MyClub = "club?level=10";
 
         public const string TransferMarket = "transfermarket";

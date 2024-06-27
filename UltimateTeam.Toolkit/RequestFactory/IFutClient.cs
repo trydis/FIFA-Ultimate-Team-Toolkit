@@ -18,6 +18,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         Task<AuctionResponse> PlaceBidAsync(AuctionInfo auctionInfo, uint bidAmount = 0);
 
+        Task<PlayerListResponse> GetPlayerListAsync();
+
         Task<byte[]> GetPlayerImageAsync(AuctionInfo auctionInfo);
 
         Task<AuctionResponse> GetTradeStatusAsync(IEnumerable<long> tradeIds);

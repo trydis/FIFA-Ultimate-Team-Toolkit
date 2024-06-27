@@ -5,6 +5,7 @@ EAFC Ultimate Team Toolkit
 
 [Initialization](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#initialization)  
 [Login](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#login)  
+[Players list](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#players-list)  
 [Player search](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#player-search)  
 [Place bid](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#place-bid)  
 [Trade status](https://github.com/trydis/FIFA-Ultimate-Team-Toolkit#trade-status)  
@@ -71,6 +72,18 @@ In order to avoid to enter OTP at each session you can overload it with a `Cooki
 FutClient client = new FutClient(cookieContainer);
 ```
 
+### Players list
+
+Retrieves all legends and players basic data with Firstname, Lastname, Rating and AssetId (needed for search requests)
+
+```csharp
+var playerListResponse = await client.GetPlayerListAsync();
+foreach (var player in playerListResponse.Players ) //or playerListResponse.LegendPlayers
+{
+	// Handle player Data
+}
+```
+
 ### Player search
 
 All the search parameters are optional. If none are specified, you will get the 1st page of results with no filters applied.
@@ -100,7 +113,7 @@ It is also possible to search for a definition (i.e. a Herocard of a player)
 var searchParameters = new PlayerSearchParameters
 {
     Page = 1,
-    ResourceId = <AssetId>, //see section Get Definitions
+    ResourceId = <AssetId> or <ResourceId>,
     MaxBuy = 2500
 };
 
