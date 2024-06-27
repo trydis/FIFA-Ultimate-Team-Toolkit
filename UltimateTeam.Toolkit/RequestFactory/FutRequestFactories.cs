@@ -32,6 +32,8 @@ namespace UltimateTeam.Toolkit.Factories
 
         private Func<AuctionInfo, uint, IFutRequest<AuctionResponse>> _placeBidRequestFactory;
 
+        private Func<IFutRequest<PlayerListResponse>> _playerListRequestFactory;
+
         private Func<AuctionInfo, IFutRequest<byte[]>> _playerImageRequestFactory;
 
         private Func<AuctionInfo, IFutRequest<byte[]>> _clubImageRequestFactory;
@@ -201,6 +203,20 @@ namespace UltimateTeam.Toolkit.Factories
             {
                 value.ThrowIfNullArgument();
                 _placeBidRequestFactory = value;
+            }
+        }
+
+        public Func<IFutRequest<PlayerListResponse>> PlayerListRequestFactory
+        {
+            get
+            {
+                return _playerListRequestFactory ??
+                       (_playerListRequestFactory = () => SetSharedRequestProperties(new PlayerListRequest()));
+            }
+            set
+            {
+                value.ThrowIfNullArgument();
+                _playerListRequestFactory = value;
             }
         }
 
